@@ -8,6 +8,17 @@ export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [scrollY, setScrollY] = useState(0);
 
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = "/Nilambar_Sonu_Behera_Resume_1762280071195.pdf";
+    link.download = "Nilambar_Sonu_Behera_Resume.pdf";
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll);
@@ -175,6 +186,7 @@ export default function Hero() {
             <Button
               size="lg"
               variant="outline"
+              onClick={handleDownload}
               data-testid="button-download-resume"
               className="border-2 border-primary/50 text-primary hover:bg-primary/10 hover:border-primary hover:shadow-[0_0_20px_rgba(0,255,255,0.3)]"
             >
