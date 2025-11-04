@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,15 @@ export default function Resume() {
   const { toast } = useToast();
   const [zoom, setZoom] = useState(100);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -67,7 +76,7 @@ export default function Resume() {
   return (
     <section
       ref={ref}
-      className="relative py-20 md:py-32 px-4 bg-gradient-to-b from-muted/30 via-background to-muted/30"
+      className="relative py-20 md:py-32 px-4 bg-gradient-to-br from-purple-950/20 via-background to-purple-900/10"
       id="resume"
     >
       <div className="max-w-6xl mx-auto">
@@ -90,13 +99,14 @@ export default function Resume() {
           >
             <Card className="p-4 md:p-6 bg-card/50 backdrop-blur border-card-border">
               {/* Control Buttons */}
-              <div className="flex flex-wrap gap-2 mb-4 justify-center md:justify-start">
+              <div className="flex flex-col md:flex-row md:flex-wrap gap-2 mb-4">
                 <Button
                   size="sm"
                   onClick={handleZoomOut}
                   disabled={zoom <= 50}
                   data-testid="button-zoom-out"
-                  className="bg-primary/20 text-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-50"
+                  variant="outline"
+                  className="w-full md:w-auto border-primary/30"
                 >
                   <ZoomOut className="w-4 h-4 mr-1" />
                   Zoom Out
@@ -106,7 +116,8 @@ export default function Resume() {
                   onClick={handleZoomIn}
                   disabled={zoom >= 200}
                   data-testid="button-zoom-in"
-                  className="bg-primary/20 text-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-50"
+                  variant="outline"
+                  className="w-full md:w-auto border-primary/30"
                 >
                   <ZoomIn className="w-4 h-4 mr-1" />
                   Zoom In
@@ -115,7 +126,8 @@ export default function Resume() {
                   size="sm"
                   onClick={handleFullscreen}
                   data-testid="button-fullscreen"
-                  className="bg-secondary/20 text-secondary hover:bg-secondary hover:text-secondary-foreground"
+                  variant="outline"
+                  className="w-full md:w-auto border-secondary/30"
                 >
                   <Maximize2 className="w-4 h-4 mr-1" />
                   Fullscreen
@@ -124,7 +136,8 @@ export default function Resume() {
                   size="sm"
                   onClick={handleOpenNewTab}
                   data-testid="button-open-tab"
-                  className="bg-accent/20 text-accent hover:bg-accent hover:text-accent-foreground"
+                  variant="outline"
+                  className="w-full md:w-auto border-accent/30"
                 >
                   <ExternalLink className="w-4 h-4 mr-1" />
                   Open in Tab
@@ -133,7 +146,7 @@ export default function Resume() {
                   size="sm"
                   onClick={handleDownload}
                   data-testid="button-download-resume"
-                  className="bg-primary hover:shadow-[0_0_20px_rgba(0,255,255,0.4)]"
+                  className="w-full md:w-auto"
                 >
                   <Download className="w-4 h-4 mr-1" />
                   Download PDF
@@ -141,9 +154,9 @@ export default function Resume() {
               </div>
 
               {/* Zoom Level Indicator */}
-              <div className="text-center mb-4">
+              <div className="text-center mb-4" data-testid="zoom-indicator">
                 <span className="text-sm text-muted-foreground">
-                  Zoom: <span className="text-primary font-semibold">{zoom}%</span>
+                  Zoom: <span className="text-primary font-semibold" data-testid="zoom-level">{zoom}%</span>
                 </span>
               </div>
 
@@ -210,11 +223,12 @@ export default function Resume() {
               <Card
                 key={stat.label}
                 className="p-4 text-center bg-card/30 backdrop-blur border-card-border hover:border-primary/50 transition-all hover:shadow-[0_0_20px_rgba(0,255,255,0.1)]"
+                data-testid={`stat-card-${stat.label.toLowerCase()}`}
               >
-                <div className="text-3xl font-display font-bold text-primary mb-1">
+                <div className="text-3xl font-display font-bold text-primary mb-1" data-testid={`stat-value-${stat.label.toLowerCase()}`}>
                   {stat.value}
                 </div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
+                <div className="text-sm text-muted-foreground" data-testid={`stat-label-${stat.label.toLowerCase()}`}>{stat.label}</div>
               </Card>
             ))}
           </motion.div>
