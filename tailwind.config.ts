@@ -86,6 +86,8 @@ export default {
         sans: ["var(--font-sans)"],
         serif: ["var(--font-serif)"],
         mono: ["var(--font-mono)"],
+        display: ["Orbitron", "Exo 2", "sans-serif"],
+        body: ["Inter", "Poppins", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {
