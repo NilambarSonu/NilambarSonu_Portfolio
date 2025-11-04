@@ -35,7 +35,7 @@ export default function About() {
       school: "Bhadrak Autonomous College",
       board: "Currently at College",
       percentage: "",
-      year: "YYYY"
+      year: "Expected 2026"
     }
   ];
 
