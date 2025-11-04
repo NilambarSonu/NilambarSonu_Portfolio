@@ -1,0 +1,71 @@
+Project brief — build a futuristic, highly animated “gully graphics” portfolio website for Nilambar Behera
+
+Overview / Goal
+
+Build a production-ready, responsive portfolio site for Nilambar Behera (BCA student from Odisha, India). Use the existing content as default copy (About, Projects, Contact, basic skills) but render it in a premium futuristic style with heavy, tasteful animation and “gully / street art” graphic motifs. Use a placeholder photo and placeholder graduation details for now — I will replace them later.
+
+Reference site / content to import as default: https://nilambarsonu.github.io/My_PortFolio/
+ — use this for default text (About blurb, project names, skills list). 
+nilambarsonu.github.io
+
+Tech stack & tools
+
+Frontend: React (Vite) + TypeScript (optional but preferred)
+
+Styling: Tailwind CSS (configured for dark/neon theme)
+
+3D & visuals: three.js (for hero 3D scene) + react-three-fiber (R3F)
+
+Animations: Framer Motion for UI transitions; GSAP for timeline/scroll-driven animations; Lottie for lightweight vector animations where suitable
+
+SVG / Graphics: Inline SVGs for “gully” art assets, and Canvas/WebGL particle systems
+
+Icons / UI: lucide-react or Heroicons
+
+Build/Deploy: Vite dev server; include scripts for npm run dev, npm run build, npm run preview
+
+Design language & UX
+
+Theme: Dark, neon-accent, futuristic with gritty/urban “gully” graphic treatments (spray-paint textures, stencil fonts, dynamic neon gradients).
+
+Hero: Full-screen animated hero with a 3D, stylized “gully graphic” scene (low-poly alley / mural + subtle camera drift + particle dust) built with three.js. Over the 3D scene, place a compact intro card: “Hi, I’m Nilambar Behera — BCA Student | Aspiring Data Scientist & Web Dev”. Include CTA buttons: “View Projects” and “Download Resume (placeholder)”.
+
+Micro-interactions: animated hover glows, ripple cursor / custom cursor (on desktop) that reacts to clickable elements, button hover animated strokes.
+
+Navigation: sticky top bar with animated underline, mobile drawer with smooth reveal.
+
+Typography: Pair a futuristic display (e.g., Orbitron / Exo) for headings with a neutral UI font (Inter / Poppins) for body text.
+
+Accessibility: Ensure color contrast, keyboard navigation, skip-to-content link, and ARIA labels for interactive components.
+
+Pages / Sections (single page with smooth scroll + route fallback)
+
+Home / Hero — animated 3D hero + short intro (placeholder profile photo, circular masked)
+
+Placeholder photo: use src/assets/photo-placeholder.jpg 400×400 with alt="Nilambar Behera — placeholder".
+
+Placeholder graduation detail: “BCA — Bhadrak Autonomous College — Graduation: YYYY” (replace later).
+
+About — short bio (import from reference site), skill chips, animated education timeline (with placeholder graduation row).
+
+Projects — card grid with animated hover reveals; each card has title, tech stack, 2 action buttons (Live / Code) and a modal with more details and GIF/demo. Use sample project entries from the reference site (Calculator, Portfolio, YouTube Clone, Rock-Paper-Scissor, Coin-Flip, Data Harvesting).
+
+Skills & Tools — interactive skill radial bars or animated progress rings.
+
+Contact — contact form (frontend only, send to a placeholder API endpoint) + social links (WhatsApp, Telegram, Email icons).
+
+Footer — small animated copyright + quick nav.
+
+Animations & Behavior (explicit)
+
+Initial loader: short Lottie + animated spray-paint reveal; if WebGL fails, show a fallback static hero image.
+
+Hero 3D: subtle parallax camera motion, procedural neon lights that pulse to a slow timeline. Use low-poly models or stylized geometry (no heavy textures).
+
+Scroll-driven glows: as user scrolls, scene light intensities and UI borders animate (GSAP ScrollTrigger).
+
+Project reveal: staggered fade + translateY using Framer Motion; card hover scales and shows neon outline.
+
+Cursor: custom circular cursor that enlarges on interactive elements and emits a short particle burst (disabled automatically on mobile).
+
+Performance: keep three.js scene lightweight (LOD, low poly, limit lights), lazy-load heavy assets, use intersection observers to pause animations off-screen, and provide a “reduced-motion” respectful mode that disables non-essential animations.
