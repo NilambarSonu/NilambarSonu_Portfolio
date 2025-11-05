@@ -1,14 +1,22 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "outDir": "dist/server",
-    "rootDir": "server",
+    "rootDir": ".",
+    "lib": ["ESNext", "DOM"],
+    "skipLibCheck": true,
     "target": "ESNext",
-    "lib": ["ESNext"],
     "esModuleInterop": true,
     "strict": true
   },
-  "include": ["server/**/*"],
-  "exclude": ["node_modules"]
+  "include": [
+    "server/**/*.ts",
+    "shared/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "client"
+  ]
 }
