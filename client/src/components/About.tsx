@@ -15,11 +15,11 @@ const skills = [
 
 const education = [
   {
-    degree: "BCA",
-    school: "Bhadrak Autonomous College",
-    board: "Currently at College",
-    percentage: "",
-    year: "Expected 2027"
+    degree: "10th",
+    school: "Sanpatpur Nodal High School",
+    board: "CHSE",
+    percentage: "88.66%",
+    year: "Completed"
   },
   {
     degree: "12th",
@@ -29,11 +29,11 @@ const education = [
     year: "Completed"
   },
   {
-    degree: "10th",
-    school: "Sanpatpur Nodal High School",
-    board: "CHSE",
-    percentage: "88.66%",
-    year: "Completed"
+    degree: "BCA",
+    school: "Bhadrak Autonomous College",
+    board: "Currently at College",
+    percentage: "",
+    year: "Expected 2027"
   }
 ];
 
