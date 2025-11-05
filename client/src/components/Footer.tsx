@@ -7,6 +7,7 @@ export default function Footer() {
   const quickLinks = [
     { label: "About", href: "#about" },
     { label: "Projects", href: "#projects" },
+    { label: "Resume", href: "#resume" },
     { label: "Contact", href: "#contact" },
   ];
 
@@ -21,10 +22,10 @@ export default function Footer() {
             className="flex items-center gap-2 text-foreground/80"
           >
             <span>Made with</span>
-            <Heart className="w-4 h-4 text-accent fill-accent animate-pulse" />
-            <span>and</span>
+            <Heart className="w-5 h-7 text-accent fill-accent animate-pulse" />
+            <span>One Plate Biriyani and</span>
             <Code className="w-4 h-4 text-primary" />
-            <span>by Nilambar Behera</span>
+            <span>by NilambarSonu</span>
           </motion.div>
 
           <motion.div

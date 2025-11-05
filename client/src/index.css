@@ -263,6 +263,17 @@
  * need to be distinguished from eachother visually.
  */
 @layer utilities {
+  .btn-shine {
+    @apply relative overflow-hidden;
+  }
+  .btn-shine::before {
+    content: '';
+    /* The shine is a gradient: transparent -> cyan -> transparent */
+    @apply absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-primary/30 to-transparent transition-all duration-700 ease-in-out -skew-x-12;
+  }
+  .btn-shine:hover::before {
+    @apply left-full;
+  }
 
   /* Hide ugly search cancel button in Chrome until we can style it properly */
   input[type="search"]::-webkit-search-cancel-button {

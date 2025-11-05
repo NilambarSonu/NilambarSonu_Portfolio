@@ -1,12 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-
 export default function CustomCursor() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number }>>([]);
   const [isMobile, setIsMobile] = useState(false);
   const particleIdRef = useRef(0);
-
   useEffect(() => {
     setIsMobile(window.matchMedia("(pointer: coarse)").matches);
   }, []);

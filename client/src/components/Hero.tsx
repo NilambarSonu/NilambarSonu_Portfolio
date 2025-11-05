@@ -10,8 +10,8 @@ export default function Hero() {
 
   const handleDownload = () => {
     const link = document.createElement("a");
-    link.href = "/Nilambar_Sonu_Behera_Resume_1762280071195.pdf";
-    link.download = "Nilambar_Sonu_Behera_Resume.pdf";
+    link.href = "/resume.pdf";
+    link.download = "Nilambar_Behera_Resume.pdf";
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     document.body.appendChild(link);
@@ -188,10 +188,19 @@ export default function Hero() {
               variant="outline"
               onClick={handleDownload}
               data-testid="button-download-resume"
-              className="border-2 border-primary/50 text-primary hover:bg-primary/10 hover:border-primary hover:shadow-[0_0_20px_rgba(0,255,255,0.3)]"
+              className="
+                btn-shine  /* <--- 1. ADDED THE SHINE CLASS --- */
+                border-2 border-primary/50 text-primary 
+                hover:bg-primary/10 hover:border-primary 
+                hover:shadow-[0_0_20px_rgba(0,255,255,0.3)]
+              "
             >
-              <Download className="mr-2 h-4 w-4" />
-              Download Resume
+              {/* --- 2. WRAPPED CONTENT IN A 'relative' SPAN --- */}
+              {/* This ensures the text/icon are on top of the shine */}
+              <span className="relative flex items-center">
+                <Download className="mr-2 h-4 w-4" />
+                Download Resume
+              </span>
             </Button>
           </motion.div>
         </motion.div>

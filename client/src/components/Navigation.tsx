@@ -50,10 +50,10 @@ export default function Navigation() {
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-background/80 backdrop-blur-lg${
           isScrolled
-            ? "bg-background/80 backdrop-blur-lg border-b border-border shadow-lg"
-            : "bg-transparent"
+            ? "border-b border-border shadow-lg"
+            : "border-b border-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4">

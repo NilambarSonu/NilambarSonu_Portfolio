@@ -215,7 +215,7 @@ export default function Resume() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8"
           >
             {[
-              { label: "CGPA", value: "8.0" },
+              { label: "CGPA", value: "8.27" },
               { label: "Projects", value: "6+" },
               { label: "Skills", value: "15+" },
               { label: "Certifications", value: "4+" },

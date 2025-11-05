@@ -1,6 +1,14 @@
+import dotenv from 'dotenv';
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+
+// --- ADDITIONS START ---
+import cors from 'cors';
+
+// Load environment variables immediately
+dotenv.config();
+// --- ADDITIONS END ---
 
 const app = express();
 
@@ -15,6 +23,12 @@ app.use(express.json({
   }
 }));
 app.use(express.urlencoded({ extended: false }));
+
+// --- ADDITION START ---
+// Add CORS middleware to allow requests from your frontend
+// TODO: In production, change '*' to your actual frontend URL (e.g., 'https://your-domain.com')
+app.use(cors({ origin: '*' }));
+// --- ADDITION END ---
 
 app.use((req, res, next) => {
   const start = Date.now();

@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Send, MessageCircle, Phone } from "lucide-react";
-import { SiWhatsapp, SiTelegram } from "react-icons/si";
+import { Mail, Send, MessageCircle, Github, Linkedin, Twitter } from "lucide-react";
+import { SiWhatsapp, SiTelegram, SiInstagram, SiFacebook } from "react-icons/si";
+import axios from "axios"; 
 
 export default function Contact() {
   const ref = useRef(null);
@@ -17,17 +18,32 @@ export default function Contact() {
     email: "",
     message: ""
   });
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    toast({
-      title: "Message Sent!",
-      description: "Thank you for reaching out. I'll get back to you soon.",
-    });
-    setFormData({ name: "", email: "", message: "" });
-  };
+    setIsSubmitting(true);
+    const API_URL = "http://localhost:5000/api/send"; 
 
+    try {
+      const response = await axios.post(API_URL, formData);
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for reaching out. I'll get back to you soon.",
+      });
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Oh no! Something went wrong.",
+        description: "Failed to send message. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,
@@ -39,21 +55,53 @@ export default function Contact() {
     {
       name: "WhatsApp",
       icon: SiWhatsapp,
-      href: "#",
+      href: "https://api.whatsapp.com/send/?phone=7205095602&text=Hello+There%21+I+Am+From+Your+Portfolio+Web&type=phone_number&app_absent=0",
       color: "text-green-500"
     },
     {
       name: "Telegram",
       icon: SiTelegram,
-      href: "#",
+      href: "https://t.me/Nilambarbehera",
       color: "text-blue-500"
     },
     {
       name: "Email",
       icon: Mail,
-      href: "mailto:contact@example.com",
+      href: "mailto:nilambarsonubehera@gmail.com", 
       color: "text-primary"
     }
+  ];
+  const otherSocials = [
+    {
+      name: "GitHub",
+      icon: Github,
+      href: "https://github.com/NilambarSonu",
+      color: "hover:text-white" 
+    },
+    {
+      name: "LinkedIn",
+      icon: Linkedin,
+      href: "https://www.linkedin.com/in/nilambarsonu-behera-37ba0036a/", 
+      color: "hover:text-blue-500"
+    },
+    {
+      name: "Instagram",
+      icon: SiInstagram,
+      href: "https://www.instagram.com/ramamanibehera001/", 
+      color: "hover:text-pink-500" 
+    },
+    {
+      name: "Twitter",
+      icon: Twitter,
+      href: "https://x.com/NilambarBeher?s=08", 
+      color: "hover:text-blue-400"
+    },
+    {
+      name: "Facebook",
+      icon: SiFacebook,
+      href: "https://www.facebook.com/share/16o7JTxTWW/",
+      color: "hover:text-blue-600"
+    },
   ];
 
   return (
@@ -76,6 +124,8 @@ export default function Contact() {
           </p>
 
           <div className="grid md:grid-cols-2 gap-12">
+            
+            {/* --- Form Column --- */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -86,6 +136,7 @@ export default function Contact() {
                   <Send className="w-6 h-6" />
                   Send a Message
                 </h3>
+                {/* ... (Your form code remains the same) ... */}
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <Input
@@ -94,6 +145,7 @@ export default function Contact() {
                       value={formData.name}
                       onChange={handleChange}
                       required
+                      disabled={isSubmitting}
                       data-testid="input-name"
                       className="bg-background/50 border-border focus:border-primary"
                     />
@@ -106,6 +158,7 @@ export default function Contact() {
                       value={formData.email}
                       onChange={handleChange}
                       required
+                      disabled={isSubmitting}
                       data-testid="input-email"
                       className="bg-background/50 border-border focus:border-primary"
                     />
@@ -118,6 +171,7 @@ export default function Contact() {
                       onChange={handleChange}
                       required
                       rows={5}
+                      disabled={isSubmitting}
                       data-testid="input-message"
                       className="bg-background/50 border-border focus:border-primary resize-none"
                     />
@@ -125,15 +179,24 @@ export default function Contact() {
                   <Button
                     type="submit"
                     data-testid="button-submit-contact"
-                    className="w-full bg-primary hover:shadow-[0_0_20px_rgba(0,255,255,0.4)]"
+                    className="w-full bg-primary hover:shadow-[0_0_20px_rgba(0,255,25F,0.4)]"
+                    disabled={isSubmitting}
                   >
-                    <Send className="w-4 h-4 mr-2" />
-                    Send Message
+                    {isSubmitting ? (
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    ) : (
+                      <Send className="w-4 h-4 mr-2" />
+                    )}
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </Button>
                 </form>
               </Card>
             </motion.div>
 
+            {/* --- Social Column --- */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -151,7 +214,8 @@ export default function Contact() {
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6, delay: 0.5 + index * 0.1 }}
                   >
-                    <Card className="p-6 bg-card/30 backdrop-blur border-card-border hover:border-primary/50 transition-all hover:shadow-[0_0_20px_rgba(0,255,255,0.1)]">
+                    {/* --- 2. REDUCED PADDING HERE (p-4 from p-6) --- */}
+                    <Card className="p-4 bg-card/30 backdrop-blur border-card-border hover:border-primary/50 transition-all hover:shadow-[0_0_20px_rgba(0,255,255,0.1)]">
                       <a
                         href={social.href}
                         target="_blank"
@@ -175,6 +239,31 @@ export default function Contact() {
                   </motion.div>
                 ))}
               </div>
+
+              {/* --- 3. MOVED THIS SECTION INSIDE THE COLUMN --- */}
+              <motion.div
+                className="mt-4 pt-3 border-t border-card-border/50" 
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.8 }}
+              >
+                <div className="flex justify-center gap-4">
+                  {otherSocials.map((social) => (
+                    <a
+                      key={social.name}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.name}
+                      className={`p-3 bg-card/30 rounded-full text-muted-foreground ${social.color} hover:shadow-[0_0_15px_currentColor] transition-all`}
+                    >
+                      <social.icon className="w-6 h-6" />
+                    </a>
+                  ))}
+                </div>
+              </motion.div>
+              {/* --- END OF MOVED SECTION --- */}
+
             </motion.div>
           </div>
         </motion.div>
