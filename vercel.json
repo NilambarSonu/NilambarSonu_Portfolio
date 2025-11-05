@@ -6,21 +6,21 @@
       "use": "@vercel/node"
     },
     {
-      "src": "package.json",
+      "src": "client/vite.config.ts",
       "use": "@vercel/static-build",
       "config": {
         "distDir": "client/dist"
       }
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/(.*)",
-      "destination": "/server/index.ts"
+      "src": "/api/(.*)",
+      "dest": "server/$1.ts"
     },
     {
-      "source": "/(.*)",
-      "destination": "/client/dist/index.html"
+      "src": "/(.*)",
+      "dest": "client/dist/$1"
     }
   ]
 }
