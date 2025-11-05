@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
   "dev": "cross-env NODE_ENV=development tsx server/index.ts",
-  "build": "cd client && npm install && npm run build && cd .. && tsc",
+  "build": "vite build",
+  "preview": "vite preview",
   "start": "node dist/server/index.js"
 },
   "dependencies": {
