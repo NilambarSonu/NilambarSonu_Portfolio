@@ -23,7 +23,7 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const API_URL = "http://localhost:5000/api/send"; 
+    const API_URL = "/api/send"; 
 
     try {
       const response = await axios.post(API_URL, formData);
