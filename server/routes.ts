@@ -89,15 +89,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       subject: `Portfolio Message from ${name}`,
       html: htmlEmailTemplate,
     };
+    res.status(200).json({ success: 'Message sent successfully!' });
+    transporter.sendMail(mailOptions)
+      .then(() => {
+        console.log('Background email send successful.');
+      })
+      .catch((error) => {
+        console.error('BACKGROUND EMAIL FAILED:', error);
+      });
 
-    try {
-      await transporter.sendMail(mailOptions);
-      res.status(200).json({ success: 'Message sent successfully!' });
-    } catch (error) {
-      console.error('Error sending email:', error);
-      res.status(500).json({ error: 'Failed to send message.' });
-    }
-  });
+  }); // end apiRouter.post
 
   app.use('/api', apiRouter);
 

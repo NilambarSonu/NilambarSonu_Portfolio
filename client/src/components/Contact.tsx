@@ -21,28 +21,57 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    const API_URL = "/api/send"; 
+  e.preventDefault();
+  setIsSubmitting(true);
+  
+  const API_URL = '/api/send';
 
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    // Check if response is OK and has content
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Get response text first to debug
+    const responseText = await response.text();
+    console.log('Raw response:', responseText);
+
+    let result;
     try {
-      const response = await axios.post(API_URL, formData);
+      result = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+      throw new Error('Invalid response from server');
+    }
+
+    if (result.success) {
       toast({
-        title: "Message Sent!",
+        title: "Message Sent! 🎉",
         description: "Thank you for reaching out. I'll get back to you soon.",
       });
       setFormData({ name: "", email: "", message: "" });
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      toast({
-        title: "Oh no! Something went wrong.",
-        description: "Failed to send message. Please try again later.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      throw new Error(result.error || 'Failed to send message');
     }
-  };
+  } catch (error: any) {
+    console.error("Error submitting form:", error);
+    toast({
+      title: "Oh no! Something went wrong.",
+      description: error.message || "Failed to send message. Please try again later.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
