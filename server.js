@@ -3,17 +3,14 @@ import cors from 'cors';
 import { Resend } from 'resend';
 import dotenv from 'dotenv';
 
-// Load environment variables
 dotenv.config();
-
 const app = express();
 const PORT = 5000;
-
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Setup Resend
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // API route for sending emails
@@ -24,7 +21,7 @@ app.post('/api/send', async (req, res) => {
     return res.status(400).json({ error: 'All fields are required.' });
   }
 
-  // Your beautiful HTML template
+  //HTML template
   const htmlEmailTemplate = `
   <body style="margin: 0; padding: 0; font-family: 'Poppins', Arial, sans-serif; background-color: #0a0a0a; color: #c4c4c4;">
     <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px;">
