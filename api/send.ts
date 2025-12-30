@@ -21,94 +21,93 @@ export default async function handler(
     return res.status(400).json({ error: 'All fields are required.' });
   }
   
-  // Aesthetic email template with animated background symbols using white, brown, and black colors
+  // Professional email template using table-based layout for better email client compatibility
   const htmlEmailTemplate = `
   <!DOCTYPE html>
   <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Contact Message</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>New Contact Message</title>
+      <style>
+          /* Reset styles for email client compatibility */
+          body { margin: 0; padding: 0; background-color: #f6f3ef; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+          table { border-collapse: collapse; width: 100%; }
+
+          /* Responsive styles */
+          @media screen and (max-width: 600px) {
+              .container { width: 100% !important; }
+              .content-padding { padding: 20px !important; }
+          }
+      </style>
   </head>
-  <body style="margin: 0; padding: 0; font-family: 'Georgia', serif; background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #e8e8e8 100%); min-height: 100vh; position: relative; overflow: hidden; color: #000000;">
-    <!-- Animated aesthetic background symbols -->
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; opacity: 0.1;">
-      <div style="position: absolute; top: 15%; left: 8%; font-size: 40px; color: #8b4513; animation: float 5s ease-in-out infinite;">✨</div>
-      <div style="position: absolute; top: 50%; right: 12%; font-size: 35px; color: #654321; animation: float 7s ease-in-out infinite reverse;">📜</div>
-      <div style="position: absolute; bottom: 25%; left: 15%; font-size: 45px; color: #8b4513; animation: float 6s ease-in-out infinite;">🏛️</div>
-      <div style="position: absolute; top: 35%; right: 8%; font-size: 38px; color: #654321; animation: float 8s ease-in-out infinite reverse;">📖</div>
-      <div style="position: absolute; bottom: 15%; right: 20%; font-size: 42px; color: #8b4513; animation: float 9s ease-in-out infinite;">🎭</div>
-      <div style="position: absolute; top: 70%; left: 25%; font-size: 36px; color: #654321; animation: float 6.5s ease-in-out infinite;">🖋️</div>
-      <div style="position: absolute; top: 25%; left: 70%; font-size: 32px; color: #8b4513; animation: float 7.5s ease-in-out infinite reverse;">📚</div>
-      <div style="position: absolute; bottom: 40%; right: 25%; font-size: 38px; color: #654321; animation: float 8.5s ease-in-out infinite;">🕯️</div>
-    </div>
+  <body style="margin: 0; padding: 0; background-color: #f6f3ef;">
 
-    <div style="position: relative; z-index: 1; width: 100%; max-width: 650px; margin: 0 auto; padding: 30px 20px;">
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f6f3ef; padding: 40px 0;">
+          <tr>
+              <td align="center">
 
-      <!-- Header -->
-      <div style="text-align: center; padding: 40px 20px; background-color: #f5f5f5; border-bottom: 3px solid #8b4513;">
-        <h1 style="color: #000000; font-size: 28px; margin: 0; font-weight: normal; font-family: 'Georgia', serif;">
-          New Contact Message
-        </h1>
-        <p style="color: #654321; margin: 10px 0 0; font-size: 16px; font-style: italic;">
-          From your portfolio website
-        </p>
-      </div>
+                  <table border="0" cellpadding="0" cellspacing="0" class="container" width="600" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
 
-      <!-- Main Content -->
-      <div style="padding: 30px 20px; background-color: #ffffff; border: 1px solid #d2b48c;">
+                      <tr>
+                          <td height="8" style="background-color: #8B5E3C;"></td>
+                      </tr>
 
-        <!-- Sender Details -->
-        <div style="margin-bottom: 30px;">
-          <h2 style="color: #000000; font-size: 20px; margin: 0 0 20px; padding-bottom: 10px; border-bottom: 2px solid #8b4513; font-weight: normal;">
-            Visitor Information
-          </h2>
+                      <tr>
+                          <td class="content-padding" style="padding: 40px 40px 20px 40px; text-align: center;">
+                              <h1 style="margin: 0; color: #333333; font-family: 'Georgia', serif; font-size: 24px; font-weight: normal;">New Portfolio Inquiry</h1>
+                              <p style="margin: 10px 0 0 0; color: #888888; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">You have a new visitor</p>
+                          </td>
+                      </tr>
 
-          <div style="background-color: #fafafa; padding: 20px; border: 1px solid #d2b48c;">
-            <div style="margin-bottom: 15px;">
-              <strong style="color: #8b4513; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Name:</strong><br>
-              <span style="color: #000000; font-size: 16px; font-weight: bold;">${name}</span>
-            </div>
+                      <tr>
+                          <td style="padding: 0 40px;">
+                              <hr style="border: 0; border-top: 1px solid #eeeeee; margin: 0;">
+                          </td>
+                      </tr>
 
-            <div>
-              <strong style="color: #8b4513; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Email:</strong><br>
-              <a href="mailto:${email}" style="color: #654321; font-size: 16px; text-decoration: none; border-bottom: 1px solid #654321;">${email}</a>
-            </div>
-          </div>
-        </div>
+                      <tr>
+                          <td class="content-padding" style="padding: 30px 40px;">
 
-        <!-- Message Content -->
-        <div>
-          <h2 style="color: #000000; font-size: 20px; margin: 0 0 20px; padding-bottom: 10px; border-bottom: 2px solid #8b4513; font-weight: normal;">
-            Message
-          </h2>
+                          <p style="margin: 0 0 5px 0; font-size: 12px; font-weight: bold; color: #8B5E3C; text-transform: uppercase; letter-spacing: 0.5px;">Name</p>
+                          <p style="margin: 0 0 20px 0; font-size: 16px; color: #333333;">
+                              ${name}
+                          </p>
 
-          <div style="background-color: #f9f9f9; padding: 25px; border: 1px solid #d2b48c; border-left: 4px solid #8b4513;">
-            <div style="color: #000000; font-size: 16px; line-height: 1.6; white-space: pre-wrap; font-family: 'Georgia', serif;">
-              ${message}
-            </div>
-          </div>
-        </div>
-      </div>
+                          <p style="margin: 0 0 5px 0; font-size: 12px; font-weight: bold; color: #8B5E3C; text-transform: uppercase; letter-spacing: 0.5px;">Email</p>
+                          <p style="margin: 0 0 20px 0; font-size: 16px; color: #333333;">
+                              <a href="mailto:${email}" style="color: #8B5E3C; text-decoration: none;">${email}</a>
+                          </p>
 
-      <!-- Footer -->
-      <div style="text-align: center; padding: 30px 20px; background-color: #f5f5f5; border-top: 1px solid #d2b48c;">
-        <p style="color: #654321; margin: 0; font-size: 14px; font-style: italic;">
-          This message was sent from the contact form on your portfolio website
-        </p>
-        <div style="width: 60px; height: 2px; background-color: #8b4513; margin: 15px auto;"></div>
-        <p style="color: #000000; margin: 10px 0 0; font-size: 12px;">
-          Reply directly to this email to respond to ${name}
-        </p>
-      </div>
-    </div>
+                          <p style="margin: 0 0 5px 0; font-size: 12px; font-weight: bold; color: #8B5E3C; text-transform: uppercase; letter-spacing: 0.5px;">Message</p>
+                          <div style="background-color: #f9f9f9; border-left: 4px solid #8B5E3C; padding: 15px; border-radius: 4px;">
+                              <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #555555; white-space: pre-wrap;">
+                                  ${message}
+                              </p>
+                          </div>
 
-    <style>
-      @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-10px) rotate(5deg); }
-      }
-    </style>
+                      </td>
+                      </tr>
+
+                      <tr>
+                          <td align="center" style="padding-bottom: 40px;">
+                              <table border="0" cellspacing="0" cellpadding="0">
+                                  <tr>
+                                      <td align="center" style="border-radius: 4px;" bgcolor="#8B5E3C">
+                                          <a href="mailto:${email}" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; padding: 12px 30px; border-radius: 4px; border: 1px solid #8B5E3C; display: inline-block; font-weight: bold;">Reply via Email</a>
+                                      </td>
+                                  </tr>
+                              </table>
+                          </td>
+                      </tr>
+
+                  </table>
+                  <p style="margin-top: 20px; color: #999999; font-size: 12px;">Sent from your Portfolio Website</p>
+
+              </td>
+          </tr>
+      </table>
+
   </body>
   </html>
   `;
