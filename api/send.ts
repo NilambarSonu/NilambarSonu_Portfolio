@@ -21,7 +21,7 @@ export default async function handler(
     return res.status(400).json({ error: 'All fields are required.' });
   }
   
-  // Elegant email template using only white, brown, and black colors
+  // Aesthetic email template with animated background symbols using white, brown, and black colors
   const htmlEmailTemplate = `
   <!DOCTYPE html>
   <html>
@@ -30,8 +30,20 @@ export default async function handler(
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Contact Message</title>
   </head>
-  <body style="margin: 0; padding: 0; font-family: 'Georgia', serif; background-color: #ffffff; color: #000000;">
-    <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
+  <body style="margin: 0; padding: 0; font-family: 'Georgia', serif; background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #e8e8e8 100%); min-height: 100vh; position: relative; overflow: hidden; color: #000000;">
+    <!-- Animated aesthetic background symbols -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; opacity: 0.1;">
+      <div style="position: absolute; top: 15%; left: 8%; font-size: 40px; color: #8b4513; animation: float 5s ease-in-out infinite;">✨</div>
+      <div style="position: absolute; top: 50%; right: 12%; font-size: 35px; color: #654321; animation: float 7s ease-in-out infinite reverse;">📜</div>
+      <div style="position: absolute; bottom: 25%; left: 15%; font-size: 45px; color: #8b4513; animation: float 6s ease-in-out infinite;">🏛️</div>
+      <div style="position: absolute; top: 35%; right: 8%; font-size: 38px; color: #654321; animation: float 8s ease-in-out infinite reverse;">📖</div>
+      <div style="position: absolute; bottom: 15%; right: 20%; font-size: 42px; color: #8b4513; animation: float 9s ease-in-out infinite;">🎭</div>
+      <div style="position: absolute; top: 70%; left: 25%; font-size: 36px; color: #654321; animation: float 6.5s ease-in-out infinite;">🖋️</div>
+      <div style="position: absolute; top: 25%; left: 70%; font-size: 32px; color: #8b4513; animation: float 7.5s ease-in-out infinite reverse;">📚</div>
+      <div style="position: absolute; bottom: 40%; right: 25%; font-size: 38px; color: #654321; animation: float 8.5s ease-in-out infinite;">🕯️</div>
+    </div>
+
+    <div style="position: relative; z-index: 1; width: 100%; max-width: 650px; margin: 0 auto; padding: 30px 20px;">
 
       <!-- Header -->
       <div style="text-align: center; padding: 40px 20px; background-color: #f5f5f5; border-bottom: 3px solid #8b4513;">
@@ -90,6 +102,13 @@ export default async function handler(
         </p>
       </div>
     </div>
+
+    <style>
+      @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-10px) rotate(5deg); }
+      }
+    </style>
   </body>
   </html>
   `;
