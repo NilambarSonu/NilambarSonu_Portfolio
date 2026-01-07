@@ -20,10 +20,8 @@ export default function ContributionsAndMusic() {
       <div className="max-w-6xl mx-auto">
         
         {/* --- 1. CHANGED THIS LINE --- */}
-        {/* We now use a 5-column grid on large screens */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-9 items-start">
 
-          {/* --- 2. CHANGED THIS LINE --- */}
           {/* This column now takes 3 of the 5 columns */}
           <motion.div
             className="lg:col-span-3"
@@ -54,7 +52,6 @@ export default function ContributionsAndMusic() {
           </motion.div>
 
           {/* --- 3. CHANGED THIS LINE --- */}
-          {/* This column now takes 2 of the 5 columns */}
           <motion.div
             className="lg:col-span-2"
             initial={{ opacity: 0, y: 50 }}
