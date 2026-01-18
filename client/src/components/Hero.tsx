@@ -49,15 +49,24 @@ export default function Hero() {
       hue: number;
     }> = [];
 
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 100; i++) {
+      // Create more varied color palette: cyan, blue, purple, magenta, green
+      const colorOptions = [
+        Math.random() * 30 + 180, // cyan-blue range
+        Math.random() * 40 + 260, // purple-magenta range
+        Math.random() * 30 + 100, // green range
+        Math.random() * 20 + 300, // magenta-pink range
+      ];
+      const hue = colorOptions[Math.floor(Math.random() * colorOptions.length)];
+
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1,
-        opacity: Math.random() * 0.5 + 0.3,
-        hue: Math.random() * 60 + 280,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        size: Math.random() * 3 + 1,
+        opacity: Math.random() * 0.4 + 0.2,
+        hue: hue,
       });
     }
 
@@ -132,8 +141,8 @@ export default function Hero() {
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <div className="absolute inset-0 rounded-full bg-primary/20 blur-2xl animate-pulse" />
-            <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-primary shadow-[0_0_30px_rgba(0,255,255,0.5)]">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400/30 via-purple-400/30 to-green-400/30 blur-2xl animate-pulse" />
+            <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-cyan-400/80 shadow-[0_0_40px_rgba(0,255,255,0.4),0_0_80px_rgba(168,85,247,0.2),0_0_120px_rgba(34,197,94,0.1)]">
               <img
                 src={profilePlaceholder}
                 alt="Nilambar Behera"
@@ -143,7 +152,7 @@ export default function Hero() {
           </motion.div>
 
           <motion.h1
-            className="text-5xl md:text-7xl font-display font-bold mb-4 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
+            className="text-5xl md:text-7xl font-display font-bold mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-green-400 bg-clip-text text-transparent animate-pulse"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
@@ -157,7 +166,8 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
           >
-            BCA Student | Aspiring Data Scientist & Web Dev
+            BCA Student | Founder of Mitti-AI | Building AI Systems for Real-World Impact
+
           </motion.p>
 
           <motion.p
@@ -170,36 +180,51 @@ export default function Hero() {
           </motion.p>
 
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.8 }}
+            className="relative mb-6"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-emerald-500/20 blur-xl rounded-lg" />
+            <Button
+              size="lg"
+              asChild
+              className="group relative overflow-hidden bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:shadow-[0_0_30px_rgba(34,197,94,0.7)] hover:scale-105 transition-all duration-300 border-0 text-lg px-8 py-4 h-14"
+            >
+              <a href="https://saathiai.org/" target="_blank" rel="noopener noreferrer" className="flex items-center">
+                <span className="mr-3 text-2xl">🚀</span>
+                <span className="font-bold">Saathi AI</span>
+                <span className="mx-3 text-green-200">–</span>
+                <span className="text-base opacity-95">AI for Agriculture</span>
+              </a>
+            </Button>
+          </motion.div>
+
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1, duration: 0.8 }}
           >
             <Button
               size="lg"
               onClick={handleViewProjects}
               data-testid="button-view-projects"
-              className="group relative overflow-hidden bg-primary text-primary-foreground hover:shadow-[0_0_20px_rgba(0,255,255,0.5)] transition-all"
+              className="group relative overflow-hidden bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:shadow-[0_0_25px_rgba(0,255,255,0.6)] hover:scale-105 transition-all duration-300 border-0"
             >
-              View Projects
+              <span className="relative z-10">View Projects</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Button>
             <Button
               size="lg"
               variant="outline"
               onClick={handleDownload}
               data-testid="button-download-resume"
-              className="
-                btn-shine  /* <--- 1. ADDED THE SHINE CLASS --- */
-                border-2 border-primary/50 text-primary 
-                hover:bg-primary/10 hover:border-primary 
-                hover:shadow-[0_0_20px_rgba(0,255,255,0.3)]
-              "
+              className="group relative overflow-hidden border-2 border-cyan-400/60 text-cyan-300 hover:bg-cyan-400/10 hover:border-cyan-300 hover:shadow-[0_0_20px_rgba(0,255,255,0.4)] hover:scale-105 transition-all duration-300 backdrop-blur-sm"
             >
-              {/* --- 2. WRAPPED CONTENT IN A 'relative' SPAN --- */}
-              {/* This ensures the text/icon are on top of the shine */}
               <span className="relative flex items-center">
                 <Download className="mr-2 h-4 w-4" />
-                Download Resume
+                Resume
               </span>
             </Button>
           </motion.div>
