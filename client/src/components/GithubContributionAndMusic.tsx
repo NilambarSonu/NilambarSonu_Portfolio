@@ -9,7 +9,7 @@ export default function ContributionsAndMusic() {
 
   const githubUsername = "NilambarSonu"; 
 
-  const spotifyPlaylistUrl = "https://open.spotify.com/embed/playlist/37i9dQZF1E355fVwvZDzug?utm_source=generator";
+  const spotifyPlaylistUrl = "https://open.spotify.com/embed/playlist/3nBpNPEsB5cbKUlu6iHVrm?utm_source=generator"
 
   return (
     <section
