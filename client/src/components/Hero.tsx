@@ -167,7 +167,6 @@ export default function Hero() {
             transition={{ delay: 0.5, duration: 0.8 }}
           >
             BCA Student | Founder of Mitti-AI | Building AI Systems for Real-World Impact
-
           </motion.p>
 
           <motion.p

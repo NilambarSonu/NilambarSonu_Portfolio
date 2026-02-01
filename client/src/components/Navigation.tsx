@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -57,46 +58,49 @@ export default function Navigation() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <motion.button
-              onClick={() => scrollToSection("home")}
-              className="text-2xl font-display font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              data-testid="link-logo"
-            >
-              NB
-            </motion.button>
+<div className="flex items-center justify-between h-16">
+  <motion.button
+    onClick={() => scrollToSection("home")}
+    className="text-2xl font-display font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    data-testid="link-logo"
+  >
+    NB
+  </motion.button>
 
-            <div className="hidden md:flex items-center gap-8">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className="relative text-foreground/80 hover:text-foreground transition-colors font-body"
-                  data-testid={`link-${item.id}`}
-                >
-                  {item.label}
-                  {activeSection === item.id && (
-                    <motion.div
-                      layoutId="activeSection"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-accent"
-                    />
-                  )}
-                </button>
-              ))}
-            </div>
+  <div className="hidden md:flex items-center gap-8">
+    {navItems.map((item) => (
+      <button
+        key={item.id}
+        onClick={() => scrollToSection(item.id)}
+        className="relative text-foreground/80 hover:text-foreground transition-colors font-body"
+        data-testid={`link-${item.id}`}
+      >
+        {item.label}
+        {activeSection === item.id && (
+          <motion.div
+            layoutId="activeSection"
+            className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-accent"
+          />
+        )}
+      </button>
+    ))}
+  </div>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden text-foreground"
-              data-testid="button-menu-toggle"
-            >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </Button>
-          </div>
+  <div className="flex items-center gap-4">
+    <ThemeToggle />
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+      className="md:hidden text-foreground"
+      data-testid="button-menu-toggle"
+    >
+      {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+    </Button>
+  </div>
+</div>
         </div>
       </motion.nav>
 

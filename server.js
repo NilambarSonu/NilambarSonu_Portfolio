@@ -1,9 +1,9 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { Resend } from 'resend';
-import dotenv from 'dotenv';
+import statsRouter from "./api/stats.js";
 
-dotenv.config();
 const app = express();
 const PORT = 5000;
 // Middleware
@@ -110,6 +110,9 @@ app.post('/api/send', async (req, res) => {
     return res.status(500).json({ error: 'Failed to send email.' });
   }
 });
+
+// API Routes
+app.use("/api/stats", statsRouter);
 
 app.listen(PORT, () => {
   console.log(`Development server running on http://localhost:${PORT}`);
