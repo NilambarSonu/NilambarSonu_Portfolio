@@ -111,7 +111,7 @@ export default function Contact() {
     {
       name: "Instagram",
       icon: SiInstagram,
-      href: "https://www.instagram.com/ramamanibehera001/",
+      href: "https://www.instagram.com/nilambarsonu/",
       color: "hover:text-pink-500"
     },
     {
