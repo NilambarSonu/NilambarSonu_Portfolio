@@ -1,19 +1,14 @@
 import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Github, Info } from "lucide-react";
 import ProjectModal from "./ProjectModal";
 import ProjectCard from "./ProjectCard";
 import FilterBar from "./FilterBar";
 
-// Import images/placeholders
 import mittiaiThumbnail from "@assets/generated_images/mitti-ai.png";
 import agniThumbnail from "@assets/generated_images/agni-sensor.png";
 import saathiThumbnail from "@assets/generated_images/saathi-app.png";
 
-// Placeholder for web projects
 const webPlaceholder = "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop";
 
 export interface Project {
@@ -41,12 +36,7 @@ export default function Projects() {
       techStack: ["React", "Python", "Machine Learning"],
       liveUrl: "https://saathiai.org/",
       codeUrl: "https://github.com/NilambarSonu",
-      features: [
-        "AI-powered soil analysis",
-        "Real-time agricultural insights",
-        "Mobile-friendly interface",
-        "Data visualization"
-      ],
+      features: ["AI-powered soil analysis", "Real-time agricultural insights", "Mobile-friendly interface", "Data visualization"],
       isPublished: true,
       category: "Startup",
       thumbnail: mittiaiThumbnail || webPlaceholder
@@ -56,12 +46,7 @@ export default function Projects() {
       description: "IoT-based soil sensor system for real-time soil health monitoring.",
       techStack: ["Python", "IoT", "Data Science"],
       codeUrl: "https://github.com/NilambarSonu",
-      features: [
-        "Real-time soil monitoring",
-        "IoT sensor integration",
-        "Data analytics dashboard",
-        "Mobile alerts"
-      ],
+      features: ["Real-time soil monitoring", "IoT sensor integration", "Data analytics dashboard", "Mobile alerts"],
       isPublished: false,
       category: "Startup",
       thumbnail: agniThumbnail || webPlaceholder
@@ -71,12 +56,7 @@ export default function Projects() {
       description: "Mobile application for agricultural advisory and crop management.",
       techStack: ["React Native", "Node.js", "MongoDB"],
       codeUrl: "https://github.com/NilambarSonu",
-      features: [
-        "Crop advisory system",
-        "Weather integration",
-        "Farmer community",
-        "Push notifications"
-      ],
+      features: ["Crop advisory system", "Weather integration", "Farmer community", "Push notifications"],
       isPublished: false,
       category: "Startup",
       thumbnail: saathiThumbnail || webPlaceholder
@@ -87,12 +67,7 @@ export default function Projects() {
       techStack: ["HTML", "CSS", "JavaScript"],
       liveUrl: "https://nilambarsonu.github.io/Rock-Paper-Scissor/",
       codeUrl: "https://github.com/NilambarSonu",
-      features: [
-        "Interactive gameplay",
-        "Score tracking",
-        "Animated results",
-        "Responsive design"
-      ],
+      features: ["Interactive gameplay", "Score tracking", "Animated results", "Responsive design"],
       isPublished: true,
       category: "Web Dev",
       thumbnail: webPlaceholder
@@ -103,12 +78,7 @@ export default function Projects() {
       techStack: ["HTML", "CSS", "JavaScript"],
       liveUrl: "https://nilambarsonu.github.io/Calculator.01.036/",
       codeUrl: "https://github.com/NilambarSonu",
-      features: [
-        "Responsive design",
-        "Basic arithmetic operations",
-        "User-friendly interface",
-        "Clean modern UI"
-      ],
+      features: ["Responsive design", "Basic arithmetic operations", "User-friendly interface", "Clean modern UI"],
       isPublished: true,
       category: "Web Dev",
       thumbnail: webPlaceholder
@@ -118,12 +88,7 @@ export default function Projects() {
       description: "Interactive and responsive portfolio web application showcasing projects and skills.",
       techStack: ["React", "TypeScript", "Tailwind CSS"],
       codeUrl: "https://github.com/NilambarSonu",
-      features: [
-        "Interactive and responsive",
-        "Real-world use cases",
-        "Problem-solving demonstrations",
-        "Links to live demos and source code"
-      ],
+      features: ["Interactive and responsive", "Real-world use cases", "Problem-solving demonstrations", "Links to live demos and source code"],
       isPublished: true,
       category: "Web Dev",
       thumbnail: webPlaceholder
@@ -133,12 +98,7 @@ export default function Projects() {
       description: "Data collection and analysis tool for extracting insights from web sources.",
       techStack: ["Python", "Data Science"],
       codeUrl: "https://github.com/NilambarSonu",
-      features: [
-        "Web data extraction",
-        "Data analysis capabilities",
-        "Export functionality",
-        "Visualization tools"
-      ],
+      features: ["Web data extraction", "Data analysis capabilities", "Export functionality", "Visualization tools"],
       isPublished: false,
       category: "AI/ML",
       thumbnail: webPlaceholder
@@ -146,24 +106,30 @@ export default function Projects() {
   ];
 
   const [selectedCategory, setSelectedCategory] = useState("All");
-
   const filteredProjects = selectedCategory === "All"
     ? projects
     : projects.filter(project => project.category === selectedCategory);
 
   return (
-    <section ref={ref} className="relative py-20 md:py-32 px-4 bg-background transition-colors duration-500" id="projects">
-      <div className="max-w-7xl mx-auto">
+    <section ref={ref} className="relative py-20 md:py-32 px-4 bg-[#0a0a0a]" id="projects">
+      {/* Red top border */}
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-st-red/15 to-transparent" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-center bg-gradient-to-r from-accent via-primary to-secondary bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-center text-st-red tracking-[0.1em] uppercase"
+            style={{
+              textShadow: "0 0 10px rgba(229,9,20,0.4), 0 0 30px rgba(229,9,20,0.15)",
+            }}
+          >
             My Projects
           </h2>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Explore my collection of web development, AI, and startup projects
+          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto font-retro text-sm tracking-wider">
+            Experiments from the lab — web development, AI, and startup projects
           </p>
 
           <FilterBar
@@ -173,7 +139,7 @@ export default function Projects() {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(showAllProjects ? filteredProjects : filteredProjects.slice(0, 3)).map((project, index) => (
+            {(showAllProjects ? filteredProjects : filteredProjects.slice(0, 3)).map((project) => (
               <ProjectCard
                 key={project.title}
                 project={project}
@@ -191,10 +157,10 @@ export default function Projects() {
             >
               <Button
                 onClick={() => setShowAllProjects(true)}
-                className="bg-primary hover:shadow-[0_0_20px_rgba(0,255,255,0.4)]"
+                className="bg-st-red/20 text-st-red border border-st-red/40 hover:bg-st-red hover:text-white hover:shadow-[0_0_20px_rgba(229,9,20,0.4)] transition-all font-retro tracking-wider"
                 size="lg"
               >
-                See More Projects
+                Open More Files
               </Button>
             </motion.div>
           )}
@@ -209,10 +175,10 @@ export default function Projects() {
               <Button
                 onClick={() => setShowAllProjects(false)}
                 variant="outline"
-                className="border-primary/30 hover:border-primary text-primary"
+                className="border-st-red/20 hover:border-st-red/50 text-st-red/70 font-retro tracking-wider"
                 size="lg"
               >
-                See Less Projects
+                Close Files
               </Button>
             </motion.div>
           )}

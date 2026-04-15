@@ -22,7 +22,11 @@ export default function FilterBar({ categories, selectedCategory, onCategoryChan
           variant={selectedCategory === category ? "default" : "outline"}
           size="lg"
           onClick={() => onCategoryChange(category)}
-          className="text-sm font-semibold px-6 py-3"
+          className={`text-xs font-retro tracking-[0.15em] uppercase px-6 py-3 transition-all duration-300 ${
+            selectedCategory === category
+              ? "bg-st-red text-white border-st-red hover:bg-st-red/80 shadow-[0_0_15px_rgba(229,9,20,0.3)]"
+              : "border-st-red/20 text-st-red/60 hover:border-st-red/50 hover:text-st-red hover:bg-st-red/5"
+          }`}
         >
           {category}
         </Button>

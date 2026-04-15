@@ -12,19 +12,22 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="relative bg-muted/30 border-t border-border py-12 px-4">
+    <footer className="relative bg-[#0a0a0a] border-t border-st-red/10 py-12 px-4">
+      {/* Decorative top line */}
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-st-red/20 to-transparent" />
+
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex items-center gap-2 text-foreground/80"
+            className="flex items-center gap-2 text-foreground/60 font-retro text-sm tracking-wider"
           >
             <span>Made with</span>
-            <Heart className="w-5 h-7 text-accent fill-accent animate-pulse" />
+            <Heart className="w-4 h-4 text-st-red fill-st-red animate-pulse" />
             <span>One Plate Biriyani and</span>
-            <Code className="w-4 h-4 text-primary" />
+            <Code className="w-4 h-4 text-st-amber" />
             <span>by NilambarSonu</span>
           </motion.div>
 
@@ -39,7 +42,7 @@ export default function Footer() {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                className="text-xs text-muted-foreground hover:text-st-red transition-colors font-retro tracking-wider uppercase"
                 data-testid={`footer-link-${link.label.toLowerCase()}`}
               >
                 {link.label}
@@ -53,9 +56,14 @@ export default function Footer() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="mt-8 text-center text-sm text-muted-foreground"
+          className="mt-8 text-center"
         >
-          <p>&copy; {currentYear} Nilambar Behera. All rights reserved.</p>
+          <p className="text-xs text-muted-foreground/50 font-retro tracking-wider">
+            © {currentYear} Nilambar Behera — Built in Hawkins... err, Odisha, India 🔴
+          </p>
+          <div className="mt-3 flex justify-center">
+            <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-st-red/20 to-transparent" />
+          </div>
         </motion.div>
       </div>
     </footer>

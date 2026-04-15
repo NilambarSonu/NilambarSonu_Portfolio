@@ -17,7 +17,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4"
         data-testid="project-modal-backdrop"
       >
         <motion.div
@@ -25,18 +25,27 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-card border border-card-border rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-[0_0_50px_rgba(0,255,255,0.2)]"
+          className="bg-[#111] border border-st-red/30 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto relative"
+          style={{
+            boxShadow: "0 0 40px rgba(229,9,20,0.2), 0 0 80px rgba(229,9,20,0.08)",
+          }}
         >
-          <div className="sticky top-0 bg-card/95 backdrop-blur border-b border-card-border p-6 flex items-start justify-between">
+          {/* Classified header */}
+          <div className="sticky top-0 bg-[#111]/95 backdrop-blur border-b border-st-red/20 p-6 flex items-start justify-between">
             <div>
-              <h2 className="text-3xl font-display font-bold text-foreground mb-2">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="font-retro text-[10px] text-st-red/40 tracking-[0.3em] uppercase">
+                  HAWKINS LAB — PROJECT FILE
+                </span>
+              </div>
+              <h2 className="text-3xl font-display font-bold text-foreground mb-3 tracking-wide">
                 {project.title}
               </h2>
               <div className="flex flex-wrap gap-2">
                 {project.techStack.map((tech) => (
                   <Badge
                     key={tech}
-                    className="bg-primary/20 text-primary border border-primary/50"
+                    className="bg-st-red/15 text-st-red/80 border border-st-red/30 font-retro text-xs tracking-wider"
                   >
                     {tech}
                   </Badge>
@@ -48,7 +57,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               size="icon"
               onClick={onClose}
               data-testid="button-close-modal"
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-st-red hover:bg-st-red/10"
             >
               <X className="w-6 h-6" />
             </Button>
@@ -56,30 +65,32 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
           <div className="p-6 space-y-6">
             <div>
-              <h3 className="text-xl font-display font-semibold mb-3 text-primary">
+              <h3 className="text-lg font-display font-semibold mb-3 text-st-red tracking-wider uppercase flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-st-red animate-pulse" />
                 Description
               </h3>
-              <p className="text-foreground/90 leading-relaxed">{project.description}</p>
+              <p className="text-foreground/80 leading-relaxed font-mono text-sm">{project.description}</p>
             </div>
 
             <div>
-              <h3 className="text-xl font-display font-semibold mb-3 text-accent">
+              <h3 className="text-lg font-display font-semibold mb-3 text-st-amber tracking-wider uppercase flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-st-amber animate-pulse" />
                 Key Features
               </h3>
               <ul className="space-y-2">
                 {project.features.map((feature, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-foreground/80">{feature}</span>
+                    <CheckCircle className="w-4 h-4 text-st-red/60 mt-0.5 flex-shrink-0" />
+                    <span className="text-foreground/70 font-mono text-sm">{feature}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {!project.isPublished && (
-              <div className="bg-muted/50 border border-border rounded-md p-4">
-                <p className="text-sm text-muted-foreground">
-                  <strong className="text-foreground">Note:</strong> This project is not yet published to GitHub Pages.
+              <div className="bg-st-red/5 border border-st-red/15 rounded-md p-4">
+                <p className="text-sm text-muted-foreground font-retro">
+                  <strong className="text-st-red">⚠ CLASSIFIED:</strong> This project is not yet published.
                 </p>
               </div>
             )}
@@ -89,7 +100,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <Button
                   asChild
                   data-testid="button-modal-live"
-                  className="flex-1 bg-primary hover:shadow-[0_0_20px_rgba(0,255,255,0.4)]"
+                  className="flex-1 bg-st-red hover:bg-st-red/80 hover:shadow-[0_0_20px_rgba(229,9,20,0.4)] text-white"
                 >
                   <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="w-4 h-4 mr-2" />
@@ -102,7 +113,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   variant="outline"
                   asChild
                   data-testid="button-modal-code"
-                  className="flex-1 border-primary/50 hover:border-primary"
+                  className="flex-1 border-st-amber/40 text-st-amber hover:border-st-amber hover:shadow-[0_0_15px_rgba(212,160,23,0.3)]"
                 >
                   <a href={project.codeUrl} target="_blank" rel="noopener noreferrer">
                     <Github className="w-4 h-4 mr-2" />

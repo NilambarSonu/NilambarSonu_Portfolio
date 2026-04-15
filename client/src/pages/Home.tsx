@@ -10,6 +10,8 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
 import Loader from "@/components/Loader";
+import UpsideDownParticles from "@/components/UpsideDownParticles";
+import AudioPlayer from "@/components/AudioPlayer";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +27,9 @@ export default function Home() {
     <>
       {isLoading && <Loader onComplete={() => setIsLoading(false)} />}
       <div className="relative">
+        {/* Upside Down floating particles — persistent background */}
+        <UpsideDownParticles />
+        
         <CustomCursor />
         <Navigation />
         <main>
@@ -37,6 +42,9 @@ export default function Home() {
           <Contact />
         </main>
         <Footer />
+
+        {/* Floating audio player */}
+        <AudioPlayer />
       </div>
     </>
   );
