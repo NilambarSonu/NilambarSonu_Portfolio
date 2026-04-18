@@ -64,6 +64,20 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           </div>
 
           <div className="p-6 space-y-6">
+            {project.thumbnail && (
+              <div className="relative rounded-lg overflow-hidden border border-st-red/20 bg-[#050505] group">
+                <img
+                  src={project.thumbnail}
+                  alt={project.title}
+                  className="w-full h-auto max-h-[300px] object-contain mx-auto"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#111]/40 to-transparent pointer-events-none" />
+                <div className="absolute top-2 right-2 px-2 py-1 bg-st-red/20 backdrop-blur-md rounded border border-st-red/30 text-[10px] font-retro text-st-red tracking-widest uppercase">
+                  Encrypted File
+                </div>
+              </div>
+            )}
+
             <div>
               <h3 className="text-lg font-display font-semibold mb-3 text-st-red tracking-wider uppercase flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-st-red animate-pulse" />

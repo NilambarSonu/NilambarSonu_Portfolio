@@ -4,106 +4,13 @@ import { Button } from "@/components/ui/button";
 import ProjectModal from "./ProjectModal";
 import ProjectCard from "./ProjectCard";
 import FilterBar from "./FilterBar";
-
-import mittiaiThumbnail from "@assets/generated_images/mitti-ai.png";
-import agniThumbnail from "@assets/generated_images/agni-sensor.png";
-import saathiThumbnail from "@assets/generated_images/saathi-app.png";
-
-const webPlaceholder = "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop";
-
-export interface Project {
-  title: string;
-  description: string;
-  techStack: string[];
-  liveUrl?: string;
-  codeUrl?: string;
-  features: string[];
-  isPublished: boolean;
-  category: string;
-  thumbnail?: string;
-}
+import { projects, type Project } from "@/lib/projects-data";
 
 export default function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showAllProjects, setShowAllProjects] = useState(false);
-
-  const projects: Project[] = [
-    {
-      title: "Mitti-AI",
-      description: "AI-powered soil analysis and agricultural insights platform for farmers.",
-      techStack: ["React", "Python", "Machine Learning"],
-      liveUrl: "https://saathiai.org/",
-      codeUrl: "https://github.com/NilambarSonu",
-      features: ["AI-powered soil analysis", "Real-time agricultural insights", "Mobile-friendly interface", "Data visualization"],
-      isPublished: true,
-      category: "Startup",
-      thumbnail: mittiaiThumbnail || webPlaceholder
-    },
-    {
-      title: "Agni Soil Sensor",
-      description: "IoT-based soil sensor system for real-time soil health monitoring.",
-      techStack: ["Python", "IoT", "Data Science"],
-      codeUrl: "https://github.com/NilambarSonu",
-      features: ["Real-time soil monitoring", "IoT sensor integration", "Data analytics dashboard", "Mobile alerts"],
-      isPublished: false,
-      category: "Startup",
-      thumbnail: agniThumbnail || webPlaceholder
-    },
-    {
-      title: "Saathi App",
-      description: "Mobile application for agricultural advisory and crop management.",
-      techStack: ["React Native", "Node.js", "MongoDB"],
-      codeUrl: "https://github.com/NilambarSonu",
-      features: ["Crop advisory system", "Weather integration", "Farmer community", "Push notifications"],
-      isPublished: false,
-      category: "Startup",
-      thumbnail: saathiThumbnail || webPlaceholder
-    },
-    {
-      title: "Rock-Paper-Scissor",
-      description: "Interactive game implementation of the classic Rock-Paper-Scissor with score tracking.",
-      techStack: ["HTML", "CSS", "JavaScript"],
-      liveUrl: "https://nilambarsonu.github.io/Rock-Paper-Scissor/",
-      codeUrl: "https://github.com/NilambarSonu",
-      features: ["Interactive gameplay", "Score tracking", "Animated results", "Responsive design"],
-      isPublished: true,
-      category: "Web Dev",
-      thumbnail: webPlaceholder
-    },
-    {
-      title: "Calculator",
-      description: "A responsive web calculator with basic arithmetic operations and a user-friendly interface.",
-      techStack: ["HTML", "CSS", "JavaScript"],
-      liveUrl: "https://nilambarsonu.github.io/Calculator.01.036/",
-      codeUrl: "https://github.com/NilambarSonu",
-      features: ["Responsive design", "Basic arithmetic operations", "User-friendly interface", "Clean modern UI"],
-      isPublished: true,
-      category: "Web Dev",
-      thumbnail: webPlaceholder
-    },
-    {
-      title: "Portfolio Website",
-      description: "Interactive and responsive portfolio web application showcasing projects and skills.",
-      techStack: ["React", "TypeScript", "Tailwind CSS"],
-      codeUrl: "https://github.com/NilambarSonu",
-      features: ["Interactive and responsive", "Real-world use cases", "Problem-solving demonstrations", "Links to live demos and source code"],
-      isPublished: true,
-      category: "Web Dev",
-      thumbnail: webPlaceholder
-    },
-    {
-      title: "Data Harvesting",
-      description: "Data collection and analysis tool for extracting insights from web sources.",
-      techStack: ["Python", "Data Science"],
-      codeUrl: "https://github.com/NilambarSonu",
-      features: ["Web data extraction", "Data analysis capabilities", "Export functionality", "Visualization tools"],
-      isPublished: false,
-      category: "AI/ML",
-      thumbnail: webPlaceholder
-    }
-  ];
 
   const [selectedCategory, setSelectedCategory] = useState("All");
   const filteredProjects = selectedCategory === "All"

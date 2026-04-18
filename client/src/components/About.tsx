@@ -45,7 +45,9 @@ export default function About() {
     offset: ["start end", "end start"],
   });
 
-  const vineGrow = useTransform(scrollYProgress, [0, 0.8], ["0%", "100%"]);
+  // Climber moves bottom → top as user scrolls through the education section
+  const boyY = useTransform(scrollYProgress, [0.1, 0.9], ["85%", "5%"]);
+  const bubbleOpacity = useTransform(scrollYProgress, [0.75, 0.9], [0, 1]);
 
   return (
     <section
@@ -146,30 +148,106 @@ export default function About() {
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4" ref={educationColumnRef}>
-              {/* Vine/tendril growth indicator */}
-              <div className="relative hidden md:flex md:col-span-1 h-80">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-full bg-st-red/10 rounded-full overflow-hidden">
-                  <motion.div
-                    className="w-full bg-gradient-to-b from-st-red/60 to-st-amber/40"
-                    style={{ height: vineGrow }}
-                  />
-                </div>
+              {/* ── RED LADDER + CLIMBING MAN ── */}
+              <div className="relative hidden md:flex md:col-span-1 items-start justify-center h-80">
+                <div className="relative mt-4 h-full w-20">
 
-                {/* Decorative dots on the line */}
-                {[0.15, 0.45, 0.75].map((pos, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-st-red/40 border border-st-red/60"
+                  {/* Left rail */}
+                  <div className="absolute left-2 top-0 h-full w-[3px] rounded-full"
+                    style={{ background: "linear-gradient(to bottom, #e50914cc, #7f0a0acc)" }} />
+
+                  {/* Right rail */}
+                  <div className="absolute right-2 top-0 h-full w-[3px] rounded-full"
+                    style={{ background: "linear-gradient(to bottom, #e50914cc, #7f0a0acc)" }} />
+
+                  {/* Rungs — evenly spaced */}
+                  <div className="absolute inset-x-2 top-0 flex h-full flex-col justify-between py-6">
+                    {Array.from({ length: 7 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-[3px] w-full rounded-full"
+                        style={{
+                          background: "rgba(229,9,20,0.45)",
+                          boxShadow: "0 0 6px rgba(229,9,20,0.3)",
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Glow behind ladder */}
+                  <div className="absolute inset-0 pointer-events-none"
                     style={{
-                      top: `${pos * 100}%`,
-                      boxShadow: "0 0 8px rgba(229,9,20,0.4)",
+                      background: "radial-gradient(ellipse at center, rgba(229,9,20,0.08) 0%, transparent 70%)",
                     }}
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.3 }}
                   />
-                ))}
+
+                  {/* ── CLIMBER ── */}
+                  <motion.div
+                    className="absolute left-1/2 h-16 w-16"
+                    style={{ y: boyY, x: "-50%" }}
+                  >
+                    <motion.svg
+                      viewBox="0 0 40 48"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-full w-full"
+                      style={{ filter: "drop-shadow(0 0 8px rgba(229,9,20,0.8))" }}
+                    >
+                      {/* Head */}
+                      <circle cx="20" cy="7" r="5" fill="#e50914" />
+
+                      {/* Body */}
+                      <rect x="15" y="14" width="10" height="13" rx="3" fill="#e50914" />
+
+                      {/* Left arm — reaches up then down */}
+                      <motion.rect
+                        x="9" y="14" width="4" height="9" rx="2" fill="#b00710"
+                        animate={{ y: [0, -5, 0] }}
+                        transition={{ repeat: Infinity, duration: 1.0, ease: "easeInOut" }}
+                      />
+
+                      {/* Right arm — opposite phase */}
+                      <motion.rect
+                        x="27" y="14" width="4" height="9" rx="2" fill="#b00710"
+                        animate={{ y: [-5, 0, -5] }}
+                        transition={{ repeat: Infinity, duration: 1.0, ease: "easeInOut" }}
+                      />
+
+                      {/* Left leg */}
+                      <motion.rect
+                        x="13" y="25" width="5" height="10" rx="2" fill="#7f0a0a"
+                        animate={{ y: [0, -4, 0] }}
+                        transition={{ repeat: Infinity, duration: 1.0, ease: "easeInOut", delay: 0.5 }}
+                      />
+
+                      {/* Right leg — opposite phase */}
+                      <motion.rect
+                        x="22" y="25" width="5" height="10" rx="2" fill="#7f0a0a"
+                        animate={{ y: [-4, 0, -4] }}
+                        transition={{ repeat: Infinity, duration: 1.0, ease: "easeInOut", delay: 0.5 }}
+                      />
+                    </motion.svg>
+
+                    {/* Speech bubble — appears near top */}
+                    <motion.div
+                      className="absolute bottom-full left-full mb-1 ml-1 w-36"
+                      style={{ opacity: bubbleOpacity }}
+                    >
+                      <div
+                        className="relative rounded-xl px-3 py-2 text-xs font-retro"
+                        style={{
+                          background: "rgba(10,0,0,0.85)",
+                          border: "1px solid rgba(229,9,20,0.4)",
+                          color: "rgba(255,255,255,0.85)",
+                          backdropFilter: "blur(6px)",
+                        }}
+                      >
+                        Almost at the top!
+                      </div>
+                    </motion.div>
+                  </motion.div>
+
+                </div>
               </div>
 
               {/* Education cards */}

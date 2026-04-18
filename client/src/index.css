@@ -124,13 +124,16 @@
   ::-webkit-scrollbar {
     width: 8px;
   }
+
   ::-webkit-scrollbar-track {
     background: #0a0a0a;
   }
+
   ::-webkit-scrollbar-thumb {
     background: #3a0000;
     border-radius: 4px;
   }
+
   ::-webkit-scrollbar-thumb:hover {
     background: #e50914;
   }
@@ -138,33 +141,53 @@
 
 /* ─── Stranger Things Animations ─── */
 @keyframes st-flicker {
-  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+
+  0%,
+  19.999%,
+  22%,
+  62.999%,
+  64%,
+  64.999%,
+  70%,
+  100% {
     opacity: 1;
-    text-shadow: 
+    text-shadow:
       0 0 10px var(--st-red-glow),
       0 0 20px var(--st-red-glow),
       0 0 40px var(--st-red-glow),
       0 0 80px var(--st-red-glow);
   }
-  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+
+  20%,
+  21.999%,
+  63%,
+  63.999%,
+  65%,
+  69.999% {
     opacity: 0.4;
     text-shadow: none;
   }
 }
 
 @keyframes st-glow-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 5px var(--st-red-glow), 0 0 10px var(--st-red-glow);
   }
+
   50% {
     box-shadow: 0 0 15px var(--st-red-glow), 0 0 30px var(--st-red-glow), 0 0 60px rgba(229, 9, 20, 0.3);
   }
 }
 
 @keyframes st-text-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     text-shadow: 0 0 5px var(--st-red-glow), 0 0 10px var(--st-red-glow);
   }
+
   50% {
     text-shadow: 0 0 10px var(--st-red-glow), 0 0 20px var(--st-red-glow), 0 0 40px rgba(229, 9, 20, 0.4);
   }
@@ -175,12 +198,15 @@
     transform: translateY(100vh) rotate(0deg);
     opacity: 0;
   }
+
   10% {
     opacity: 0.6;
   }
+
   90% {
     opacity: 0.6;
   }
+
   100% {
     transform: translateY(-10vh) rotate(720deg);
     opacity: 0;
@@ -188,34 +214,54 @@
 }
 
 @keyframes float-gentle {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
   }
+
   25% {
     transform: translateY(-10px) translateX(5px);
   }
+
   50% {
     transform: translateY(-5px) translateX(-5px);
   }
+
   75% {
     transform: translateY(-15px) translateX(3px);
   }
 }
 
 @keyframes christmas-light-blink {
-  0%, 100% { opacity: 1; filter: brightness(1.5); }
-  50% { opacity: 0.3; filter: brightness(0.5); }
+
+  0%,
+  100% {
+    opacity: 1;
+    filter: brightness(1.5);
+  }
+
+  50% {
+    opacity: 0.3;
+    filter: brightness(0.5);
+  }
 }
 
 @keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100vh);
+  }
 }
 
 @keyframes portal-ripple {
   0% {
     box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.4);
   }
+
   100% {
     box-shadow: 0 0 0 20px rgba(229, 9, 20, 0);
   }
@@ -226,10 +272,12 @@
     transform: translate(0, 0) scale(1);
     opacity: 0.8;
   }
+
   50% {
     transform: translate(var(--tx, 20px), var(--ty, -30px)) scale(0.8);
     opacity: 0.4;
   }
+
   100% {
     transform: translate(var(--tx2, -10px), var(--ty2, -60px)) scale(0.3);
     opacity: 0;
@@ -242,10 +290,12 @@
     opacity: 0;
     filter: blur(10px);
   }
+
   50% {
     opacity: 0.5;
     filter: blur(5px);
   }
+
   100% {
     letter-spacing: 0.15em;
     opacity: 1;
@@ -254,9 +304,12 @@
 }
 
 @keyframes border-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     border-color: rgba(229, 9, 20, 0.3);
   }
+
   50% {
     border-color: rgba(229, 9, 20, 0.7);
   }
@@ -264,12 +317,20 @@
 
 /* Audio equalizer bars */
 @keyframes eq-bar {
-  0%, 100% { height: 4px; }
-  50% { height: var(--eq-height, 16px); }
+
+  0%,
+  100% {
+    height: 4px;
+  }
+
+  50% {
+    height: var(--eq-height, 16px);
+  }
 }
 
 /* ─── Utility Classes ─── */
 @layer utilities {
+
   /* Stranger Things neon text */
   .st-neon-text {
     color: #e50914;
@@ -306,13 +367,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0.1) 0px,
-      rgba(0, 0, 0, 0.1) 1px,
-      transparent 1px,
-      transparent 3px
-    );
+    background: repeating-linear-gradient(0deg,
+        rgba(0, 0, 0, 0.1) 0px,
+        rgba(0, 0, 0, 0.1) 1px,
+        transparent 1px,
+        transparent 3px);
     pointer-events: none;
     z-index: 50;
     opacity: 0.3;
@@ -320,7 +379,7 @@
 
   /* Red fog gradient */
   .st-fog {
-    background: 
+    background:
       radial-gradient(ellipse at 20% 80%, rgba(229, 9, 20, 0.08) 0%, transparent 60%),
       radial-gradient(ellipse at 80% 20%, rgba(26, 107, 107, 0.06) 0%, transparent 60%),
       radial-gradient(ellipse at 50% 50%, rgba(139, 0, 0, 0.04) 0%, transparent 70%);
@@ -330,9 +389,10 @@
   .st-portal-hover {
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
+
   .st-portal-hover:hover {
     transform: scale(1.03);
-    box-shadow: 
+    box-shadow:
       0 0 15px rgba(229, 9, 20, 0.3),
       0 0 30px rgba(229, 9, 20, 0.15),
       inset 0 0 15px rgba(229, 9, 20, 0.05);
@@ -365,10 +425,12 @@
   .btn-shine {
     @apply relative overflow-hidden;
   }
+
   .btn-shine::before {
     content: '';
     @apply absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-primary/20 to-transparent transition-all duration-700 ease-in-out -skew-x-12;
   }
+
   .btn-shine:hover::before {
     @apply left-full;
   }
@@ -390,11 +452,874 @@
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
+
   100% {
-    transform: translate(
-      calc(-50% + var(--burst-x, 30px)),
-      calc(-50% + var(--burst-y, -30px))
-    ) scale(0);
+    transform: translate(calc(-50% + var(--burst-x, 30px)),
+        calc(-50% + var(--burst-y, -30px))) scale(0);
     opacity: 0;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   🎬 HOMEPAGE — Cinematic 5-Zone Video Grid
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Custom red cursor dot ── */
+.hero-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e63946;
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 0 0 6px rgba(230, 57, 70, 0.8), 0 0 12px rgba(230, 57, 70, 0.4);
+  will-change: transform;
+  mix-blend-mode: difference;
+}
+
+/* Apply cursor: none to the hero section */
+.hero-section,
+.hero-section * {
+  cursor: none;
+}
+
+/* ── SVG noise texture ── */
+.hero-noise {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.03;
+}
+
+/* ── Full-viewport hero section ── */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  /* Red/Blue atmospheric base gradient */
+  background: linear-gradient(to right, #120000 0%, #050000 35%, #050000 65%, #000c1a 100%);
+}
+
+/*
+  Grid: 35vw side panels | 30vw center
+  FIX 1: bottom row = 28vh to give bikes vertical room
+  FIX 2B: gap:0 — even 1px gap breaks the seamless illusion
+*/
+.hero-grid {
+  display: grid;
+  grid-template-columns: 35vw 30vw 35vw;
+  grid-template-rows: 26vh calc(100vh - 62vh) 36vh;
+  width: 100%;
+  height: 100%;
+  gap: 0;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+}
+
+/* ════════════════════════
+   GRID CELL PLACEMENT
+   ════════════════════════ */
+
+/* TOP STRIP — full width */
+.hero-top {
+  grid-column: 1 / -1;
+  grid-row: 1 / 2;
+}
+
+/* LEFT PANEL — middle row only */
+.hero-left {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
+
+/* CENTER — middle row only (FIX 2+5: fully transparent, overflow visible) */
+.hero-center {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  /* Bleeding atmospheric colors into the center gap */
+  background: 
+    linear-gradient(to right, rgba(139, 0, 0, 0.2) 0%, transparent 50%),
+    linear-gradient(to left, rgba(30, 58, 95, 0.2) 0%, transparent 50%);
+  z-index: 2;
+  /* overflow:visible lets the avatar glow bleed into side panels */
+  overflow: visible;
+}
+
+/* RIGHT PANEL — middle row only */
+.hero-right {
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
+}
+
+/* BOTTOM STRIP — full width */
+.hero-bottom {
+  grid-column: 1 / -1;
+  grid-row: 3 / 4;
+}
+
+/* ════════════════════════
+   VIDEO PANEL BASE
+   ════════════════════════ */
+.hero-panel {
+  position: relative;
+  overflow: hidden;
+  /* GPU isolation — reduces layout/paint cost significantly */
+  contain: strict;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.hero-panel-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  /* default fallback */
+  display: block;
+  z-index: 0;
+  filter: brightness(0.7) contrast(1.1);
+  /* GPU compositing */
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* ── Per-video object-position focal points (FIX 1) ── */
+/* Top: pull WAY down to show the fiery red hot core */
+.video-pos-top {
+  object-position: center 70%;
+  transform: scale(1.1);
+  filter: brightness(0.9) saturate(1.3) contrast(1.1);
+}
+
+/* Bottom: FIX 1 — center-bottom crop to show full bikes + children */
+.video-pos-bottom {
+  object-fit: cover;
+  object-position: 20% 84%;
+  transform: scale(1.4) translateY(-5%);
+  filter: brightness(0.85) contrast(1.2) saturate(1.15);
+}
+
+/* Left: show right edge to blend toward center */
+.video-pos-left {
+  object-position: 80% center;
+  filter: brightness(0.7) saturate(1.1);
+}
+
+/* Right: show left edge to blend toward center */
+.video-pos-right {
+  object-position: 20% center;
+  filter: brightness(0.7) saturate(1.1);
+}
+
+/* ── Base dark overlay (all panels) ── */
+.hero-panel-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* FIX 2C — ALL overlay/blend colors unified to #050000 */
+
+/* Neutral dark tint (top/bottom panels) */
+.overlay-neutral {
+  background: rgba(5, 0, 0, 0.1);
+}
+
+/* Left panel overlay: darkens toward center edge, subtle red tint */
+.overlay-left {
+  background: linear-gradient(to right, rgba(139, 0, 0, 0.1) 0%, rgba(5, 0, 0, 0.4) 100%);
+}
+
+/* Right panel overlay: darkens toward center edge, subtle blue tint */
+.overlay-right {
+  background: linear-gradient(to left, rgba(30, 58, 95, 0.1) 0%, rgba(5, 0, 0, 0.4) 100%);
+}
+
+/* ── Edge-blend gradients — ALL endpoints are exactly #050000 ── */
+.hero-panel-blend {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Top panel: strong bottom fade, 35% side caps */
+.blend-top {
+  background:
+    linear-gradient(to bottom, transparent 0%, transparent 45%, rgba(5, 0, 0, 0.7) 75%, #050000 100%),
+    linear-gradient(to right, #050000 0%, transparent 35%),
+    linear-gradient(to left, #050000 0%, transparent 35%);
+}
+
+/* Bottom panel: strong top fade, 35% side caps */
+.blend-bottom {
+  background:
+    linear-gradient(to top, transparent 0%, transparent 45%, rgba(5, 0, 0, 0.7) 75%, #050000 100%),
+    linear-gradient(to right, #050000 0%, transparent 35%),
+    linear-gradient(to left, #050000 0%, transparent 35%);
+}
+
+/* Left panel: right edge fades to center red atmo */
+.blend-left {
+  background:
+    linear-gradient(to right, transparent 0%, transparent 40%, rgba(20, 0, 0, 0.6) 70%, #120000 100%),
+    linear-gradient(to bottom, #050000 0%, transparent 30%),
+    linear-gradient(to top, #050000 0%, transparent 30%);
+}
+
+/* Right panel: left edge fades to center blue atmo */
+.blend-right {
+  background:
+    linear-gradient(to left, transparent 0%, transparent 40%, rgba(0, 8, 20, 0.6) 70%, #000c1a 100%),
+    linear-gradient(to bottom, #050000 0%, transparent 30%),
+    linear-gradient(to top, #050000 0%, transparent 30%);
+}
+
+/* ── FIX 4 — 3D panel tilts ── */
+.hero-left.hero-panel {
+  transform: rotateY(8deg) translateZ(-20px);
+  transform-origin: right center;
+  transition: transform 0.6s ease;
+}
+
+.hero-left.hero-panel:hover {
+  transform: rotateY(4deg) translateZ(0px);
+}
+
+.hero-right.hero-panel {
+  transform: rotateY(-8deg) translateZ(-20px);
+  transform-origin: left center;
+  transition: transform 0.6s ease;
+}
+
+.hero-right.hero-panel:hover {
+  transform: rotateY(-4deg) translateZ(0px);
+}
+
+.hero-top.hero-panel {
+  transform: rotateX(-6deg) translateZ(-15px);
+  transform-origin: bottom center;
+}
+
+.hero-bottom.hero-panel {
+  transform: rotateX(6deg) translateZ(-15px);
+  transform-origin: top center;
+}
+
+/* ── Center column outer glow — pushes videos back ── */
+.hero-center-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  box-shadow: 0 0 120px 40px rgba(0, 0, 0, 0.9);
+}
+
+/* FIX 2F — Cinematic spotlight vignette: fixed so it covers full page */
+.hero-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  background: radial-gradient(ellipse 55% 65% at 50% 50%,
+      transparent 0%,
+      transparent 35%,
+      rgba(5, 0, 0, 0.4) 60%,
+      rgba(5, 0, 0, 0.85) 100%);
+}
+
+/* ════════════════════════════════════════
+   NAME CARD WRAPPER & ATMOSPHERIC GLOW
+   ════════════════════════════════════════ */
+.name-card-wrapper {
+  position: relative;
+  width: min(380px, 90%);
+  z-index: 1;
+}
+
+/* Red atmospheric glow — larger behind avatar */
+.name-atmo-glow {
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(230, 57, 70, 0.18) 0%, transparent 70%);
+  filter: blur(50px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ════════════════════════════════════
+   NAME CARD — invisible flex container
+   No box, no background, no border.
+   Content floats directly in the center zone.
+   ════════════════════════════════════ */
+.name-glass-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 2rem;
+  /* Fully transparent — card box removed */
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+  text-align: center;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Shine hidden — no card surface to shine on */
+.name-card-shine {
+  display: none;
+}
+
+/* ══ Spinning avatar ring ══ */
+@keyframes spin-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Avatar wrapper — strictly circular (FIX 5 — 140px + pulse glow) ── */
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(230, 57, 70, 0.5), 0 0 40px rgba(230, 57, 70, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 35px rgba(230, 57, 70, 0.8), 0 0 70px rgba(230, 57, 70, 0.4);
+  }
+}
+
+/* Avatar wrapper — FIX 3: drop-shadow bleeds beyond the circle into side panels */
+.avatar-ring-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  /* pulse-glow uses box-shadow; drop-shadow bleeds beyond overflow */
+  filter:
+    drop-shadow(0 0 40px rgba(230, 57, 70, 0.7)) drop-shadow(0 0 80px rgba(230, 57, 70, 0.3));
+  animation: pulse-glow 3s ease-in-out infinite;
+  margin-bottom: 0.4rem;
+  /* overflow:visible so the glow escapes the wrapper */
+  overflow: visible;
+}
+
+/* Spinning conic ring — sits at the very base */
+.avatar-ring {
+  position: absolute;
+  inset: -1px;
+  /* slight bleed so ring hugs the edge */
+  border-radius: 50%;
+  background: conic-gradient(#e63946, #ff6b6b, #c0392b, #8b0000, #e63946);
+  animation: spin-border 3s linear infinite;
+  z-index: 0;
+}
+
+/* Profile photo — FIX 5: object-position center 10% shows more face */
+.avatar-photo {
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 10%;
+  z-index: 1;
+  clip-path: circle(50% at 50% 50%);
+  background: #0a0a0a;
+  transform: scale(1.3);
+  transform-origin: center 30%;
+}
+
+/* ══ Hawkins name reveal animation ══ */
+@keyframes hawkins-reveal {
+  0% {
+    transform: rotateX(180deg) scaleY(-1);
+    color: #8b0000;
+    text-shadow: 0 0 20px #e63946, 0 0 40px #e63946;
+    filter: blur(2px);
+    letter-spacing: 0.3em;
+    opacity: 1;
+  }
+
+  40% {
+    transform: rotateX(90deg) scaleY(0.1);
+    color: #cc0000;
+    filter: blur(4px);
+    letter-spacing: 0.5em;
+    opacity: 1;
+  }
+
+  60% {
+    transform: rotateX(90deg) scaleY(0.1);
+    color: #cc0000;
+    filter: blur(4px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotateX(0deg) scaleY(1);
+    color: #ffffff;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+    filter: blur(0px);
+    letter-spacing: normal;
+    opacity: 1;
+  }
+}
+
+.hawkins-name {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  animation: hawkins-reveal 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 0.5s;
+  opacity: 1;
+  transform-style: preserve-3d;
+  perspective: 400px;
+  /* Start state matching 0% keyframe before delay fires */
+  color: #8b0000;
+  text-shadow: 0 0 20px #e63946, 0 0 40px #e63946;
+  font-variant: small-caps;
+}
+
+/* Subtitle — Framer Motion controls fade-in, CSS just sets typography */
+.name-tagline {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 0.1rem;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Red divider — Framer Motion controls fade-in */
+.name-divider {
+  width: 40px;
+  height: 2px;
+  background: #e63946;
+  margin: 0.25rem auto;
+  border: none;
+  border-radius: 1px;
+}
+
+/* ════════════════════════════════
+   my-default OVAL CTA — Glowing pill
+   ════════════════════════════════ */
+.my-default-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 2.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  margin-top: 0.25rem;
+}
+
+.my-default-cta:hover {
+  border-color: rgba(230, 57, 70, 0.8);
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(230, 57, 70, 0.3), 0 0 48px rgba(230, 57, 70, 0.1);
+  transform: scale(1.04);
+}
+
+.my-default-cta:active {
+  transform: scale(0.97);
+}
+
+/* Shimmer sweep on hover */
+.cta-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.12) 50%,
+      transparent 60%);
+  pointer-events: none;
+  transition: left 0s;
+}
+
+.my-default-cta:hover .cta-shimmer {
+  left: 150%;
+  transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Red glow halo */
+.my-default-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(ellipse at center, rgba(230, 57, 70, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.my-default-cta:hover .my-default-glow {
+  opacity: 1;
+}
+
+.my-default-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cta-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+
+/* ═════════════════════════════════
+   RESPONSIVE — Medium screens (≤ 1200px)
+   ═════════════════════════════════ */
+@media (max-width: 1200px) {
+  .hero-grid {
+    grid-template-columns: 32vw 27vw 32vw;
+    perspective: 900px;
+  }
+}
+
+/* ═════════════════════════════
+   RESPONSIVE — Mobile (≤ 768px)
+   ═════════════════════════════ */
+@media (max-width: 768px) {
+
+  .hero-section,
+  .hero-section * {
+    cursor: auto;
+    /* restore default cursor on touch */
+  }
+
+  .hero-cursor-dot {
+    display: none;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 15vh calc(100vh - 30vh) 15vh;
+  }
+
+  .hero-top {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+  }
+
+  .hero-left {
+    display: none;
+  }
+
+  .hero-right {
+    display: none;
+  }
+
+  .hero-center {
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+  }
+
+  .hero-bottom {
+    grid-column: 1 / -1;
+    grid-row: 3 / 4;
+  }
+
+  .name-card-wrapper {
+    width: min(340px, 90%);
+  }
+
+  .hawkins-name {
+    font-size: clamp(1.6rem, 8vw, 2rem);
+  }
+
+  /* Disable 3D tilts on mobile */
+  .hero-left.hero-panel,
+  .hero-right.hero-panel,
+  .hero-top.hero-panel,
+  .hero-bottom.hero-panel {
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hawkins-name {
+    font-size: clamp(1.4rem, 9vw, 1.8rem);
+  }
+}
+
+/* ── Legacy upside-down text utility ── */
+.upside-down-text {
+  transform: rotate(180deg) scaleX(-1);
+  transform-origin: center center;
+}
+
+/* ════════════════════════════════════════════
+   FIX 2 — NAME CARD fully naked (no box, no shadow)
+   ════════════════════════════════════════════ */
+.name-glass-card {
+  transform: none;
+  box-shadow: none;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* ── FIX 6 — Floating pill Resume button (below divider) ── */
+.resume-pill {
+  position: relative;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(230, 57, 70, 0.4);
+  background: rgba(230, 57, 70, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: none;
+  transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  margin-top: 0.6rem;
+}
+
+.resume-pill:hover {
+  background: rgba(230, 57, 70, 0.25);
+  box-shadow: 0 0 25px rgba(230, 57, 70, 0.4);
+  border-color: rgba(230, 57, 70, 0.7);
+}
+
+/* ════════════════════════════════════════════
+   COMPACT FLOATING AUDIO PLAYER
+   ════════════════════════════════════════════ */
+
+/* The circular FAB button */
+.audio-fab {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(10, 0, 0, 0.82);
+  border: 1.5px solid rgba(229, 9, 20, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.2), 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.audio-fab:hover {
+  border-color: rgba(229, 9, 20, 0.9);
+  box-shadow: 0 0 18px rgba(229, 9, 20, 0.5), 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Equalizer bars container */
+.audio-eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
+}
+
+.audio-eq-bar {
+  display: block;
+  width: 2px;
+  height: 10px;
+  border-radius: 1px;
+  background: #e50914;
+  transform-origin: bottom;
+  will-change: transform;
+}
+
+/* Volume slider — appears above the button on hover */
+.audio-slider-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 80px;
+  background: rgba(10, 0, 0, 0.82);
+  border: 1.5px solid rgba(229, 9, 20, 0.35);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  padding: 10px 0;
+}
+
+.audio-vol-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 3px;
+  height: 60px;
+  background: rgba(229, 9, 20, 0.25);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.audio-vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e50914;
+  box-shadow: 0 0 6px rgba(229, 9, 20, 0.7);
+  cursor: pointer;
+}
+
+.audio-vol-slider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border: none;
+  border-radius: 50%;
+  background: #e50914;
+  box-shadow: 0 0 6px rgba(229, 9, 20, 0.7);
+  cursor: pointer;
+}
+
+/* ════════════════════════════════════════════
+   FLOATING ORBITING CIRCLES EFFECT
+   ════════════════════════════════════════════ */
+
+.orbit-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orbit-side {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #0a0a0a;
+  border: 2px solid var(--st-red);
+  box-shadow: 0 0 15px var(--st-red-glow), inset 0 0 10px rgba(229, 9, 20, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+
+.orbit-side img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+  filter: saturate(0.6) contrast(1.2);
+  transition: opacity 0.3s ease;
+}
+
+.orbit-side:hover img {
+  opacity: 1;
+  filter: saturate(1) contrast(1.1);
+}
+
+/* Specific side offsets */
+.orbit-left {
+  left: calc(50% - 160px);
+}
+
+.orbit-right {
+  right: calc(50% - 160px);
+}
+
+@media (max-width: 768px) {
+  .orbit-left {
+    left: calc(50% - 130px);
+    width: 60px;
+    height: 60px;
+  }
+  .orbit-right {
+    right: calc(50% - 130px);
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .orbit-left {
+    left: calc(50% - 110px);
+    width: 50px;
+    height: 50px;
+  }
+  .orbit-right {
+    right: calc(50% - 110px);
+    width: 50px;
+    height: 50px;
+  }
+}

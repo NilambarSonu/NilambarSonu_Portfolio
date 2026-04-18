@@ -39,17 +39,17 @@ export default function ProjectCard({ project, onDetailsClick }: ProjectCardProp
 
         <div className="flex-1 relative z-10">
           {project.thumbnail && (
-            <div className="mb-4 overflow-hidden rounded-lg border border-st-red/10">
+            <div className="mb-4 overflow-hidden rounded-lg border border-st-red/10 bg-[#050505]/60 relative">
               <img
                 src={project.thumbnail}
                 alt={project.title}
-                className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-700 relative z-10"
                 style={{
-                  filter: "saturate(0.7) contrast(1.1)",
+                  filter: "saturate(0.8) contrast(1.1)",
                 }}
               />
-              {/* Red overlay on image */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/60 to-transparent" />
+              {/* Subtle gradient overlay to blend into card */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/40 to-transparent z-20 pointer-events-none" />
             </div>
           )}
           <h3 className="text-2xl font-display font-bold mb-3 text-foreground group-hover:text-st-red transition-colors tracking-wide">

@@ -94,20 +94,36 @@ app.post('/api/send', async (req, res) => {
   </html>
   `;
 
+  // Guard: ensure API key is configured
+  if (!process.env.RESEND_API_KEY) {
+    console.error('RESEND_API_KEY is not set in .env');
+    return res.status(500).json({ error: 'Server email not configured.' });
+  }
+
   try {
-    const data = await resend.emails.send({
+    // Resend SDK returns { data, error } — it does NOT throw on failure
+    const { data, error: resendError } = await resend.emails.send({
       from: 'Portfolio Contact <onboarding@resend.dev>',
       to: [process.env.EMAIL_TO],
-      reply_to: email,
+      replyTo: email,
       subject: `Portfolio Message from ${name}`,
       html: htmlEmailTemplate,
     });
 
-    console.log('Email sent successfully:', data);
+    if (resendError) {
+      // Log the exact Resend error for debugging
+      console.error('RESEND ERROR:', JSON.stringify(resendError, null, 2));
+      const msg = resendError.message || 'Resend rejected the request.';
+      return res.status(500).json({ error: msg });
+    }
+
+    console.log('Email sent successfully. ID:', data?.id);
     return res.status(200).json({ success: 'Message sent successfully!' });
+
   } catch (error) {
-    console.error('EMAIL FAILED:', error);
-    return res.status(500).json({ error: 'Failed to send email.' });
+    // Network / unexpected error
+    console.error('EMAIL EXCEPTION:', error);
+    return res.status(500).json({ error: 'Unexpected server error sending email.' });
   }
 });
 
