@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const SIDE_IMAGES = [
@@ -37,6 +37,22 @@ function isLowEndDevice(): boolean {
    ════════════════════════════════════════════ */
 function useVideoPerformance() {
   useEffect(() => {
+    // Wait for page load, then lazy-load videos
+    const loadVideos = () => {
+      const videos = document.querySelectorAll<HTMLVideoElement>('video[data-src]');
+      videos.forEach(video => {
+        video.src = video.getAttribute('data-src') || '';
+        video.load();
+        video.play().catch(() => {});
+      });
+    };
+
+    if (document.readyState === 'complete') {
+      setTimeout(loadVideos, 100);
+    } else {
+      window.addEventListener('load', () => setTimeout(loadVideos, 100));
+    }
+
     const handleVisibility = () => {
       const allVideos = document.querySelectorAll<HTMLVideoElement>(".hero-panel-video");
       if (document.hidden) {
@@ -55,6 +71,9 @@ function useVideoPerformance() {
    ════════════════════════════════════════════ */
 function useParallaxMouse() {
   useEffect(() => {
+    // Skip parallax entirely on touch devices
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 2;
       const y = (e.clientY / window.innerHeight - 0.5) * 2;
@@ -112,25 +131,27 @@ interface VideoPanelProps {
   label?: string;
 }
 
-function VideoPanel({ src, className, overlayClass, blendClass, posClass, label }: VideoPanelProps) {
+const VideoPanel = React.memo(({ src, className, overlayClass, blendClass, posClass, label }: VideoPanelProps) => {
   return (
     <div className={`hero-panel ${className}`} aria-label={label}>
       <video
         className={`hero-panel-video ${posClass}`}
-        src={src}
-        preload="metadata"
+        data-src={src}
+        preload="none"
         autoPlay
         loop
         muted
         playsInline
         disablePictureInPicture
+        disableRemotePlayback
+        style={{ willChange: 'transform', transform: 'translateZ(0)' }}
         aria-hidden="true"
       />
       <div className={`hero-panel-overlay ${overlayClass}`} aria-hidden="true" />
       <div className={`hero-panel-blend ${blendClass}`} aria-hidden="true" />
     </div>
   );
-}
+});
 
 /* ════════════════════════════════════════════
    SPINNING AVATAR RING
@@ -224,8 +245,17 @@ function OrbitingCircles() {
    HAWKINS NAME — upside-down flip reveal
    ════════════════════════════════════════════ */
 function HawkinsName() {
+  const nameRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = nameRef.current;
+    if (!el) return;
+    const cleanup = () => el.classList.add('animation-done');
+    el.addEventListener('animationend', cleanup);
+    return () => el.removeEventListener('animationend', cleanup);
+  }, []);
+
   return (
-    <div className="hawkins-name" aria-label="NilambarSonu">
+    <div ref={nameRef} className="hawkins-name" aria-label="NilambarSonu">
       NilambarSonu
     </div>
   );
