@@ -5,6 +5,11 @@ import careerThumbnail from "@assets/generated_images/career-architect.png";
 import lecturesnapThumbnail from "@assets/generated_images/lecturesnap-ai.png";
 import smartdataThumbnail from "@assets/generated_images/smart-data-analyst.png";
 import saathiThumbnail from "@assets/generated_images/saathi-app.png";
+import taskManagementThumbnail from "@assets/generated_images/task-management.png";
+import v2PortfolioThumbnail from "@assets/generated_images/v2-portfolio.png";
+import agni3DThumbnail from "@assets/generated_images/agni-3d.png";
+import kalingaTrailsThumbnail from "@assets/generated_images/kalinga-trails.png";
+import bistroSeqThumbnail from "@assets/generated_images/bistro-seq.png";
 
 const webPlaceholder = "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop";
 
@@ -97,6 +102,61 @@ export const projects: Project[] = [
     isPublished: false,
     category: "Web Dev",
     thumbnail: aestheticThumbnail || webPlaceholder
+  },
+  {
+    title: "Task Management Webapp",
+    description: "Robust full-stack task management system featuring role-based access and real-time status tracking.",
+    techStack: ["Node.js", "Express", "PostgreSQL", "React", "JWT", "Zod"],
+    liveUrl: "https://task-management.nilambarsonu.me/",
+    codeUrl: "https://github.com/NilambarSonu",
+    features: ["Full CRUD with RBAC", "Real-time updates via WebSockets", "Comprehensive API documentation", "Automated status workflows"],
+    isPublished: false,
+    category: "Web Dev",
+    thumbnail: taskManagementThumbnail || webPlaceholder
+  },
+  {
+    title: "PortFolio - V2",
+    description: "High-end developer portfolio with advanced server-verified site statistics and immersive design.",
+    techStack: ["Vite", "React", "Framer Motion", "Neon DB", "Express", "FingerprintJS"],
+    liveUrl: "https://nilambar.me/",
+    codeUrl: "https://github.com/NilambarSonu",
+    features: ["Fingerprint-based love system", "Server-side view deduplication", "Glassmorphic UI architecture", "Real-time GitHub stats integration"],
+    isPublished: true,
+    category: "Web Dev",
+    thumbnail: v2PortfolioThumbnail || webPlaceholder
+  },
+  {
+    title: "Agni 3D",
+    description: "Immersive 3D visualization dashboard for real-time IoT sensor telemetry and data mapping.",
+    techStack: ["Three.js", "React Three Fiber", "GLSL Shaders", "IoT"],
+    liveUrl: "https://agni-3d.nilambarsonu.me/",
+    codeUrl: "https://github.com/NilambarSonu",
+    features: ["Real-time 3D data mapping", "Custom GLSL particle systems", "Interactive sensor nodes", "Low-latency telemetry sync"],
+    isPublished: false,
+    category: "Web Dev",
+    thumbnail: agni3DThumbnail || webPlaceholder
+  },
+  {
+    title: "Kalinga Trails",
+    description: "Premium tourism platform for Odisha featuring immersive discovery and server-verified interaction stats.",
+    techStack: ["React", "Tailwind CSS", "Framer Motion", "Neon DB"],
+    liveUrl: "https://kalinga-trails.nilambarsonu.me/",
+    codeUrl: "https://github.com/NilambarSonu",
+    features: ["Server-side love/view tracking", "Dynamic location exploration", "High-performance image sequences", "Optimized tourism SEO"],
+    isPublished: false,
+    category: "Web Dev",
+    thumbnail: kalingaTrailsThumbnail || webPlaceholder
+  },
+  {
+    title: "Bistro Sequence",
+    description: "High-performance video-to-image sequence conversion model supporting ultra-high frame rates.",
+    techStack: ["Next.js", "Canvas API", "Web Workers", "Vanta.js"],
+    liveUrl: "https://bistro-seq.nilambarsonu.me/",
+    codeUrl: "https://github.com/NilambarSonu",
+    features: ["Support for 120 FPS sequences", "Scroll-triggered cinematic playback", "Offscreen processing workers", "Vanta background integration"],
+    isPublished: false,
+    category: "Web Dev",
+    thumbnail: bistroSeqThumbnail || webPlaceholder
   },
   {
     title: "Rock-Paper-Scissor",
