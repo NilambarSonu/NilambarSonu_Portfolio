@@ -10,7 +10,7 @@ import {
   fetchSiteStats,
   incrementViews,
   incrementLoves,
-  hasUserLiked
+  getFingerprint,
 } from "@/lib/api";
 
 interface StatCardProps {
@@ -93,46 +93,65 @@ export default function LiveStatsDashboard({ compact = false }: LiveStatsDashboa
   const [githubStats, setGithubStats] = useState({ followers: 0, following: 0, loading: true });
   const [siteStats, setSiteStats] = useState({ views: 0, loves: 0, loading: true });
   const [loved, setLoved] = useState(false);
+  const [lovePending, setLovePending] = useState(false);
   const [showLoveAnimation, setShowLoveAnimation] = useState(false);
+  const [fingerprint, setFingerprint] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
 
+    // 1. Fetch GitHub stats
     fetchGitHubStats().then(data => {
-      if (isMounted && data) {
+      if (!isMounted) return;
+      if (data) {
         setGithubStats({ followers: data.followers, following: data.following, loading: false });
-      } else if (isMounted) {
+      } else {
         setGithubStats(prev => ({ ...prev, loading: false }));
       }
     });
 
-    fetchSiteStats().then(data => {
-      if (isMounted) {
-        setSiteStats(prev => ({ ...prev, loves: data.loves, loading: false }));
-      }
+    // 2. Get fingerprint FIRST, then fetch stats with it (server is truth for hasLoved)
+    getFingerprint().then(async fp => {
+      if (!isMounted) return;
+      setFingerprint(fp);
+
+      // Fetch stats + hasLoved from server using this fingerprint
+      const stats = await fetchSiteStats(fp);
+      if (!isMounted) return;
+      setSiteStats({ views: stats.views, loves: stats.loves, loading: false });
+      setLoved(stats.hasLoved); // server truth — no localStorage needed
     });
 
-    const hasLiked = localStorage.getItem("has_liked") === "true";
-    if (isMounted) setLoved(hasLiked);
-
+    // 3. Increment view count (server deduplicates by session_id)
     incrementViews().then(newViewCount => {
-      if (isMounted && newViewCount) {
-        setSiteStats(prev => ({ ...prev, views: newViewCount }));
-        sessionStorage.setItem("view_incremented", "true");
-      }
+      if (!isMounted || !newViewCount) return;
+      setSiteStats(prev => ({ ...prev, views: newViewCount }));
     });
 
     return () => { isMounted = false; };
   }, []);
 
   const handleLoveClick = async () => {
-    if (localStorage.getItem("has_liked") === "true") return;
-    setLoved(true);
-    setSiteStats(prev => ({ ...prev, loves: prev.loves + 1 }));
-    setShowLoveAnimation(true);
-    setTimeout(() => setShowLoveAnimation(false), 1000);
-    localStorage.setItem("has_liked", "true");
-    try { await incrementLoves(); } catch (error) { console.error("Failed to sync love count", error); }
+    if (loved || lovePending || !fingerprint) return;
+
+    setLovePending(true);
+
+    const result = await incrementLoves(fingerprint);
+
+    if (result?.success) {
+      // Server confirmed — update UI
+      setLoved(true);
+      setSiteStats(prev => ({ ...prev, loves: result.newLoveCount }));
+      setShowLoveAnimation(true);
+      setTimeout(() => setShowLoveAnimation(false), 1000);
+    } else if (result?.alreadyLoved) {
+      // Server says already loved — sync UI
+      setLoved(true);
+      setSiteStats(prev => ({ ...prev, loves: result.newLoveCount }));
+    }
+    // If result is null (network error) — do nothing, button re-enables
+
+    setLovePending(false);
   };
 
   const containerClass = compact
@@ -143,7 +162,7 @@ export default function LiveStatsDashboard({ compact = false }: LiveStatsDashboa
   const wrapperProps = compact ? { className: containerClass } : { className: containerClass, id: "stats" };
 
   return (
-    <Wrapper {...wrapperProps}>
+    <Wrapper {...(wrapperProps as any)}>
       <div className={compact ? "w-full" : "max-w-6xl mx-auto"}>
         <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full">
           {!compact && (
@@ -162,7 +181,16 @@ export default function LiveStatsDashboard({ compact = false }: LiveStatsDashboa
             <StatCard icon={<Github className={compact ? "w-8 h-8" : "w-12 h-12"} />} label="Followers" value={githubStats.followers} loading={githubStats.loading} compact={compact} />
             <StatCard icon={<Users className={compact ? "w-8 h-8" : "w-12 h-12"} />} label="Following" value={githubStats.following} loading={githubStats.loading} compact={compact} />
             <StatCard icon={<Eye className={compact ? "w-8 h-8" : "w-12 h-12"} />} label="Views" value={siteStats.views} loading={siteStats.loading} compact={compact} />
-            <StatCard icon={<Heart className={compact ? "w-8 h-8" : "w-12 h-12"} />} label="Loves" value={siteStats.loves} loading={siteStats.loading} isLovable={true} onLoveClick={handleLoveClick} loved={loved} compact={compact} />
+            <StatCard
+              icon={<Heart className={compact ? "w-8 h-8" : "w-12 h-12"} />}
+              label="Loves"
+              value={siteStats.loves}
+              loading={siteStats.loading}
+              isLovable={true}
+              onLoveClick={handleLoveClick}
+              loved={loved || lovePending}
+              compact={compact}
+            />
           </div>
 
           <AnimatePresence>

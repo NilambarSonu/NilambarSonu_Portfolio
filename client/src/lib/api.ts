@@ -4,21 +4,12 @@ import { toast } from "@/hooks/use-toast";
 const GITHUB_USERNAME = "NilambarSonu";
 const GITHUB_API_BASE = "https://api.github.com";
 
-// Database API Configuration (Neon PostgreSQL)
-const DATABASE_URL = import.meta.env.VITE_DATABASE_URL;
-const DATABASE_TABLE = "site_stats";
-
-// GitHub API Functions
+// ── GitHub API ──────────────────────────────────────────────────────────────
 export async function fetchGitHubStats() {
   try {
     const response = await fetch(`${GITHUB_API_BASE}/users/${GITHUB_USERNAME}`);
-
-    if (!response.ok) {
-      throw new Error(`GitHub API error: ${response.status}`);
-    }
-
+    if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
     const data = await response.json();
-
     return {
       followers: data.followers,
       following: data.following,
@@ -27,134 +18,133 @@ export async function fetchGitHubStats() {
     };
   } catch (error) {
     console.error("Error fetching GitHub stats:", error);
-    toast({
-      title: "Error",
-      description: "Failed to fetch GitHub stats. Please try again later.",
-      variant: "destructive"
-    });
     return null;
   }
 }
 
-// Database API Functions
-export async function fetchSiteStats() {
+// ── Fingerprint helpers ─────────────────────────────────────────────────────
+
+/** Get or create a stable FingerprintJS visitor ID */
+export async function getFingerprint(): Promise<string> {
+  // Check cache first
+  const cached = sessionStorage.getItem("_portfolio_fp");
+  if (cached) return cached;
+
   try {
-    if (!DATABASE_URL) {
-      console.warn("Database URL not configured");
-      return { views: 0, loves: 0, id: null };
+    // FingerprintJS v4 (loaded via CDN in index.html as window.FingerprintJS)
+    const FP = (window as any).FingerprintJS;
+    if (!FP) throw new Error("FingerprintJS not available");
+    const fp = await FP.load();
+    const result = await fp.get();
+    const id = result.visitorId as string;
+    sessionStorage.setItem("_portfolio_fp", id);
+    return id;
+  } catch {
+    // Fallback: stable random UUID for this browser
+    let fb = localStorage.getItem("_portfolio_fp_fb");
+    if (!fb) {
+      fb = crypto.randomUUID
+        ? crypto.randomUUID()
+        : Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem("_portfolio_fp_fb", fb);
     }
-
-    // For Neon PostgreSQL, we need to use a different approach
-    // Since we can't make direct HTTP requests to PostgreSQL from frontend,
-    // we'll need to create a backend API endpoint
-    const response = await fetch(`/api/stats`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`Database error: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    if (!data || Object.keys(data).length === 0) {
-      // Initialize stats if table is empty
-      return await initializeStats();
-    }
-
-    return {
-      views: data.site_views || 0,
-      loves: data.love_count || 0,
-      id: data.id
-    };
-  } catch (error) {
-    console.error("Error fetching site stats:", error);
-    return { views: 0, loves: 0, id: null };
+    const id = "fb_" + fb;
+    sessionStorage.setItem("_portfolio_fp", id);
+    return id;
   }
 }
 
-export async function incrementViews() {
-  try {
-    if (!DATABASE_URL) {
-      console.warn("Database URL not configured");
-      return;
-    }
+/** Get or create a stable session ID (changes each browser session) */
+function getSessionId(): string {
+  let id = sessionStorage.getItem("_portfolio_session");
+  if (!id) {
+    id = crypto.randomUUID
+      ? crypto.randomUUID()
+      : Date.now().toString(36) + Math.random().toString(36).slice(2);
+    sessionStorage.setItem("_portfolio_session", id);
+  }
+  return id;
+}
 
-    const response = await fetch(`/api/stats/views`, {
+// ── Site Stats API ──────────────────────────────────────────────────────────
+
+/** Fetch current stats. Pass fingerprint to also get hasLoved from server. */
+export async function fetchSiteStats(fingerprint?: string) {
+  try {
+    const url = fingerprint
+      ? `/api/stats?fingerprint=${encodeURIComponent(fingerprint)}`
+      : "/api/stats";
+
+    const response = await fetch(url, {
+      headers: { "Content-Type": "application/json" }
+    });
+
+    if (!response.ok) throw new Error(`Stats error: ${response.status}`);
+
+    const data = await response.json();
+    return {
+      views: data.site_views ?? 0,
+      loves: data.love_count ?? 0,
+      hasLoved: data.hasLoved ?? false
+    };
+  } catch (error) {
+    console.error("Error fetching site stats:", error);
+    return { views: 0, loves: 0, hasLoved: false };
+  }
+}
+
+/** Increment view count — deduplicated by session_id on the server */
+export async function incrementViews(): Promise<number | null> {
+  try {
+    const session_id = getSessionId();
+
+    const response = await fetch("/api/stats/views", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      }
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_id })
     });
 
     if (response.ok) {
       const data = await response.json();
-      return data.newViewCount;
+      return data.newViewCount ?? null;
     }
   } catch (error) {
     console.error("Error incrementing views:", error);
   }
+  return null;
 }
 
-export async function incrementLoves() {
+/** Increment love count — deduplicated by FingerprintJS fingerprint on the server */
+export async function incrementLoves(fingerprint: string): Promise<{
+  newLoveCount: number;
+  success: boolean;
+  alreadyLoved: boolean;
+} | null> {
   try {
-    if (!DATABASE_URL) {
-      console.warn("Database URL not configured");
-      return null;
-    }
-
-    const response = await fetch(`/api/stats/loves`, {
+    const response = await fetch("/api/stats/loves", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return data.newLoveCount;
-    }
-  } catch (error) {
-    console.error("Error incrementing loves:", error);
-    return null;
-  }
-}
-
-async function initializeStats(initialViews = 0, initialLoves = 0) {
-  try {
-    const response = await fetch(`/api/stats/init`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        site_views: initialViews,
-        love_count: initialLoves
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fingerprint })
     });
 
     if (response.ok) {
       const data = await response.json();
       return {
-        views: data.site_views,
-        loves: data.love_count,
-        id: data.id
+        newLoveCount: data.newLoveCount ?? 0,
+        success: data.success ?? false,
+        alreadyLoved: data.alreadyLoved ?? false
       };
     }
   } catch (error) {
-    console.error("Error initializing stats:", error);
+    console.error("Error incrementing loves:", error);
   }
-  return { views: initialViews, loves: initialLoves };
+  return null;
 }
 
-// Utility functions for local storage
-export const hasUserLiked = () => {
-  return localStorage.getItem("has_liked") === "true";
-};
+// ── Utility ─────────────────────────────────────────────────────────────────
 
-export const hasUserViewed = () => {
-  return sessionStorage.getItem("view_incremented") === "true";
-};
+/** @deprecated Use server truth (fetchSiteStats hasLoved) instead */
+export const hasUserLiked = () => localStorage.getItem("has_liked") === "true";
+
+/** @deprecated Not needed — server deduplicates by session_id */
+export const hasUserViewed = () => sessionStorage.getItem("view_incremented") === "true";
