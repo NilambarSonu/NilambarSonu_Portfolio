@@ -10,7 +10,7 @@ import v2PortfolioThumbnail from "@assets/generated_images/v2-portfolio.png";
 import agni3DThumbnail from "@assets/generated_images/agni-3d.png";
 import kalingaTrailsThumbnail from "@assets/generated_images/kalinga-trails.png";
 import bistroSeqThumbnail from "@assets/generated_images/bistro-seq.png";
-
+import spendLensThumbnail from "@assets/generated_images/spendlens.png";
 const webPlaceholder = "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop";
 
 export interface Project {
@@ -159,47 +159,14 @@ export const projects: Project[] = [
     thumbnail: bistroSeqThumbnail || webPlaceholder
   },
   {
-    title: "Rock-Paper-Scissor",
-    description: "Interactive game implementation of the classic Rock-Paper-Scissor with score tracking.",
-    techStack: ["HTML", "CSS", "JavaScript"],
-    liveUrl: "https://nilambarsonu.github.io/Rock-Paper-Scissor/",
+    title: "SpendLens",
+    description: "Ai Free webtoll to eveyone for tracking there personal or team Api expenses.",
+    techStack: ["React", "Node.js", "Express", "Neon Postgres", "GeminiAI API"],
+    liveUrl: "https://spendlens.nilambarsonu.me/",
     codeUrl: "https://github.com/NilambarSonu",
-    features: ["Interactive gameplay", "Score tracking", "Animated results", "Responsive design"],
+    features: ["Real-time expense tracking", "AI-powered insights and recommendations", "Team collaboration features", "Customizable dashboards"],
     isPublished: true,
     category: "Web Dev",
-    thumbnail: webPlaceholder
-  },
-  {
-    title: "Calculator",
-    description: "A responsive web calculator with basic arithmetic operations and a user-friendly interface.",
-    techStack: ["HTML", "CSS", "JavaScript"],
-    liveUrl: "https://nilambarsonu.github.io/Calculator.01.036/",
-    codeUrl: "https://github.com/NilambarSonu",
-    features: ["Responsive design", "Basic arithmetic operations", "User-friendly interface", "Clean modern UI"],
-    isPublished: true,
-    category: "Web Dev",
-    thumbnail: webPlaceholder
-  },
-  {
-    title: "Portfolio Website",
-    description: "Interactive and responsive portfolio web application showcasing projects and skills.",
-    techStack: ["React", "TypeScript", "Tailwind CSS"],
-    liveUrl: "https://saathiai.org/",
-    codeUrl: "https://github.com/NilambarSonu",
-    features: ["Interactive and responsive", "Real-world use cases", "Problem-solving demonstrations", "Links to live demos and source code"],
-    isPublished: true,
-    category: "Web Dev",
-    thumbnail: webPlaceholder
-  },
-  {
-    title: "Data Harvesting",
-    description: "Data collection and analysis tool for extracting insights from web sources.",
-    techStack: ["Python", "Data Science"],
-    liveUrl: "https://saathiai.org/",
-    codeUrl: "https://github.com/NilambarSonu",
-    features: ["Web data extraction", "Data analysis capabilities", "Export functionality", "Visualization tools"],
-    isPublished: false,
-    category: "AI/ML",
-    thumbnail: webPlaceholder
+    thumbnail: spendLensThumbnail || webPlaceholder
   }
 ];
