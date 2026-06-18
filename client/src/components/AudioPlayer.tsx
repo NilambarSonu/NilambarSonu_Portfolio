@@ -32,7 +32,7 @@ export default function AudioPlayer() {
         position: 'fixed',
         bottom: '24px',
         right: '24px',
-        zIndex: 1000,
+        zIndex: 30,
         width: '48px',
         height: '48px',
         borderRadius: '50%',

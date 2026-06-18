@@ -1,302 +1,286 @@
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { GraduationCap, Award, Zap } from "lucide-react";
-import { TypeAnimation } from "react-type-animation";
-
-const skills = [
-  "HTML-CSS-JS", "Python for Data Science", "ReactJS", "Data Analysis",
-  "Web Development", "SQL", "Git & GitHub", "Problem Solving",
-  "Critical Thinking", "Mathematics-Statistics"
+const bodyParagraphs = [
+  "I'm Nilambar Behera, a BCA student, AI engineer, full-stack developer, and founder of Mitti-AI (Saathi AI), an agri-tech startup focused on bringing intelligent technology to agriculture.",
+  "My journey began with a simple belief: technology should solve real-world problems. That belief led me to build products across artificial intelligence, data science, IoT, and full-stack development while still pursuing my undergraduate degree. Today, I have shipped more than 10 production-ready projects, completed industry internships, and worked across web applications, AI systems, data analytics platforms, and smart agriculture solutions.",
+  "One of the defining milestones of my journey was founding Mitti-AI, which went on to secure 1st place at College, University, and Odisha State-Level Innovation & Startup Competitions, earning ₹6,00,000 in total prize funding. The platform combines IoT, machine learning, and modern software engineering to help farmers make smarter decisions through real-time soil intelligence.",
+  "Beyond building products, I enjoy transforming ideas into scalable solutions, whether through AI-powered applications, immersive web experiences, or data-driven systems. My goal is to build technology that creates measurable impact and contributes to solving meaningful challenges at scale.",
+  "When I'm not building, I'm constantly learning, experimenting, and pushing my limits as a developer, founder, and problem solver.",
 ];
 
-const education = [
-  {
-    degree: "10th",
-    school: "Sanpatpur Nodal High School",
-    board: "CHSE",
-    percentage: "88.66%",
-    year: "Completed"
-  },
-  {
-    degree: "12th",
-    school: "Nilgiri Higher Secondary School",
-    board: "CHSE, Science",
-    percentage: "83.33%",
-    year: "Completed"
-  },
-  {
-    degree: "BCA",
-    school: "Bhadrak Autonomous College",
-    board: "Currently at College",
-    percentage: "",
-    year: "Expected 2027"
-  }
-];
+const constellationLines = [
+  "M28 48 L162 184 L148 352 L238 526 L410 742 L642 666 L812 736",
+  "M422 300 L682 356 L882 168 L1052 226 L1188 82 L1372 132 L1540 232",
+  "M980 64 L1174 220 L1238 344 L1138 448 L1282 602 L1416 702",
+  "M1030 362 L1192 312 L1368 420 L1526 342",
+  "M708 666 L846 542 L1008 608 L1154 554",
+] as const;
+
+const constellationDots = [
+  [28, 48, 4],
+  [162, 184, 7],
+  [148, 352, 4],
+  [238, 526, 10],
+  [410, 742, 5],
+  [642, 666, 4],
+  [812, 736, 5],
+  [422, 300, 3],
+  [682, 356, 4],
+  [882, 168, 5],
+  [1052, 226, 4],
+  [1188, 82, 4],
+  [1372, 132, 4],
+  [1540, 232, 4],
+  [980, 64, 4],
+  [1174, 220, 8],
+  [1238, 344, 7],
+  [1138, 448, 4],
+  [1282, 602, 4],
+  [1416, 702, 5],
+  [1030, 362, 5],
+  [1192, 312, 6],
+  [1368, 420, 4],
+  [1526, 342, 4],
+] as const;
 
 export default function About() {
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-
-  const educationColumnRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: educationColumnRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Climber moves bottom → top as user scrolls through the education section
-  const boyY = useTransform(scrollYProgress, [0.1, 0.9], ["85%", "5%"]);
-  const bubbleOpacity = useTransform(scrollYProgress, [0.75, 0.9], [0, 1]);
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative py-20 md:py-32 px-4 bg-[#0a0a0a] st-fog"
-      id="about"
-    >
-      {/* Subtle red line at top */}
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-st-red/20 to-transparent" />
+    <section id="about" className="about-founder-section" aria-labelledby="about-founder-title">
+      <div className="about-founder-bg" aria-hidden="true" />
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-        >
-          {/* Section Title — ST style */}
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-12 text-center text-st-red tracking-[0.1em] uppercase"
-            style={{
-              textShadow: "0 0 10px rgba(229,9,20,0.4), 0 0 30px rgba(229,9,20,0.15)",
-            }}
-          >
-            About Me
-          </h2>
+      <svg className="about-founder-network" viewBox="0 0 1600 900" aria-hidden="true">
+        {constellationLines.map((d) => (
+          <path key={d} d={d} />
+        ))}
+        {constellationDots.map(([cx, cy, r]) => (
+          <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={r} className={r > 6 ? "is-bright" : ""} />
+        ))}
+      </svg>
 
-          <div className="grid md:grid-cols-2 gap-12 mb-16">
-            {/* Bio with typewriter */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative"
-            >
-              {/* Classified stamp */}
-              <div className="absolute -top-2 -right-2 font-retro text-[10px] text-st-red/30 tracking-[0.3em] uppercase transform rotate-6">
-                CLASSIFIED
-              </div>
+      <img
+        src="/leftsidebar_standing_profile.png"
+        alt="Nilambar Behera"
+        draggable={false}
+        className="about-founder-portrait"
+      />
 
-              <Card className="p-6 bg-[#111]/50 border border-st-red/15 backdrop-blur">
-                <TypeAnimation
-                  sequence={[
-                    'I am a BCA student with a passion for data science and web development. I have completed certifications like "Python for Data Science and AI" by IBM, which has equipped me with the skills to analyze data and build web applications.',
-                    1000,
-                    'I am a BCA student with a passion for data science and web development. I have completed certifications like "Python for Data Science and AI" by IBM, which has equipped me with the skills to analyze data and build web applications.\n\nI enjoy working on real-world projects using Python, HTML, CSS, and JavaScript. My goal is to become a data scientist in the future, and I am continuously learning and improving my skills to achieve that.',
-                  ]}
-                  wrapper="p"
-                  speed={60}
-                  className="text-base text-foreground/80 leading-relaxed whitespace-pre-line font-mono"
-                  repeat={0}
-                  cursor={true}
-                />
-              </Card>
-            </motion.div>
-
-            {/* Skills — Power badges */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              <h3 className="text-2xl font-display font-semibold mb-6 flex items-center gap-2 text-st-amber tracking-wider uppercase text-lg">
-                <Zap className="w-5 h-5" />
-                Powers & Abilities
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                {skills.map((skill, index) => (
-                  <motion.div
-                    key={skill}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ duration: 0.5, delay: 0.5 + index * 0.08 }}
-                  >
-                    <Badge
-                      className="text-sm px-4 py-2 bg-st-red/10 text-st-red/90 border border-st-red/30 hover:bg-st-red/20 hover:shadow-[0_0_15px_rgba(229,9,20,0.3)] hover:border-st-red/60 transition-all duration-300 font-retro"
-                      data-testid={`skill-${index}`}
-                    >
-                      {skill}
-                    </Badge>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Education Timeline — Hawkins Lab classified documents */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <h3 className="text-2xl font-display font-semibold mb-8 flex items-center gap-2 text-st-teal tracking-wider uppercase text-lg"
-              style={{
-                textShadow: "0 0 10px rgba(26,107,107,0.3)",
-              }}
-            >
-              <GraduationCap className="w-6 h-6" />
-              Subject Files — Education
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4" ref={educationColumnRef}>
-              {/* ── RED LADDER + CLIMBING MAN ── */}
-              <div className="relative hidden md:flex md:col-span-1 items-start justify-center h-80">
-                <div className="relative mt-4 h-full w-20">
-
-                  {/* Left rail */}
-                  <div className="absolute left-2 top-0 h-full w-[3px] rounded-full"
-                    style={{ background: "linear-gradient(to bottom, #e50914cc, #7f0a0acc)" }} />
-
-                  {/* Right rail */}
-                  <div className="absolute right-2 top-0 h-full w-[3px] rounded-full"
-                    style={{ background: "linear-gradient(to bottom, #e50914cc, #7f0a0acc)" }} />
-
-                  {/* Rungs — evenly spaced */}
-                  <div className="absolute inset-x-2 top-0 flex h-full flex-col justify-between py-6">
-                    {Array.from({ length: 7 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="h-[3px] w-full rounded-full"
-                        style={{
-                          background: "rgba(229,9,20,0.45)",
-                          boxShadow: "0 0 6px rgba(229,9,20,0.3)",
-                        }}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Glow behind ladder */}
-                  <div className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: "radial-gradient(ellipse at center, rgba(229,9,20,0.08) 0%, transparent 70%)",
-                    }}
-                  />
-
-                  {/* ── CLIMBER ── */}
-                  <motion.div
-                    className="absolute left-1/2 h-16 w-16"
-                    style={{ y: boyY, x: "-50%" }}
-                  >
-                    <motion.svg
-                      viewBox="0 0 40 48"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-full w-full"
-                      style={{ filter: "drop-shadow(0 0 8px rgba(229,9,20,0.8))" }}
-                    >
-                      {/* Head */}
-                      <circle cx="20" cy="7" r="5" fill="#e50914" />
-
-                      {/* Body */}
-                      <rect x="15" y="14" width="10" height="13" rx="3" fill="#e50914" />
-
-                      {/* Left arm — reaches up then down */}
-                      <motion.rect
-                        x="9" y="14" width="4" height="9" rx="2" fill="#b00710"
-                        animate={{ y: [0, -5, 0] }}
-                        transition={{ repeat: Infinity, duration: 1.0, ease: "easeInOut" }}
-                      />
-
-                      {/* Right arm — opposite phase */}
-                      <motion.rect
-                        x="27" y="14" width="4" height="9" rx="2" fill="#b00710"
-                        animate={{ y: [-5, 0, -5] }}
-                        transition={{ repeat: Infinity, duration: 1.0, ease: "easeInOut" }}
-                      />
-
-                      {/* Left leg */}
-                      <motion.rect
-                        x="13" y="25" width="5" height="10" rx="2" fill="#7f0a0a"
-                        animate={{ y: [0, -4, 0] }}
-                        transition={{ repeat: Infinity, duration: 1.0, ease: "easeInOut", delay: 0.5 }}
-                      />
-
-                      {/* Right leg — opposite phase */}
-                      <motion.rect
-                        x="22" y="25" width="5" height="10" rx="2" fill="#7f0a0a"
-                        animate={{ y: [-4, 0, -4] }}
-                        transition={{ repeat: Infinity, duration: 1.0, ease: "easeInOut", delay: 0.5 }}
-                      />
-                    </motion.svg>
-
-                    {/* Speech bubble — appears near top */}
-                    <motion.div
-                      className="absolute bottom-full left-full mb-1 ml-1 w-36"
-                      style={{ opacity: bubbleOpacity }}
-                    >
-                      <div
-                        className="relative rounded-xl px-3 py-2 text-xs font-retro"
-                        style={{
-                          background: "rgba(10,0,0,0.85)",
-                          border: "1px solid rgba(229,9,20,0.4)",
-                          color: "rgba(255,255,255,0.85)",
-                          backdropFilter: "blur(6px)",
-                        }}
-                      >
-                        Almost at the top!
-                      </div>
-                    </motion.div>
-                  </motion.div>
-
-                </div>
-              </div>
-
-              {/* Education cards */}
-              <div className="md:col-span-2 space-y-4">
-                {[...education].reverse().map((edu, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.5 }}
-                    transition={{ duration: 0.6, delay: 0.1 }}
-                  >
-                    <Card className="p-5 bg-[#111]/60 backdrop-blur border border-st-red/15 hover:border-st-red/40 transition-all relative group st-portal-hover">
-                      {/* File number */}
-                      <div className="absolute top-2 right-3 font-retro text-[10px] text-st-red/25 tracking-wider">
-                        FILE #{String(index + 1).padStart(3, "0")}
-                      </div>
-
-                      <div className="flex items-start gap-4">
-                        <div className="w-2.5 h-2.5 rounded-full mt-2 bg-st-red/50 shadow-[0_0_8px_rgba(229,9,20,0.4)] group-hover:bg-st-red group-hover:shadow-[0_0_12px_rgba(229,9,20,0.6)] transition-all" />
-                        <div className="flex-1">
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                            <h4 className="text-xl font-display font-semibold text-foreground tracking-wide">
-                              {edu.degree}
-                            </h4>
-                            <span className="text-xs text-st-amber/60 font-retro tracking-wider uppercase">
-                              {edu.year}
-                            </span>
-                          </div>
-                          <p className="text-foreground/70 mb-1 font-mono text-sm">{edu.school}</p>
-                          <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
-                            <span className="font-retro">{edu.board}</span>
-                            {edu.percentage && (
-                              <>
-                                <span>•</span>
-                                <span className="text-st-red font-semibold">{edu.percentage}</span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
+      <div className="about-founder-copy">
+        <h2 id="about-founder-title">The Founder</h2>
+        <div className="about-founder-body">
+          {bodyParagraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
       </div>
+
+      <style>{`
+        .about-founder-section {
+          position: relative;
+          z-index: 50;
+          min-height: 100vh;
+          overflow: hidden;
+          isolation: isolate;
+          background: #030913;
+          color: #f5f7fa;
+        }
+
+        .about-founder-bg,
+        .about-founder-bg::before,
+        .about-founder-bg::after {
+          position: absolute;
+          inset: 0;
+          content: "";
+          pointer-events: none;
+        }
+
+        .about-founder-bg {
+          z-index: -5;
+          background:
+            radial-gradient(ellipse 48% 92% at 18% 46%, rgba(0, 101, 149, 0.42) 0%, rgba(0, 62, 88, 0.26) 32%, rgba(1, 16, 29, 0.12) 58%, rgba(3, 9, 19, 0) 78%),
+            radial-gradient(ellipse 36% 48% at 38% 63%, rgba(0, 157, 223, 0.11) 0%, rgba(0, 106, 160, 0.05) 44%, transparent 76%),
+            linear-gradient(90deg, #06273a 0%, #041827 20%, #030d19 45%, #030913 68%, #030913 100%);
+        }
+
+        .about-founder-bg::before {
+          background:
+            linear-gradient(90deg, rgba(2, 8, 16, 0.06) 0%, rgba(2, 8, 16, 0.22) 28%, rgba(2, 8, 16, 0.8) 58%, rgba(2, 8, 16, 0.98) 100%),
+            linear-gradient(0deg, rgba(1, 4, 9, 0.84) 0%, rgba(1, 4, 9, 0.12) 22%, rgba(1, 4, 9, 0) 54%);
+        }
+
+        .about-founder-bg::after {
+          opacity: 0.18;
+          background-image:
+            linear-gradient(90deg, rgba(0, 157, 223, 0.08) 1px, transparent 1px),
+            linear-gradient(0deg, rgba(0, 157, 223, 0.05) 1px, transparent 1px);
+          background-size: 14rem 14rem;
+          mask-image: radial-gradient(ellipse 72% 70% at 47% 48%, black 0%, transparent 72%);
+        }
+
+        .about-founder-network {
+          position: absolute;
+          inset: 3% 6% 0 14%;
+          z-index: -2;
+          width: 88%;
+          height: 88%;
+          overflow: visible;
+          opacity: 0.56;
+        }
+
+        .about-founder-network path {
+          fill: none;
+          stroke: rgba(0, 157, 223, 0.09);
+          stroke-width: 1.4;
+        }
+
+        .about-founder-network circle {
+          fill: rgba(92, 135, 163, 0.34);
+        }
+
+        .about-founder-network circle.is-bright {
+          fill: rgba(0, 157, 223, 0.72);
+          filter: drop-shadow(0 0 5px rgba(0, 157, 223, 0.34));
+        }
+
+        .about-founder-portrait {
+          position: absolute;
+          z-index: -1;
+          left: clamp(-3.6rem, -2.4vw, -0.8rem);
+          bottom: -0.15rem;
+          width: clamp(35rem, 41vw, 54rem);
+          max-width: none;
+          height: auto;
+          user-select: none;
+          filter: saturate(1.04) contrast(1.02) drop-shadow(0 0 18px rgba(0, 157, 223, 0.1));
+        }
+
+        .about-founder-copy {
+          position: relative;
+          z-index: 1;
+          width: min(47vw, 59rem);
+          margin-left: clamp(35rem, 45.2vw, 58rem);
+          padding-top: clamp(10.8rem, 22vh, 16.5rem);
+          padding-bottom: 5rem;
+        }
+
+        .about-founder-copy h2 {
+          margin: 0 0 clamp(2.1rem, 3.1vw, 3.55rem) 0;
+          font-family: "Amiko", "Inter", sans-serif;
+          font-size: clamp(2rem, 2.45vw, 3.1rem);
+          font-weight: 400;
+          line-height: 1;
+          letter-spacing: -0.06em;
+          text-transform: uppercase;
+          color: rgba(0, 157, 223, 0.19);
+          -webkit-text-stroke: 1px #007fff;
+          text-shadow: 0 0 18px rgba(0, 127, 255, 0.18);
+        }
+
+        .about-founder-body {
+          font-family: "Ancizar Serif", Georgia, serif;
+          font-size: clamp(0.98rem, 1.16vw, 1.38rem);
+          font-weight: 400;
+          line-height: 1.1;
+          letter-spacing: 0.01em;
+          color: rgba(245, 247, 250, 0.82);
+          text-shadow: 0 2px 14px rgba(0, 0, 0, 0.42);
+        }
+
+        .about-founder-body p {
+          margin: 0;
+          max-width: 58rem;
+        }
+
+        .about-founder-body p + p {
+          margin-top: clamp(1.05rem, 1.45vw, 1.8rem);
+        }
+
+        @media (max-width: 1180px) {
+          .about-founder-portrait {
+            width: clamp(29rem, 42vw, 36rem);
+            left: -4.8rem;
+          }
+
+          .about-founder-copy {
+            width: min(53vw, 43rem);
+            margin-left: clamp(26rem, 41vw, 34rem);
+            padding-top: clamp(8rem, 17vh, 10rem);
+          }
+
+          .about-founder-body {
+            font-size: clamp(1rem, 1.45vw, 1.18rem);
+            line-height: 1.18;
+          }
+        }
+
+        @media (max-width: 820px) {
+          .about-founder-section {
+            min-height: auto;
+            padding: 0 1.35rem 4rem;
+          }
+
+          .about-founder-bg {
+            background:
+              radial-gradient(ellipse 78% 46% at 34% 16%, rgba(0, 101, 149, 0.48) 0%, rgba(0, 45, 70, 0.2) 48%, transparent 76%),
+              linear-gradient(180deg, #06273a 0%, #030913 44%, #030913 100%);
+          }
+
+          .about-founder-bg::before {
+            background:
+              linear-gradient(180deg, rgba(2, 8, 16, 0.12) 0%, rgba(2, 8, 16, 0.72) 46%, rgba(2, 8, 16, 0.98) 100%);
+          }
+
+          .about-founder-network {
+            inset: 0 -25% auto -10%;
+            width: 130%;
+            height: 52rem;
+            opacity: 0.48;
+          }
+
+          .about-founder-portrait {
+            position: relative;
+            display: block;
+            z-index: 0;
+            left: auto;
+            bottom: auto;
+            width: min(82vw, 26rem);
+            margin: 0 auto -1.25rem;
+          }
+
+          .about-founder-copy {
+            width: min(100%, 42rem);
+            margin: 0 auto;
+            padding: 0;
+          }
+
+          .about-founder-copy h2 {
+            font-size: clamp(2.15rem, 9vw, 3rem);
+            margin-bottom: 1.7rem;
+            text-align: left;
+          }
+
+          .about-founder-body {
+            font-size: clamp(1.05rem, 4.8vw, 1.25rem);
+            line-height: 1.2;
+          }
+
+          .about-founder-body p + p {
+            margin-top: 1.25rem;
+          }
+        }
+
+        @media (max-width: 460px) {
+          .about-founder-section {
+            padding-inline: 1rem;
+          }
+
+          .about-founder-portrait {
+            width: 96vw;
+            margin-left: -11vw;
+          }
+
+          .about-founder-copy h2 {
+            letter-spacing: -0.055em;
+          }
+        }
+      `}</style>
     </section>
   );
 }

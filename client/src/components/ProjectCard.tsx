@@ -29,17 +29,17 @@ export default function ProjectCard({ project, onDetailsClick }: ProjectCardProp
       transition={{ duration: 0.6 }}
       viewport={{ once: true, margin: "0px" }}
     >
-      <Card className="group p-6 bg-[#111]/60 backdrop-blur border border-st-red/15 hover:border-st-red/50 transition-all duration-500 st-portal-hover flex flex-col relative overflow-hidden">
+      <Card data-cursor="project" className="group p-6 bg-[#06111e]/70 backdrop-blur border border-[#007fff]/15 hover:border-[#00bfff]/55 transition-all duration-500 hover:shadow-[0_0_34px_rgba(0,127,255,0.22),0_24px_70px_rgba(0,0,0,0.48)] flex flex-col relative overflow-hidden">
         {/* Subtle scanline effect on hover */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
           style={{
-            background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(229,9,20,0.02) 2px, rgba(229,9,20,0.02) 4px)",
+            background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0,191,255,0.035) 2px, rgba(0,191,255,0.035) 4px)",
           }}
         />
 
         <div className="flex-1 relative z-10">
           {project.thumbnail && (
-            <div className="mb-4 overflow-hidden rounded-lg border border-st-red/10 bg-[#050505]/60 relative">
+            <div className="mb-4 overflow-hidden rounded-lg border border-[#007fff]/15 bg-[#020814]/70 relative">
               <img
                 src={project.thumbnail}
                 alt={project.title}
@@ -52,7 +52,7 @@ export default function ProjectCard({ project, onDetailsClick }: ProjectCardProp
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/40 to-transparent z-20 pointer-events-none" />
             </div>
           )}
-          <h3 className="text-2xl font-display font-bold mb-3 text-foreground group-hover:text-st-red transition-colors tracking-wide">
+          <h3 className="text-2xl font-display font-bold mb-3 text-foreground group-hover:text-[#00bfff] transition-colors tracking-wide">
             {project.title}
           </h3>
           <p className="text-muted-foreground mb-4 line-clamp-3 font-mono text-sm">
@@ -63,7 +63,7 @@ export default function ProjectCard({ project, onDetailsClick }: ProjectCardProp
               <Badge
                 key={tech}
                 variant="outline"
-                className="text-xs border-st-red/20 text-st-red/70 font-retro tracking-wider"
+                className="text-xs border-[#007fff]/25 text-[#6bc7ff]/80 font-retro tracking-wider"
               >
                 {tech}
               </Badge>
@@ -76,7 +76,7 @@ export default function ProjectCard({ project, onDetailsClick }: ProjectCardProp
               size="sm"
               asChild
               data-testid={`button-live-${project.title}`}
-              className="flex-1 bg-st-red/15 text-st-red border border-st-red/30 hover:bg-st-red hover:text-white hover:shadow-[0_0_15px_rgba(229,9,20,0.4)] transition-all"
+              className="flex-1 bg-[#007fff]/15 text-[#6bc7ff] border border-[#007fff]/30 hover:bg-[#007fff] hover:text-white hover:shadow-[0_0_18px_rgba(0,127,255,0.42)] transition-all"
             >
               <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="w-4 h-4 mr-1" />

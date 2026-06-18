@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
+import Education from "@/components/Education";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
+import Achievements from "@/components/Achievements";
 import Resume from "@/components/Resume";
 import GithubContributions from "@/components/GithubContributionAndMusic";
 import Contact from "@/components/Contact";
@@ -27,12 +28,13 @@ export default function Home() {
         <UpsideDownParticles />
         
         <CustomCursor />
-        <Navigation />
         <main>
           <Hero />
           <About />
-          <Projects />
+          <Education />
           <Skills />
+          <Projects />
+          <Achievements />
           <Resume />
           <GithubContributions />
           <Contact />

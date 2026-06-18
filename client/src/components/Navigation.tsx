@@ -8,10 +8,17 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
+  // Sections where the nav should be completely hidden (full-bleed Figma designs)
+  const hiddenOnSections = ["skills", "achievements"];
+  const hideNav = hiddenOnSections.includes(activeSection);
+
   const navItems = [
     { id: "home", label: "Home" },
     { id: "about", label: "About" },
+    { id: "education", label: "Education" },
+    { id: "skills", label: "Skills" },
     { id: "projects", label: "Projects" },
+    { id: "achievements", label: "Achievements" },
     { id: "resume", label: "Resume" },
     { id: "contact", label: "Contact" },
   ];
@@ -51,109 +58,101 @@ export default function Navigation() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
+        style={{
+          // Fade out nav completely on sections that use full-bleed Figma designs
+          opacity: hideNav ? 0 : 1,
+          pointerEvents: hideNav ? "none" : "auto",
+          transition: "opacity 0.4s ease",
+        }}
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
-            ? "bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-st-red/20 shadow-[0_2px_20px_rgba(229,9,20,0.1)]"
+            ? "bg-[#0D1424]/90 backdrop-blur-xl border-b border-[#1A2740] shadow-lg shadow-black/20"
             : "bg-transparent border-b border-transparent"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
-            {/* Logo with red neon flicker */}
+            
+            {/* Minimalist Logo */}
             <motion.button
               onClick={() => scrollToSection("home")}
-              className="text-2xl font-display font-bold text-st-red tracking-[0.15em] uppercase"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="text-xl font-bold text-white tracking-widest uppercase flex items-center gap-2"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               data-testid="link-logo"
-              style={{
-                textShadow: "0 0 10px rgba(229,9,20,0.6), 0 0 20px rgba(229,9,20,0.3)",
-              }}
             >
-              <span className="animate-st-flicker">NB</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-[#00BFFF] shadow-[0_0_10px_#00BFFF]" />
+              <span className="font-sans font-extrabold tracking-wider">NB</span>
             </motion.button>
 
-            {/* Desktop nav */}
+            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="relative text-sm font-retro tracking-[0.15em] uppercase transition-colors group"
+                  className="relative text-xs font-semibold tracking-widest uppercase transition-colors group py-1"
                   data-testid={`link-${item.id}`}
                   style={{
-                    color: activeSection === item.id ? "#e50914" : "rgba(255,255,255,0.5)",
+                    color: activeSection === item.id ? "#00BFFF" : "rgba(245,247,250,0.55)",
                   }}
                 >
-                  <span className="group-hover:text-st-red transition-colors duration-300">
+                  <span className="group-hover:text-white transition-colors duration-300">
                     {item.label}
                   </span>
                   {activeSection === item.id && (
                     <motion.div
                       layoutId="activeSection"
-                      className="absolute -bottom-1 left-0 right-0 h-[2px] bg-st-red"
-                      style={{
-                        boxShadow: "0 0 8px rgba(229,9,20,0.6), 0 0 16px rgba(229,9,20,0.3)",
-                      }}
+                      className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-[#00BFFF] shadow-[0_0_8px_#00BFFF]"
                     />
                   )}
-                  {/* Hover glow line */}
-                  <div className="absolute -bottom-1 left-0 right-0 h-[2px] bg-st-red/0 group-hover:bg-st-red/40 transition-all duration-300" />
                 </button>
               ))}
             </div>
 
-            {/* Mobile menu toggle */}
+            {/* Mobile Menu Toggle */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden text-st-red hover:bg-st-red/10"
+              className="md:hidden text-neutral-300 hover:text-white hover:bg-[#1A2740]/40"
               data-testid="button-menu-toggle"
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </Button>
           </div>
         </div>
       </motion.nav>
 
-      {/* Mobile menu — Upside Down portal slide */}
+      {/* Mobile Menu Dropdown */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            transition={{ type: "spring", damping: 25 }}
-            className="fixed top-16 right-0 bottom-0 w-72 bg-[#0a0a0a]/95 backdrop-blur-xl border-l border-st-red/20 z-40 md:hidden"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="fixed top-16 right-0 left-0 bg-[#0D1424]/98 backdrop-blur-2xl border-b border-[#1A2740] z-40 md:hidden shadow-2xl"
             data-testid="mobile-menu"
           >
-            {/* Red fog effect in mobile menu */}
-            <div className="absolute inset-0 bg-gradient-to-b from-st-red/5 to-transparent pointer-events-none" />
-            
-            <div className="flex flex-col p-6 gap-2 relative z-10">
+            <div className="flex flex-col p-6 gap-2">
               {navItems.map((item, i) => (
                 <motion.button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className={`text-left py-3 px-4 rounded-lg transition-all font-retro tracking-[0.15em] uppercase text-sm ${
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className={`text-left py-3 px-4 rounded-lg transition-all font-semibold tracking-wider uppercase text-xs ${
                     activeSection === item.id
-                      ? "bg-st-red/15 text-st-red border border-st-red/30"
-                      : "text-white/50 hover:bg-st-red/5 hover:text-st-red/80"
+                      ? "bg-[#1A2740] text-[#00BFFF] border border-[#00BFFF]/20"
+                      : "text-neutral-400 hover:bg-[#1A2740]/50 hover:text-white"
                   }`}
                   data-testid={`mobile-link-${item.id}`}
                 >
                   {item.label}
                 </motion.button>
               ))}
-            </div>
-
-            {/* Decorative element */}
-            <div className="absolute bottom-8 left-0 right-0 flex justify-center">
-              <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-st-red/30 to-transparent" />
             </div>
           </motion.div>
         )}

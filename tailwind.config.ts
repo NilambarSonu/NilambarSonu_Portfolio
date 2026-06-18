@@ -53,20 +53,20 @@ export default {
           "4": "hsl(var(--chart-4) / <alpha-value>)",
           "5": "hsl(var(--chart-5) / <alpha-value>)",
         },
-        // Stranger Things specific colors
-        "st-red": "#e50914",
-        "st-dark-red": "#8b0000",
-        "st-amber": "#d4a017",
-        "st-teal": "#1a6b6b",
-        "st-cold-blue": "#1e3a5f",
+        // Stranger Things specific colors mapped to premium AI founder colors
+        "st-red": "#00BFFF",       // Primary Sky Blue
+        "st-dark-red": "#1A2740",  // Dark Slate Border
+        "st-amber": "#4F8CFF",     // Secondary Soft Blue
+        "st-teal": "#00BFFF",      // Primary Sky Blue
+        "st-cold-blue": "#0D1424", // Surface Dark
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
-        serif: ["Libre Baskerville", "Georgia", "serif"],
-        mono: ["Courier Prime", "Courier New", "monospace"],
-        display: ["Libre Baskerville", "Georgia", "serif"],
+        serif: ["Crimson Text", "Georgia", "serif"],
+        mono: ["Inter", "monospace"],
+        display: ["Ancizar Sans", "Inter", "system-ui", "sans-serif"],
         body: ["Inter", "system-ui", "sans-serif"],
-        retro: ["Special Elite", "cursive"],
+        retro: ["Inter", "system-ui", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {
@@ -87,10 +87,10 @@ export default {
         },
         "st-glow": {
           "0%, 100%": {
-            boxShadow: "0 0 5px rgba(229,9,20,0.5), 0 0 10px rgba(229,9,20,0.3)",
+            boxShadow: "0 0 5px rgba(0,191,255,0.3), 0 0 10px rgba(0,191,255,0.1)",
           },
           "50%": {
-            boxShadow: "0 0 15px rgba(229,9,20,0.7), 0 0 30px rgba(229,9,20,0.4), 0 0 60px rgba(229,9,20,0.2)",
+            boxShadow: "0 0 15px rgba(0,191,255,0.5), 0 0 30px rgba(0,191,255,0.25), 0 0 60px rgba(0,191,255,0.1)",
           },
         },
         "float-up": {
