@@ -1,3 +1,6 @@
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+
 const stars = [
   ["8%", "18%"],
   ["18%", "30%"],
@@ -17,9 +20,36 @@ const stars = [
   ["76%", "86%"],
 ] as const;
 
+const textVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.14, duration: 0.72, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
 export default function LandingPage() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const rawY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const rawScale = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
+  const rawOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
+  const copyOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
+  const copyY = useTransform(scrollYProgress, [0, 0.55], [0, -45]);
+
+  const portraitY = useSpring(rawY, { stiffness: 60, damping: 20, mass: 0.8 });
+  const portraitScale = useSpring(rawScale, { stiffness: 60, damping: 20 });
+  const portraitOpacity = useSpring(rawOpacity, { stiffness: 80, damping: 25 });
+
   return (
     <section
+      ref={sectionRef}
       id="home"
       className="landing-hero relative z-50 min-h-screen w-full overflow-hidden"
       style={{ minHeight: "100svh" }}
@@ -38,23 +68,66 @@ export default function LandingPage() {
         ))}
       </div>
 
-      <img
+      {/* Portrait with parallax depth */}
+      <motion.img
         src="/profile_photo.png"
         alt=""
         draggable={false}
         className="landing-portrait"
         aria-hidden="true"
+        style={{
+          y: portraitY,
+          scale: portraitScale,
+          opacity: portraitOpacity,
+        }}
+        initial={{ opacity: 0, scale: 1.04, x: 40 }}
+        animate={{ opacity: 1, scale: 1, x: 0 }}
+        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
       />
 
-      <div className="landing-copy">
-        <p className="landing-eyebrow">Hey, I&apos;m</p>
-        <h1>Nilambar Behera</h1>
-        <div className="landing-role" aria-label="Founder and CEO of Mitti-AI">
+      {/* Text copy with scroll fade+rise */}
+      <motion.div
+        className="landing-copy"
+        style={{ opacity: copyOpacity, y: copyY }}
+      >
+        <motion.p
+          className="landing-eyebrow"
+          custom={0}
+          variants={textVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          Hey, I&apos;m
+        </motion.p>
+        <motion.h1
+          custom={1}
+          variants={textVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          Nilambar Behera
+        </motion.h1>
+        <motion.div
+          className="landing-role"
+          aria-label="Founder and CEO of Mitti-AI"
+          custom={2}
+          variants={textVariants}
+          initial="hidden"
+          animate="visible"
+        >
           <p>Founder &amp; CEO</p>
           <p>Mitti-AI</p>
-        </div>
-        <p className="landing-tagline">Building AI Infrastructure For Agriculture</p>
-      </div>
+        </motion.div>
+        <motion.p
+          className="landing-tagline"
+          custom={3}
+          variants={textVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          Building AI Infrastructure For Agriculture
+        </motion.p>
+      </motion.div>
 
       <style>{`
         .landing-hero {
@@ -152,7 +225,9 @@ export default function LandingPage() {
           max-width: none;
           height: auto;
           user-select: none;
+          transform-origin: bottom center;
           filter: saturate(1.04) contrast(1.04) drop-shadow(-22px 10px 38px rgba(0, 0, 0, 0.28));
+          will-change: transform, opacity;
         }
 
         .landing-copy {
@@ -161,6 +236,7 @@ export default function LandingPage() {
           top: clamp(14rem, 40.8vh, 26.5rem);
           width: min(47vw, 54rem);
           user-select: none;
+          will-change: transform, opacity;
         }
 
         .landing-eyebrow {

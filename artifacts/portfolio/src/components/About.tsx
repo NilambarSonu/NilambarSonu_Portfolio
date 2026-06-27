@@ -1,3 +1,6 @@
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+
 const bodyParagraphs = [
   "I'm Nilambar Behera, a BCA student, AI engineer, full-stack developer, and founder of Mitti-AI (Saathi AI), an agri-tech startup focused on bringing intelligent technology to agriculture.",
   "My journey began with a simple belief: technology should solve real-world problems. That belief led me to build products across artificial intelligence, data science, IoT, and full-stack development while still pursuing my undergraduate degree. Today, I have shipped more than 10 production-ready projects, completed industry internships, and worked across web applications, AI systems, data analytics platforms, and smart agriculture solutions.",
@@ -42,8 +45,11 @@ const constellationDots = [
 ] as const;
 
 export default function About() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { once: true, margin: "-120px" });
+
   return (
-    <section id="about" className="about-founder-section" aria-labelledby="about-founder-title">
+    <section ref={sectionRef} id="about" className="about-founder-section" aria-labelledby="about-founder-title">
       <div className="about-founder-bg" aria-hidden="true" />
 
       <svg className="about-founder-network" viewBox="0 0 1600 900" aria-hidden="true">
@@ -55,18 +61,35 @@ export default function About() {
         ))}
       </svg>
 
-      <img
+      <motion.img
         src="/leftsidebar_standing_profile.png"
         alt="Nilambar Behera"
         draggable={false}
         className="about-founder-portrait"
+        initial={{ opacity: 0, x: -60, scale: 0.96 }}
+        animate={inView ? { opacity: 1, x: 0, scale: 1 } : {}}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
       />
 
       <div className="about-founder-copy">
-        <h2 id="about-founder-title">The Founder</h2>
+        <motion.h2
+          id="about-founder-title"
+          initial={{ opacity: 0, y: 32 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+        >
+          The Founder
+        </motion.h2>
         <div className="about-founder-body">
-          {bodyParagraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
+          {bodyParagraphs.map((paragraph, i) => (
+            <motion.p
+              key={paragraph}
+              initial={{ opacity: 0, y: 28 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.32 + i * 0.1 }}
+            >
+              {paragraph}
+            </motion.p>
           ))}
         </div>
       </div>

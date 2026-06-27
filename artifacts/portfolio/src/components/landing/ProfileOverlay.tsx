@@ -1,7 +1,8 @@
-import profilePlaceholder from "@assets/generated_images/Profile_photo_placeholder_dfc6967d.png";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { motion } from "framer-motion";
+
+const profilePlaceholder = "/profile_photo.png";
 
 export default function ProfileOverlay() {
   const handleDownload = () => {
@@ -48,7 +49,7 @@ export default function ProfileOverlay() {
           </h1>
         </div>
 
-        {/* Action Buttons Preserved */}
+        {/* Action Buttons */}
         <div className="mt-8 flex flex-col items-center pointer-events-auto z-10 space-y-5">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

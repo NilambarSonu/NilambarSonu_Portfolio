@@ -1,4 +1,6 @@
+import { useRef } from "react";
 import { ExternalLink } from "lucide-react";
+import { motion, useInView } from "framer-motion";
 
 const academics = [
   {
@@ -63,21 +65,34 @@ const certificates = [
 ];
 
 export default function Education() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { once: true, margin: "-100px" });
+
   return (
-    <section id="education" className="education-foundation-section" aria-labelledby="education-title">
+    <section ref={sectionRef} id="education" className="education-foundation-section" aria-labelledby="education-title">
       <div className="education-bg" aria-hidden="true" />
       <div className="education-corner education-corner-top" aria-hidden="true" />
       <div className="education-corner education-corner-bottom" aria-hidden="true" />
 
       <div className="education-left">
-        <h2 id="education-title">Academic Foundation</h2>
+        <motion.h2
+          id="education-title"
+          initial={{ opacity: 0, y: 36 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        >
+          Academic Foundation
+        </motion.h2>
 
         <div className="academic-panel-frame" aria-hidden="true" />
         <div className="academic-stack" aria-label="Academic background">
-          {academics.map((item) => (
-            <article
+          {academics.map((item, i) => (
+            <motion.article
               key={item.level}
               className={`academic-pill${item.featured ? " is-featured" : ""}`}
+              initial={{ opacity: 0, x: -40 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.12 + i * 0.12 }}
             >
               <div className="academic-pill-top">
                 <span>{item.level}</span>
@@ -85,16 +100,22 @@ export default function Education() {
               </div>
               <p>{item.school}</p>
               <p>{item.meta}</p>
-            </article>
+            </motion.article>
           ))}
         </div>
 
         <div className="education-metrics" aria-label="Academic and project highlights">
-          {metrics.map(([value, label]) => (
-            <div className="metric-tile" key={label}>
+          {metrics.map(([value, label], i) => (
+            <motion.div
+              className="metric-tile"
+              key={label}
+              initial={{ opacity: 0, y: 28 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.36 + i * 0.08 }}
+            >
               <strong>{value}</strong>
               <span>{label}</span>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
