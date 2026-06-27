@@ -1,0 +1,114 @@
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ExternalLink, Github, Info } from "lucide-react";
+import { motion } from "framer-motion";
+
+interface Project {
+  title: string;
+  description: string;
+  techStack: string[];
+  liveUrl?: string;
+  codeUrl?: string;
+  features: string[];
+  isPublished: boolean;
+  category: string;
+  thumbnail?: string;
+}
+
+interface ProjectCardProps {
+  project: Project;
+  onDetailsClick: (project: Project) => void;
+}
+
+export default function ProjectCard({ project, onDetailsClick }: ProjectCardProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true, margin: "0px" }}
+    >
+      <Card data-cursor="project" className="group p-6 bg-[#06111e]/70 backdrop-blur border border-[#007fff]/15 hover:border-[#00bfff]/55 transition-all duration-500 hover:shadow-[0_0_34px_rgba(0,127,255,0.22),0_24px_70px_rgba(0,0,0,0.48)] flex flex-col relative overflow-hidden">
+        {/* Subtle scanline effect on hover */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{
+            background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0,191,255,0.035) 2px, rgba(0,191,255,0.035) 4px)",
+          }}
+        />
+
+        <div className="flex-1 relative z-10">
+          {project.thumbnail && (
+            <div className="mb-4 overflow-hidden rounded-lg border border-[#007fff]/15 bg-[#020814]/70 relative">
+              <img
+                src={project.thumbnail}
+                alt={project.title}
+                className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-700 relative z-10"
+                style={{
+                  filter: "saturate(0.8) contrast(1.1)",
+                }}
+              />
+              {/* Subtle gradient overlay to blend into card */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/40 to-transparent z-20 pointer-events-none" />
+            </div>
+          )}
+          <h3 className="text-2xl font-display font-bold mb-3 text-foreground group-hover:text-[#00bfff] transition-colors tracking-wide">
+            {project.title}
+          </h3>
+          <p className="text-muted-foreground mb-4 line-clamp-3 font-mono text-sm">
+            {project.description}
+          </p>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {project.techStack.map((tech) => (
+              <Badge
+                key={tech}
+                variant="outline"
+                className="text-xs border-[#007fff]/25 text-[#6bc7ff]/80 font-retro tracking-wider"
+              >
+                {tech}
+              </Badge>
+            ))}
+          </div>
+        </div>
+        <div className="flex gap-2 mt-4 relative z-10">
+          {project.liveUrl && (
+            <Button
+              size="sm"
+              asChild
+              data-testid={`button-live-${project.title}`}
+              className="flex-1 bg-[#007fff]/15 text-[#6bc7ff] border border-[#007fff]/30 hover:bg-[#007fff] hover:text-white hover:shadow-[0_0_18px_rgba(0,127,255,0.42)] transition-all"
+            >
+              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="w-4 h-4 mr-1" />
+                Live
+              </a>
+            </Button>
+          )}
+          {project.codeUrl && project.isPublished && (
+            <Button
+              size="sm"
+              variant="outline"
+              asChild
+              data-testid={`button-code-${project.title}`}
+              className="flex-1 border-st-amber/30 text-st-amber/70 hover:border-st-amber hover:text-st-amber transition-all"
+            >
+              <a href={project.codeUrl} target="_blank" rel="noopener noreferrer">
+                <Github className="w-4 h-4 mr-1" />
+                Code
+              </a>
+            </Button>
+          )}
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onDetailsClick(project)}
+            data-testid={`button-details-${project.title}`}
+            className="border-st-teal/30 text-st-teal hover:border-st-teal hover:text-st-teal hover:shadow-[0_0_10px_rgba(26,107,107,0.3)] transition-all"
+          >
+            <Info className="w-4 h-4" />
+          </Button>
+        </div>
+      </Card>
+    </motion.div>
+  );
+}

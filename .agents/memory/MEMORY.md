@@ -1,0 +1,3 @@
+- [Portfolio pdfjs compatibility](portfolio-pdfjs.md) — pdfjs-dist must stay at v4.x; v6 uses Map.prototype.getOrInsertComputed which breaks in current env
+- [Portfolio react-github-calendar import](portfolio-misc.md) — named export only: `import { GitHubCalendar } from "react-github-calendar"`
+- [Portfolio stats SQL](portfolio-misc.md) — multi-statement SQL in pg.query() breaks; always use separate await calls; tablesEnsured guard added
