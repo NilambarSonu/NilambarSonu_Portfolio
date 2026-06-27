@@ -1,266 +1,232 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Power, Activity, Zap, RefreshCw } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 interface IntroProps {
   onEnter: () => void;
 }
 
-const NAME = "NILAMBAR";
+const NAME_LETTERS = "NILAMBAR".split("");
 
-const STATIC_COLORS = [
-  "#e50914", // red
-  "#ffd700", // golden yellow
-  "#00cc44", // green
-  "#3399ff", // blue
-  "#ff6600", // orange
-  "#cc44ff", // purple
-  "#e50914", // red
-  "#ffd700", // yellow
-];
-
-type EffectType = 'static' | 'breathing' | 'strobing' | 'colorCycle';
+const PARTICLE_COUNT = 60;
+const particles = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
+  id: i,
+  x: Math.random() * 100,
+  y: Math.random() * 100,
+  size: Math.random() * 2.5 + 0.5,
+  delay: Math.random() * 4,
+  duration: Math.random() * 3 + 3,
+  opacity: Math.random() * 0.5 + 0.1,
+}));
 
 export default function Intro({ onEnter }: IntroProps) {
-  const [rgbEffect, setRgbEffect] = useState<EffectType>('static');
-  const [isExiting, setIsExiting] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [allLit, setAllLit] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
+  const didMount = useRef(false);
 
   useEffect(() => {
-    // Sequentially light up each letter
-    const lightTimers: NodeJS.Timeout[] = [];
-    
-    NAME.split("").forEach((_, i) => {
-      lightTimers.push(
-        setTimeout(() => setActiveIndex(i), 300 + i * 250)
-      );
-    });
+    if (didMount.current) return;
+    didMount.current = true;
 
-    return () => {
-      lightTimers.forEach(clearTimeout);
-    };
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    NAME_LETTERS.forEach((_, i) => {
+      timers.push(setTimeout(() => setActiveIndex(i), 500 + i * 200));
+    });
+    timers.push(setTimeout(() => setAllLit(true), 500 + NAME_LETTERS.length * 200 + 400));
+    return () => timers.forEach(clearTimeout);
   }, []);
 
   const handleEnter = () => {
-    // CINEMATIC AUDIO â€” launched inside user-gesture so browser allows autoplay
     try {
-      const audio = new Audio('/Running Up That Hill.mp3');
-      audio.loop = false;
-      audio.preload = 'auto';
-
-      // Web Audio API gives us a compressor + gain for richer output
+      const audio = new Audio("/Running Up That Hill.mp3");
+      audio.volume = 0;
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
       const ctx = new AudioCtx() as AudioContext;
       const source = ctx.createMediaElementSource(audio);
-
-      // Dynamics compressor â€” evens out quiet/loud parts for fuller sound
-      const compressor = ctx.createDynamicsCompressor();
-      compressor.threshold.value = -18;
-      compressor.knee.value = 10;
-      compressor.ratio.value = 4;
-      compressor.attack.value = 0.003;
-      compressor.release.value = 0.25;
-
-      // Gain: ramp 0 â†’ 1.0 over 2 seconds for a cinematic swell-in
       const gainNode = ctx.createGain();
       gainNode.gain.setValueAtTime(0, ctx.currentTime);
-      gainNode.gain.linearRampToValueAtTime(1.0, ctx.currentTime + 2.0);
-
-      source.connect(compressor);
-      compressor.connect(gainNode);
+      gainNode.gain.linearRampToValueAtTime(0.85, ctx.currentTime + 2.2);
+      source.connect(gainNode);
       gainNode.connect(ctx.destination);
-
-      audio.play().catch(() => {
-        console.warn('[Intro] Audio play blocked by browser policy.');
-      });
-
-      // Persist on window â€” audio survives Intro unmount and keeps playing
+      audio.play().catch(() => {});
       (window as any).__introAudio = audio;
       (window as any).__introAudioCtx = ctx;
-      (window as any).__introGain = gainNode;
-    } catch (err) {
-      // Fallback: plain HTML Audio element if Web Audio API is unavailable
-      console.warn('[Intro] Web Audio API error, using fallback:', err);
+    } catch (_) {
       try {
-        const fallback = new Audio('/Running Up That Hill.mp3');
-        fallback.volume = 0.9;
+        const fallback = new Audio("/Running Up That Hill.mp3");
+        fallback.volume = 0.7;
         fallback.play().catch(() => {});
         (window as any).__introAudio = fallback;
-      } catch (_) {}
+      } catch (_2) {}
     }
 
     setIsExiting(true);
-    // Give time for Intro to fade out before showing the portfolio
-    setTimeout(() => {
-      onEnter();
-    }, 1000);
+    setTimeout(() => onEnter(), 900);
   };
-  
+
   return (
     <AnimatePresence>
       {!isExiting && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
-          className="fixed inset-0 z-[100] bg-[#050505] flex flex-col items-center justify-center overflow-hidden"
+          exit={{ opacity: 0, scale: 1.04 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed inset-0 z-[100] overflow-hidden flex flex-col items-center justify-center"
+          style={{ background: "#030913" }}
         >
-          {/* Ambient background glow */}
-          <div className="absolute inset-0 pointer-events-none" style={{
-            background: "radial-gradient(ellipse at center, rgba(20,0,0,0.5) 0%, transparent 70%)"
-          }} />
-
-          {/* Effect Selector Glassmorphism Panel */}
-          <div className="absolute top-12 flex flex-wrap justify-center gap-2 sm:gap-4 p-2 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md z-10 shadow-xl pointer-events-auto">
-            <button 
-              onClick={() => setRgbEffect('static')}
-              className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 rounded-xl transition-all duration-300 font-retro text-xs sm:text-sm ${rgbEffect === 'static' ? 'bg-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/60 hover:text-white hover:bg-white/10'}`}
-            >
-              <Power size={16} /> <span className="hidden sm:inline">Static</span>
-            </button>
-            <button 
-              onClick={() => setRgbEffect('breathing')}
-              className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 rounded-xl transition-all duration-300 font-retro text-xs sm:text-sm ${rgbEffect === 'breathing' ? 'bg-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/60 hover:text-white hover:bg-white/10'}`}
-            >
-              <Activity size={16} /> <span className="hidden sm:inline">Breathing</span>
-            </button>
-            <button 
-              onClick={() => setRgbEffect('strobing')}
-              className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 rounded-xl transition-all duration-300 font-retro text-xs sm:text-sm ${rgbEffect === 'strobing' ? 'bg-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/60 hover:text-white hover:bg-white/10'}`}
-            >
-              <Zap size={16} /> <span className="hidden sm:inline">Strobing</span>
-            </button>
-            <button 
-              onClick={() => setRgbEffect('colorCycle')}
-              className={`flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 rounded-xl transition-all duration-300 font-retro text-xs sm:text-sm ${rgbEffect === 'colorCycle' ? 'bg-white/20 text-white shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/60 hover:text-white hover:bg-white/10'}`}
-            >
-              <RefreshCw size={16} /> <span className="hidden sm:inline">Color Cycle</span>
-            </button>
+          {/* Stars / particles */}
+          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            {particles.map((p) => (
+              <motion.span
+                key={p.id}
+                className="absolute rounded-full"
+                style={{
+                  left: `${p.x}%`,
+                  top: `${p.y}%`,
+                  width: p.size,
+                  height: p.size,
+                  background: `rgba(65, 176, 255, ${p.opacity})`,
+                  boxShadow: `0 0 ${p.size * 4}px rgba(0, 120, 231, 0.4)`,
+                }}
+                animate={{ opacity: [p.opacity, p.opacity * 0.2, p.opacity] }}
+                transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: "easeInOut" }}
+              />
+            ))}
           </div>
 
-          {/* Title Text and Christmas Lights */}
-          <div className="relative flex items-center justify-center gap-1 sm:gap-3 md:gap-5 mb-16 px-4 z-10 w-full overflow-hidden sm:overflow-visible">
-            {/* Wire connecting bulbs */}
-            <svg viewBox="0 0 100 20" className="absolute top-2 left-0 right-0 w-full h-8 pointer-events-none" preserveAspectRatio="none">
-              <path
-                d={`M 0 15 ${NAME.split("").map((_, i) => {
-                  const x = (i + 0.5) * (100 / NAME.length);
-                  return `Q ${x - 3} 5, ${x} 20 Q ${x + 3} 5, ${x + 5} 15`;
-                }).join(" ")}`}
-                fill="none"
-                stroke="#333"
-                strokeWidth="0.5"
-              />
-            </svg>
+          {/* Radial glow behind name */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              width: "60vw",
+              height: "40vh",
+              background: "radial-gradient(ellipse at center, rgba(0,120,231,0.12) 0%, transparent 70%)",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+            aria-hidden="true"
+          />
 
-            {NAME.split("").map((letter, index) => {
-              const isInitiallyLit = index <= activeIndex;
-              let effectClassName = "transition-all duration-300 ";
-              let style: React.CSSProperties = { fontWeight: 700 };
-              let bulbStyle: React.CSSProperties = { transition: "all 0.2s ease" };
-              
-              const baseColor = STATIC_COLORS[index % STATIC_COLORS.length];
-              
-              if (!isInitiallyLit) {
-                 style.color = "#222";
-                 style.textShadow = "none";
-                 bulbStyle.backgroundColor = "#222";
-                 bulbStyle.boxShadow = "none";
-              } else {
-                 if (rgbEffect === 'static') {
-                   style.color = baseColor;
-                   style.textShadow = `0 0 10px ${baseColor}, 0 0 30px ${baseColor}, 0 0 60px ${baseColor}60`;
-                   bulbStyle.backgroundColor = baseColor;
-                   bulbStyle.boxShadow = `0 0 10px ${baseColor}, 0 0 20px ${baseColor}, 0 0 40px ${baseColor}80`;
-                 } else if (rgbEffect === 'breathing') {
-                   effectClassName += " animate-pulse-breathing";
-                   style.color = baseColor;
-                   style.textShadow = `0 0 10px ${baseColor}, 0 0 30px ${baseColor}, 0 0 60px ${baseColor}60`;
-                   bulbStyle.backgroundColor = baseColor;
-                   bulbStyle.boxShadow = `0 0 10px ${baseColor}, 0 0 20px ${baseColor}, 0 0 40px ${baseColor}80`;
-                 } else if (rgbEffect === 'strobing') {
-                   effectClassName += " animate-strobing";
-                   style.color = baseColor;
-                   style.textShadow = `0 0 10px ${baseColor}, 0 0 30px ${baseColor}, 0 0 60px ${baseColor}60`;
-                   bulbStyle.backgroundColor = baseColor;
-                   bulbStyle.boxShadow = `0 0 10px ${baseColor}, 0 0 20px ${baseColor}, 0 0 40px ${baseColor}80`;
-                 } else if (rgbEffect === 'colorCycle') {
-                   effectClassName += " animate-color-cycle";
-                   style.color = '#ff0000'; // start with red to cycle through spectrum
-                   style.textShadow = `0 0 10px #ff0000, 0 0 30px #ff0000, 0 0 60px rgba(255,0,0,0.6)`;
-                   style.animationDelay = `${index * 0.15}s`;
-                   bulbStyle.backgroundColor = '#ff0000';
-                   bulbStyle.boxShadow = `0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 40px rgba(255,0,0,0.8)`;
-                   bulbStyle.animationDelay = `${index * 0.15}s`;
-                 }
-              }
-              
+          {/* Thin horizontal rule above name */}
+          <motion.div
+            className="w-16 h-px mb-8"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(0,120,231,0.6), transparent)" }}
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          />
+
+          {/* Eyebrow label */}
+          <motion.p
+            className="text-xs tracking-[0.35em] uppercase mb-6 font-light"
+            style={{ color: "rgba(0, 157, 223, 0.7)", fontFamily: "system-ui, sans-serif" }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Portfolio
+          </motion.p>
+
+          {/* Name letters */}
+          <div className="flex items-end gap-1 sm:gap-2 mb-6" aria-label="Nilambar">
+            {NAME_LETTERS.map((letter, i) => {
+              const lit = i <= activeIndex;
               return (
-                <motion.div
-                  key={index}
-                  className={`flex flex-col items-center relative ${effectClassName}`}
-                  initial={{ opacity: 0.3 }}
-                  animate={{ 
-                    opacity: isInitiallyLit ? 1 : 0.3,
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: lit ? 1 : 0, y: lit ? 0 : 24 }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  style={{
+                    fontFamily: "'Ancizar Serif', Georgia, serif",
+                    fontSize: "clamp(3rem, 8vw, 7rem)",
+                    fontWeight: 400,
+                    letterSpacing: "0.08em",
+                    color: "#0078e7",
+                    textShadow: lit
+                      ? "0 0 28px rgba(0,120,231,0.55), 0 0 60px rgba(0,120,231,0.28)"
+                      : "none",
+                    lineHeight: 1,
+                    userSelect: "none",
+                    textTransform: "uppercase",
+                    transition: "text-shadow 0.3s ease",
                   }}
-                  transition={{ duration: 0.15 }}
                 >
-                  {/* Bulb */}
-                  <div
-                    className="w-4 h-5 sm:w-5 sm:h-6 rounded-b-full relative mb-2"
-                    style={bulbStyle}
-                  >
-                    {/* Bulb cap */}
-                    <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-3 h-2 bg-gray-600 rounded-t-sm" />
-                  </div>
-
-                  {/* Letter */}
-                  <span className="text-3xl sm:text-5xl md:text-6xl font-display tracking-widest" style={style}>
-                    {letter}
-                  </span>
-                </motion.div>
+                  {letter}
+                </motion.span>
               );
             })}
           </div>
 
-          {/* Entry Button */}
-          <button 
-            onClick={handleEnter}
-            className="relative z-10 px-6 py-3 sm:px-8 sm:py-4 bg-transparent border-2 border-[#e50914]/40 text-[#e50914] font-retro text-xs sm:text-sm tracking-[0.2em] sm:tracking-[0.3em] uppercase rounded cursor-pointer transition-all duration-500 hover:border-[#e50914] hover:text-[#ff4d4d] hover:bg-[#e50914]/10 hover:shadow-[0_0_20px_rgba(229,9,20,0.5),inset_0_0_10px_rgba(229,9,20,0.2)] group overflow-hidden"
+          {/* Full name subtitle */}
+          <motion.p
+            className="text-sm tracking-[0.22em] uppercase mb-2 font-light"
+            style={{ color: "rgba(255,255,255,0.55)", fontFamily: "system-ui, sans-serif" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: allLit ? 1 : 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <span className="relative z-10">Ready to enter the Upside Down World...</span>
-          </button>
+            Nilambar Behera
+          </motion.p>
 
-          <style>{`
-            @keyframes pulse-breathing {
-              0%, 100% { opacity: 0.3; filter: brightness(0.6); text-shadow: 0 0 5px currentColor; }
-              50% { opacity: 1; filter: brightness(1.2); }
-            }
-            .animate-pulse-breathing {
-              animation: pulse-breathing 3s ease-in-out infinite;
-            }
+          <motion.p
+            className="text-xs tracking-[0.18em] mb-12"
+            style={{ color: "rgba(0,157,223,0.55)", fontFamily: "system-ui, sans-serif" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: allLit ? 1 : 0 }}
+            transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+          >
+            Founder &amp; CEO · Mitti-AI
+          </motion.p>
 
-            @keyframes strobing {
-              0%, 10% { opacity: 1; filter: brightness(1.2); }
-              11%, 14% { opacity: 0.1; filter: brightness(0.2); }
-              15%, 25% { opacity: 1; filter: brightness(1.2); }
-              26%, 29% { opacity: 0.2; filter: brightness(0.3); }
-              30%, 35% { opacity: 1; filter: brightness(1.2); }
-              36%, 39% { opacity: 0; filter: brightness(0); }
-              40%, 100% { opacity: 1; filter: brightness(1.2); }
-            }
-            .animate-strobing {
-              animation: strobing 0.7s infinite;
-            }
+          {/* Enter button */}
+          <motion.button
+            onClick={handleEnter}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: allLit ? 1 : 0, y: allLit ? 0 : 16 }}
+            transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            className="group relative flex items-center gap-3 px-8 py-3.5 rounded-full cursor-pointer border transition-all duration-300"
+            style={{
+              background: "rgba(0,120,231,0.08)",
+              border: "1px solid rgba(0,120,231,0.35)",
+              color: "rgba(255,255,255,0.88)",
+              fontFamily: "system-ui, sans-serif",
+              fontSize: "0.8rem",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(0,120,231,0.18)";
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(0,120,231,0.7)";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 28px rgba(0,120,231,0.25)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(0,120,231,0.08)";
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(0,120,231,0.35)";
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
+            }}
+          >
+            Enter Portfolio
+            <motion.span
+              animate={{ x: [0, 4, 0] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <ArrowRight size={15} style={{ color: "#0078e7" }} />
+            </motion.span>
+          </motion.button>
 
-            @keyframes colorCycle {
-              0% { filter: hue-rotate(0deg); }
-              100% { filter: hue-rotate(360deg); }
-            }
-            .animate-color-cycle {
-              animation: colorCycle 4s linear infinite;
-            }
-          `}</style>
+          {/* Bottom thin rule */}
+          <motion.div
+            className="absolute bottom-10 w-8 h-px"
+            style={{ background: "rgba(0,120,231,0.3)" }}
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          />
         </motion.div>
       )}
     </AnimatePresence>
