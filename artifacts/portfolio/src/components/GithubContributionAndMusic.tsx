@@ -83,7 +83,7 @@ export default function ContributionsAndMusic() {
           {/* RIGHT: Profile card */}
           <motion.div className="github-right" {...fadeUp(0.18)}>
             <div className="github-profile-card">
-              {/* Avatar placeholder */}
+              {/* Avatar */}
               <div className="github-avatar-wrap">
                 <img
                   src={`https://avatars.githubusercontent.com/${GITHUB_USERNAME}`}
@@ -94,36 +94,37 @@ export default function ContributionsAndMusic() {
                 <div className="github-avatar-ring" aria-hidden="true" />
               </div>
 
-              <h3 className="github-profile-name">Nilambar Behera</h3>
-              <p className="github-profile-handle">@{GITHUB_USERNAME}</p>
-              <p className="github-profile-bio">
-                AI engineer &amp; full-stack developer building intelligent,
-                impactful software — from agri-tech to web apps.
-              </p>
+              {/* All text content grouped — required for mobile row layout */}
+              <div className="github-profile-info">
+                <h3 className="github-profile-name">Nilambar Behera</h3>
+                <p className="github-profile-handle">@{GITHUB_USERNAME}</p>
+                <p className="github-profile-bio">
+                  AI engineer &amp; full-stack developer building intelligent,
+                  impactful software — from agri-tech to web apps.
+                </p>
 
-              {/* Highlights */}
-              <ul className="github-highlights">
-                {highlights.map(({ icon, label, sub }) => (
-                  <li key={label} className="github-highlight-item">
-                    <span className="github-highlight-icon">{icon}</span>
-                    <span className="github-highlight-text">
-                      <strong>{label}</strong>
-                      <span>{sub}</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
+                <ul className="github-highlights">
+                  {highlights.map(({ icon, label, sub }) => (
+                    <li key={label} className="github-highlight-item">
+                      <span className="github-highlight-icon">{icon}</span>
+                      <span className="github-highlight-text">
+                        <strong>{label}</strong>
+                        <span>{sub}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
 
-              {/* CTA */}
-              <a
-                href={`https://github.com/${GITHUB_USERNAME}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="github-cta"
-              >
-                View GitHub Profile
-                <ArrowUpRight size={14} />
-              </a>
+                <a
+                  href={`https://github.com/${GITHUB_USERNAME}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="github-cta"
+                >
+                  View GitHub Profile
+                  <ArrowUpRight size={14} />
+                </a>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -254,6 +255,14 @@ export default function ContributionsAndMusic() {
           text-align: center;
         }
 
+        /* Text wrapper — full width on desktop, flex-1 on mobile */
+        .github-profile-info {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
         /* Avatar */
         .github-avatar-wrap {
           position: relative;
@@ -362,133 +371,135 @@ export default function ContributionsAndMusic() {
           box-shadow: 0 0 18px rgba(0,120,231,0.2);
         }
 
-        /* ── Responsive ── */
+        /* ── Tablet: stack grid ── */
         @media (max-width: 900px) {
           .github-grid {
             grid-template-columns: 1fr;
           }
-          .github-profile-card {
-            flex-direction: row;
-            flex-wrap: wrap;
-            text-align: left;
-            gap: 1rem;
-          }
-          .github-avatar-wrap { flex-shrink: 0; }
-          .github-highlights { padding-top: 0; border-top: none; }
         }
 
-        /* ── Mobile (phones) ── */
+        /* ── Mobile ── */
         @media (max-width: 640px) {
           .github-section {
-            padding: 3rem 0 3rem;
+            padding: 2.8rem 0 2.8rem;
           }
 
           .github-inner {
-            padding: 0 1rem;
+            padding: 0 0.9rem;
           }
 
           .github-header {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.4rem;
           }
 
           .github-heading {
-            font-size: 1.55rem;
-            gap: 0.5rem;
+            font-size: 1.45rem;
+            gap: 0.45rem;
           }
 
           .github-heading-icon {
-            width: 20px;
-            height: 20px;
+            width: 19px;
+            height: 19px;
           }
 
-          /* Calendar: let it scroll horizontally */
+          /* Calendar — horizontal scroll with proper containment */
           .github-calendar-card {
-            padding: 0.9rem 0.75rem;
+            padding: 0.8rem 0.7rem;
             border-radius: 10px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
           }
 
-          /* Profile card: compact stacked layout */
+          /* Profile card — row: avatar left, info right */
           .github-profile-card {
             flex-direction: row;
             align-items: flex-start;
             text-align: left;
             padding: 1rem;
-            gap: 0.9rem;
+            gap: 0.8rem;
             border-radius: 10px;
           }
 
           .github-avatar-wrap {
-            width: 52px;
-            height: 52px;
+            width: 54px;
+            height: 54px;
             flex-shrink: 0;
             margin-bottom: 0;
           }
 
           .github-avatar {
-            width: 52px;
-            height: 52px;
+            width: 54px;
+            height: 54px;
           }
 
-          /* Right-side text block */
-          .github-profile-card > *:not(.github-avatar-wrap) {
+          /* Text block — takes remaining width */
+          .github-profile-info {
             flex: 1;
             min-width: 0;
+            align-items: flex-start;
           }
 
           .github-profile-name {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             margin-bottom: 0.1rem;
+            text-align: left;
           }
 
           .github-profile-handle {
-            font-size: 0.65rem;
-            margin-bottom: 0.5rem;
+            font-size: 0.63rem;
+            margin-bottom: 0.55rem;
+            text-align: left;
           }
 
           .github-profile-bio {
-            font-size: 0.78rem;
-            line-height: 1.5;
+            font-size: 0.76rem;
+            line-height: 1.55;
             margin-bottom: 0.8rem;
+            text-align: left;
           }
 
           .github-highlights {
-            border-top: 1px solid rgba(0,120,231,0.1);
-            padding-top: 0.7rem;
-            margin-bottom: 0.9rem;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.5rem 0.75rem;
+            gap: 0.45rem 0.6rem;
+            border-top: 1px solid rgba(0,120,231,0.1);
+            padding-top: 0.65rem;
+            margin-bottom: 0.85rem;
           }
 
           .github-highlight-item {
-            gap: 0.4rem;
+            gap: 0.35rem;
           }
 
           .github-highlight-text strong {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
           }
 
           .github-highlight-text span {
-            font-size: 0.6rem;
+            font-size: 0.58rem;
           }
 
           .github-cta {
-            font-size: 0.65rem;
-            padding: 0.45rem 1rem;
-            letter-spacing: 0.1em;
+            font-size: 0.62rem;
+            padding: 0.4rem 0.9rem;
+            letter-spacing: 0.09em;
+            align-self: flex-start;
           }
         }
 
-        @media (max-width: 400px) {
-          .github-highlights {
-            grid-template-columns: 1fr;
-          }
-
+        /* ── Very small phones ── */
+        @media (max-width: 380px) {
           .github-profile-card {
             flex-direction: column;
             align-items: flex-start;
+          }
+
+          .github-profile-info {
+            width: 100%;
+          }
+
+          .github-highlights {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
