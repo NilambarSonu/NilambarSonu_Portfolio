@@ -377,8 +377,119 @@ export default function ContributionsAndMusic() {
           .github-highlights { padding-top: 0; border-top: none; }
         }
 
-        @media (max-width: 480px) {
-          .github-profile-card { flex-direction: column; align-items: center; text-align: center; }
+        /* ── Mobile (phones) ── */
+        @media (max-width: 640px) {
+          .github-section {
+            padding: 3rem 0 3rem;
+          }
+
+          .github-inner {
+            padding: 0 1rem;
+          }
+
+          .github-header {
+            margin-bottom: 1.5rem;
+          }
+
+          .github-heading {
+            font-size: 1.55rem;
+            gap: 0.5rem;
+          }
+
+          .github-heading-icon {
+            width: 20px;
+            height: 20px;
+          }
+
+          /* Calendar: let it scroll horizontally */
+          .github-calendar-card {
+            padding: 0.9rem 0.75rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+
+          /* Profile card: compact stacked layout */
+          .github-profile-card {
+            flex-direction: row;
+            align-items: flex-start;
+            text-align: left;
+            padding: 1rem;
+            gap: 0.9rem;
+            border-radius: 10px;
+          }
+
+          .github-avatar-wrap {
+            width: 52px;
+            height: 52px;
+            flex-shrink: 0;
+            margin-bottom: 0;
+          }
+
+          .github-avatar {
+            width: 52px;
+            height: 52px;
+          }
+
+          /* Right-side text block */
+          .github-profile-card > *:not(.github-avatar-wrap) {
+            flex: 1;
+            min-width: 0;
+          }
+
+          .github-profile-name {
+            font-size: 0.95rem;
+            margin-bottom: 0.1rem;
+          }
+
+          .github-profile-handle {
+            font-size: 0.65rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .github-profile-bio {
+            font-size: 0.78rem;
+            line-height: 1.5;
+            margin-bottom: 0.8rem;
+          }
+
+          .github-highlights {
+            border-top: 1px solid rgba(0,120,231,0.1);
+            padding-top: 0.7rem;
+            margin-bottom: 0.9rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem 0.75rem;
+          }
+
+          .github-highlight-item {
+            gap: 0.4rem;
+          }
+
+          .github-highlight-text strong {
+            font-size: 0.7rem;
+          }
+
+          .github-highlight-text span {
+            font-size: 0.6rem;
+          }
+
+          .github-cta {
+            font-size: 0.65rem;
+            padding: 0.45rem 1rem;
+            letter-spacing: 0.1em;
+          }
+        }
+
+        @media (max-width: 400px) {
+          .github-highlights {
+            grid-template-columns: 1fr;
+          }
+
+          .github-profile-card {
+            flex-direction: column;
+            align-items: flex-start;
+          }
         }
       `}</style>
     </section>
