@@ -95,6 +95,7 @@ export default function Contact() {
 
       <h2 id="contact-title" className="contact-heading">Let's Build The Future</h2>
 
+      {/* Desktop floating icons — hidden on mobile */}
       {contactLinks.map((link, index) => (
         <motion.a
           key={link.name}
@@ -127,6 +128,29 @@ export default function Contact() {
         <Mail className="h-8 w-8" />
         <span>Email</span>
       </motion.a>
+
+      {/* Mobile-only social icon strip */}
+      <div className="contact-mobile-social">
+        {contactLinks.map((link) => (
+          <a
+            key={link.name}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={link.name}
+            className="contact-mobile-icon"
+          >
+            <img src={link.icon} alt={link.name} />
+          </a>
+        ))}
+        <a
+          href="mailto:nilambarsonubehera@gmail.com"
+          aria-label="Email"
+          className="contact-mobile-icon contact-mobile-email"
+        >
+          <Mail size={28} />
+        </a>
+      </div>
 
       <div className="contact-stage">
         <motion.div
@@ -510,16 +534,68 @@ export default function Contact() {
           }
         }
 
+        /* ── Mobile social strip (hidden on desktop) ── */
+        .contact-mobile-social {
+          display: none;
+        }
+
         @media (max-width: 760px) {
+          /* Hide absolute floating icons entirely on mobile */
+          .contact-floating-icon,
+          .contact-floating-email {
+            display: none !important;
+          }
+
+          /* Show the mobile strip */
+          .contact-mobile-social {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.85rem;
+            margin: 0.75rem auto 1.5rem;
+            max-width: 360px;
+            position: relative;
+            z-index: 8;
+          }
+
+          .contact-mobile-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: rgba(0, 120, 231, 0.1);
+            border: 1px solid rgba(0, 157, 223, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+          }
+
+          .contact-mobile-icon:active {
+            transform: scale(0.92);
+          }
+
+          .contact-mobile-icon img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            display: block;
+          }
+
+          .contact-mobile-email {
+            color: #41b0ff;
+            background: linear-gradient(135deg, rgba(255,77,95,0.15), rgba(0,191,255,0.15));
+            border-color: rgba(0,191,255,0.3);
+          }
+
           .contact-premium-section {
             min-height: auto;
-            padding: 3.2rem 0.85rem 4rem;
+            padding: 2.5rem 1rem 3.5rem;
           }
 
           .contact-heading {
-            margin-bottom: 11.2rem;
-            font-size: clamp(1.72rem, 9.4vw, 2.55rem);
-            line-height: 0.95;
+            margin-bottom: 1.2rem;
+            font-size: clamp(1.55rem, 8.5vw, 2.2rem);
+            line-height: 1.1;
           }
 
           .contact-stage {
@@ -527,76 +603,72 @@ export default function Contact() {
           }
 
           .contact-panel {
-            padding: 1.05rem;
+            grid-template-columns: 1fr;
+            padding: 1.2rem 1rem;
             border-radius: 1.2rem;
-            gap: 0.4rem;
+            gap: 1rem;
+            min-height: auto;
           }
 
           .contact-earth-wrap {
-            min-height: 12.5rem;
-            padding-top: 0.5rem;
+            min-height: auto;
+            padding: 0.5rem 0;
+            order: -1;
           }
 
           .contact-earth {
-            min-width: 9.8rem;
-            width: min(50vw, 12rem);
+            width: min(42vw, 10rem);
+            min-width: 0;
           }
 
           .contact-form {
-            gap: 1rem;
+            gap: 0.9rem;
           }
 
           .contact-form label {
-            gap: 0.45rem;
+            gap: 0.35rem;
           }
 
           .contact-form label span {
-            font-size: clamp(1.05rem, 5.2vw, 1.4rem);
-            letter-spacing: 0.08em;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
           }
 
           .contact-input {
-            height: 2.9rem;
+            height: 2.7rem;
+            font-size: 0.9rem;
           }
 
           .contact-textarea {
-            min-height: 10.5rem;
+            min-height: 8rem;
+            font-size: 0.9rem;
           }
 
-          .contact-floating-icon,
-          .contact-floating-email {
-            right: auto;
-            bottom: auto;
-            transform: none;
+          .contact-submit {
+            height: 2.8rem;
+            font-size: 0.85rem;
           }
-
-          .contact-icon-github { left: calc(50% - 7.2rem); top: 7.8rem; }
-          .contact-icon-whatsapp { left: calc(50% - 2.4rem); top: 7.8rem; }
-          .contact-floating-email { left: calc(50% + 2.4rem); top: 7.8rem; }
-          .contact-icon-linkedin { left: calc(50% + 7.2rem); top: 7.8rem; }
-          .contact-icon-x { left: calc(50% - 7.2rem); top: 12.7rem; }
-          .contact-icon-instagram { left: calc(50% - 2.4rem); top: 12.7rem; }
-          .contact-icon-telegram { left: calc(50% + 2.4rem); top: 12.7rem; }
-          .contact-icon-facebook { left: calc(50% + 7.2rem); top: 12.7rem; }
         }
 
-        @media (max-width: 380px) {
-          .contact-premium-section {
-            padding-inline: 0.7rem;
+        @media (max-width: 400px) {
+          .contact-mobile-social {
+            gap: 0.65rem;
+          }
+
+          .contact-mobile-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+          }
+
+          .contact-mobile-icon img {
+            width: 24px;
+            height: 24px;
           }
 
           .contact-heading {
-            margin-bottom: 10.4rem;
+            font-size: clamp(1.35rem, 8vw, 1.8rem);
           }
-
-          .contact-icon-github { left: calc(50% - 6.55rem); top: 7.6rem; }
-          .contact-icon-whatsapp { left: calc(50% - 2.18rem); top: 7.6rem; }
-          .contact-floating-email { left: calc(50% + 2.18rem); top: 7.6rem; }
-          .contact-icon-linkedin { left: calc(50% + 6.55rem); top: 7.6rem; }
-          .contact-icon-x { left: calc(50% - 6.55rem); top: 12.2rem; }
-          .contact-icon-instagram { left: calc(50% - 2.18rem); top: 12.2rem; }
-          .contact-icon-telegram { left: calc(50% + 2.18rem); top: 12.2rem; }
-          .contact-icon-facebook { left: calc(50% + 6.55rem); top: 12.2rem; }
         }
       `}</style>
     </section>
