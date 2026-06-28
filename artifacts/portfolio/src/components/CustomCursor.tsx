@@ -1,233 +1,147 @@
-import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
+
+type HoverState = "default" | "link" | "project" | "text";
 
 export default function CustomCursor() {
   const [isMobile, setIsMobile] = useState(false);
-  const [hoverType, setHoverType] = useState<"default" | "link" | "project" | "skill" | "github" | "resume" | "contact">("default");
-  const [isIdle, setIsIdle] = useState(false);
-  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [hover, setHover] = useState<HoverState>("default");
+  const [clicked, setClicked] = useState(false);
 
-  // Position motion values
-  const mouseX = useMotionValue(-100);
-  const mouseY = useMotionValue(-100);
+  const mx = useMotionValue(-200);
+  const my = useMotionValue(-200);
 
-  // Springs configuration
-  const springConfig = { stiffness: 400, damping: 28, mass: 0.4 };
-  const cursorX = useSpring(mouseX, springConfig);
-  const cursorY = useSpring(mouseY, springConfig);
+  // Dot — very fast, almost 1:1
+  const dotX = useSpring(mx, { stiffness: 900, damping: 35, mass: 0.3 });
+  const dotY = useSpring(my, { stiffness: 900, damping: 35, mass: 0.3 });
 
-  // Trail springs configuration (different lag levels)
-  const trail1X = useSpring(mouseX, { stiffness: 180, damping: 22 });
-  const trail1Y = useSpring(mouseY, { stiffness: 180, damping: 22 });
-
-  const trail2X = useSpring(mouseX, { stiffness: 100, damping: 18 });
-  const trail2Y = useSpring(mouseY, { stiffness: 100, damping: 18 });
-
-  const trail3X = useSpring(mouseX, { stiffness: 50, damping: 14 });
-  const trail3Y = useSpring(mouseY, { stiffness: 50, damping: 14 });
+  // Ring — soft follow
+  const ringX = useSpring(mx, { stiffness: 120, damping: 22, mass: 0.6 });
+  const ringY = useSpring(my, { stiffness: 120, damping: 22, mass: 0.6 });
 
   useEffect(() => {
-    setIsMobile(window.matchMedia("(pointer: coarse)").matches);
-  }, []);
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      setIsMobile(true);
+      return;
+    }
 
-  const resetIdleTimer = () => {
-    setIsIdle(false);
-    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-    idleTimerRef.current = setTimeout(() => {
-      setIsIdle(true);
-    }, 2500); // 2.5 seconds idle
-  };
-
-  useEffect(() => {
-    if (isMobile) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-      resetIdleTimer();
+    const onMove = (e: MouseEvent) => {
+      mx.set(e.clientX);
+      my.set(e.clientY);
     };
 
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (!target) return;
-
-      const githubLink = target.closest('a[href*="github.com"]');
-      const resumeBtn = target.closest('[data-cursor="resume"], .resume-download, [data-testid*="download"]');
-      const contactCta = target.closest('.contact-submit, .contact-floating-icon, .contact-floating-email, [data-cursor="contact"]');
-      const skillNode = target.closest('[data-cursor="skill"]');
-      const genericLink = target.closest('a, button, [role="button"]');
-      const projectCard = target.closest('[data-cursor="project"], .project-card');
-
-      if (githubLink) {
-        setHoverType("github");
-      } else if (resumeBtn) {
-        setHoverType("resume");
-      } else if (contactCta) {
-        setHoverType("contact");
-      } else if (skillNode) {
-        setHoverType("skill");
-      } else if (genericLink) {
-        setHoverType("link");
-      } else if (projectCard) {
-        setHoverType("project");
+    const onOver = (e: MouseEvent) => {
+      const el = e.target as HTMLElement;
+      if (el.closest("a, button, [role='button'], label, select")) {
+        setHover("link");
+      } else if (el.closest("[data-cursor='project'], .project-card")) {
+        setHover("project");
+      } else if (el.closest("p, h1, h2, h3, h4, span, li")) {
+        setHover("text");
       } else {
-        setHoverType("default");
+        setHover("default");
       }
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseover", handleMouseOver);
-    resetIdleTimer();
+    const onDown = () => setClicked(true);
+    const onUp = () => setClicked(false);
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseover", onOver);
+    window.addEventListener("mousedown", onDown);
+    window.addEventListener("mouseup", onUp);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseover", handleMouseOver);
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseover", onOver);
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("mouseup", onUp);
     };
-  }, [isMobile]);
+  }, []);
 
   if (isMobile) return null;
 
-  const isHovered = hoverType !== "default";
-  const showTrail = hoverType === "default";
-
-  const cursorSize = {
-    default: 12,
-    link: 80,
-    project: 110,
-    skill: 90,
-    github: 90,
-    resume: 90,
-    contact: 100,
-  }[hoverType];
-
-  const hoverTextMap = {
-    default: "",
-    link: "OPEN",
-    project: "VIEW PROJECT",
-    skill: "EXPLORE",
-    github: "GITHUB ↗",
-    resume: "DOWNLOAD",
-    contact: "LET'S TALK",
-  };
+  const isLink = hover === "link";
+  const isProject = hover === "project";
+  const isText = hover === "text";
 
   return (
     <>
-      {/* Global Style Override to Hide Default Cursor */}
       <style>{`
         @media (pointer: fine) {
-          body, a, button, input, textarea, select, [role="button"] {
-            cursor: none !important;
-          }
+          *, *::before, *::after { cursor: none !important; }
         }
       `}</style>
 
-      {/* Trailing Dots */}
+      {/* ── Outer ring ── soft, large, follows behind */}
       <motion.div
         style={{
-          x: trail1X,
-          y: trail1Y,
+          position: "fixed",
+          top: 0, left: 0,
+          x: ringX,
+          y: ringY,
           translateX: "-50%",
           translateY: "-50%",
+          pointerEvents: "none",
+          zIndex: 9998,
         }}
-        animate={{
-          opacity: showTrail ? 0.35 : 0,
-          scale: showTrail ? 1 : 0,
-        }}
-        transition={{ duration: 0.2 }}
-        className="fixed pointer-events-none z-[9998] w-2 h-2 rounded-full bg-[#4F8CFF] shadow-[0_0_8px_rgba(79,140,255,0.4)]"
-      />
-
-      <motion.div
-        style={{
-          x: trail2X,
-          y: trail2Y,
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
-        animate={{
-          opacity: showTrail ? 0.22 : 0,
-          scale: showTrail ? 1 : 0,
-        }}
-        transition={{ duration: 0.2 }}
-        className="fixed pointer-events-none z-[9998] w-1.5 h-1.5 rounded-full bg-[#00BFFF] shadow-[0_0_6px_rgba(0,191,255,0.4)]"
-      />
-
-      <motion.div
-        style={{
-          x: trail3X,
-          y: trail3Y,
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
-        animate={{
-          opacity: showTrail ? 0.12 : 0,
-          scale: showTrail ? 1 : 0,
-        }}
-        transition={{ duration: 0.2 }}
-        className="fixed pointer-events-none z-[9998] w-1 h-1 rounded-full bg-[#4F8CFF] shadow-[0_0_4px_rgba(79,140,255,0.3)]"
-      />
-
-      {/* Main Cursor Ring */}
-      <motion.div
-        style={{
-          x: cursorX,
-          y: cursorY,
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
-        className="fixed pointer-events-none z-[9999]"
       >
         <motion.div
           animate={{
-            width: cursorSize,
-            height: cursorSize,
-            backgroundColor: isHovered ? "rgba(6, 11, 20, 0.55)" : "rgba(0, 191, 255, 0)",
-            borderColor: hoverType === "skill" || hoverType === "project" ? "#4F8CFF" : "#00BFFF",
-            boxShadow: isHovered
-              ? "0 0 24px rgba(0, 191, 255, 0.3), inset 0 0 12px rgba(0, 191, 255, 0.15)"
-              : "0 0 10px rgba(0, 191, 255, 0.45)",
+            width:  clicked ? 28 : isLink || isProject ? 38 : isText ? 24 : 32,
+            height: clicked ? 28 : isLink || isProject ? 38 : isText ? 24 : 32,
+            borderColor: isLink || isProject
+              ? "rgba(65,176,255,0.75)"
+              : isText
+                ? "rgba(0,157,223,0.35)"
+                : "rgba(0,157,223,0.45)",
+            backgroundColor: isLink || isProject
+              ? "rgba(0,120,231,0.08)"
+              : "transparent",
+            boxShadow: isLink || isProject
+              ? "0 0 16px rgba(0,120,231,0.25)"
+              : "none",
+            scale: clicked ? 0.82 : 1,
           }}
-          transition={{
-            type: "spring",
-            stiffness: 280,
-            damping: 24,
-            mass: 0.55,
+          transition={{ type: "spring", stiffness: 260, damping: 22, mass: 0.5 }}
+          style={{
+            borderRadius: "50%",
+            border: "1px solid",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
-          className="flex items-center justify-center rounded-full border backdrop-blur-[1.5px] pointer-events-none relative"
-        >
-          {/* Idle Pulse Ring */}
-          {isIdle && !isHovered && (
-            <motion.div
-              initial={{ scale: 1, opacity: 0.8 }}
-              animate={{ scale: 2.5, opacity: 0 }}
-              transition={{ duration: 1.8, ease: "easeOut" }}
-              className="absolute inset-0 rounded-full border border-[#00BFFF] pointer-events-none"
-              style={{
-                boxShadow: "0 0 12px rgba(0, 191, 255, 0.4)",
-              }}
-            />
-          )}
+        />
+      </motion.div>
 
-          {/* Hover Text */}
-          <AnimatePresence mode="wait">
-            {isHovered && (
-              <motion.span
-                key={hoverType}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.18 }}
-                className="text-[9px] font-bold tracking-[0.18em] text-[#00BFFF] text-center font-mono whitespace-nowrap"
-                style={{
-                  textShadow: "0 0 8px rgba(0, 191, 255, 0.5)",
-                }}
-              >
-                {hoverTextMap[hoverType]}
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </motion.div>
+      {/* ── Inner dot ── precise, fast */}
+      <motion.div
+        style={{
+          position: "fixed",
+          top: 0, left: 0,
+          x: dotX,
+          y: dotY,
+          translateX: "-50%",
+          translateY: "-50%",
+          pointerEvents: "none",
+          zIndex: 9999,
+        }}
+      >
+        <motion.div
+          animate={{
+            width:  isText ? 3 : isLink || isProject ? 5 : 5,
+            height: isText ? 3 : isLink || isProject ? 5 : 5,
+            backgroundColor: isLink || isProject
+              ? "#41b0ff"
+              : "rgba(0,191,255,0.9)",
+            boxShadow: isLink || isProject
+              ? "0 0 8px rgba(65,176,255,0.8)"
+              : "0 0 6px rgba(0,191,255,0.5)",
+            scale: clicked ? 0.5 : 1,
+          }}
+          transition={{ type: "spring", stiffness: 600, damping: 28 }}
+          style={{ borderRadius: "50%" }}
+        />
       </motion.div>
     </>
   );
