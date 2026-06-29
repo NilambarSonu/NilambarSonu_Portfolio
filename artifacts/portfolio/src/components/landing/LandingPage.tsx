@@ -29,7 +29,11 @@ const textVariants = {
   }),
 };
 
-export default function LandingPage() {
+interface LandingPageProps {
+  isRevealed?: boolean;
+}
+
+export default function LandingPage({ isRevealed = false }: LandingPageProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -68,7 +72,7 @@ export default function LandingPage() {
         ))}
       </div>
 
-      {/* Portrait with parallax depth */}
+      {/* Portrait — slides in from right after Enter is clicked */}
       <motion.img
         src="/profile_photo.png"
         alt=""
@@ -80,9 +84,9 @@ export default function LandingPage() {
           scale: portraitScale,
           opacity: portraitOpacity,
         }}
-        initial={{ opacity: 0, scale: 1.04, x: 40 }}
-        animate={{ opacity: 1, scale: 1, x: 0 }}
-        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+        initial={{ opacity: 0, x: "35vw" }}
+        animate={isRevealed ? { opacity: 1, x: 0 } : { opacity: 0, x: "35vw" }}
+        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
       />
 
       {/* Text copy with scroll fade+rise */}

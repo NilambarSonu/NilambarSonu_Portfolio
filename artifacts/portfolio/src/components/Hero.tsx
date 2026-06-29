@@ -1,5 +1,9 @@
 import LandingPage from "@/components/landing/LandingPage";
 
-export default function Hero() {
-  return <LandingPage />;
+interface HeroProps {
+  isRevealed?: boolean;
+}
+
+export default function Hero({ isRevealed = false }: HeroProps) {
+  return <LandingPage isRevealed={isRevealed} />;
 }

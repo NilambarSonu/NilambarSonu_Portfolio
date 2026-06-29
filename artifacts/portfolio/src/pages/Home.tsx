@@ -17,11 +17,18 @@ import AudioPlayer from "@/components/AudioPlayer";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [heroRevealed, setHeroRevealed] = useState(false);
+
+  const handleEnter = () => {
+    setIsLoading(false);
+    // slight delay matches the intro exit animation (1s blur/fade)
+    setTimeout(() => setHeroRevealed(true), 200);
+  };
 
   return (
     <>
       <AnimatePresence>
-        {isLoading && <Intro onEnter={() => setIsLoading(false)} />}
+        {isLoading && <Intro onEnter={handleEnter} />}
       </AnimatePresence>
       <div className="relative">
         {/* Upside Down floating particles — persistent background */}
@@ -29,7 +36,7 @@ export default function Home() {
         
         <CustomCursor />
         <main>
-          <Hero />
+          <Hero isRevealed={heroRevealed} />
           <About />
           <Education />
           <Skills />
