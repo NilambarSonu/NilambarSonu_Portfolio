@@ -129,29 +129,6 @@ export default function Contact() {
         <span>Email</span>
       </motion.a>
 
-      {/* Mobile-only social icon strip */}
-      <div className="contact-mobile-social">
-        {contactLinks.map((link) => (
-          <a
-            key={link.name}
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={link.name}
-            className="contact-mobile-icon"
-          >
-            <img src={link.icon} alt={link.name} />
-          </a>
-        ))}
-        <a
-          href="mailto:nilambarsonubehera@gmail.com"
-          aria-label="Email"
-          className="contact-mobile-icon contact-mobile-email"
-        >
-          <Mail size={28} />
-        </a>
-      </div>
-
       <div className="contact-stage">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -222,12 +199,36 @@ export default function Contact() {
         </motion.div>
       </div>
 
+      {/* Mobile-only social icon strip — below the form */}
+      <div className="contact-mobile-social">
+        {contactLinks.map((link) => (
+          <a
+            key={link.name}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={link.name}
+            className="contact-mobile-icon"
+          >
+            <img src={link.icon} alt={link.name} />
+          </a>
+        ))}
+        <a
+          href="mailto:nilambarsonubehera@gmail.com"
+          aria-label="Email"
+          className="contact-mobile-icon contact-mobile-email"
+        >
+          <Mail size={28} />
+        </a>
+      </div>
+
       <style>{`
         .contact-premium-section {
           position: relative;
           z-index: 40;
           overflow: hidden;
           isolation: isolate;
+          min-height: 82vh;
           padding: clamp(3rem, 5vh, 4.5rem) 1rem clamp(3.5rem, 6vh, 5rem);
           background: #030913;
           color: #f5f7fa;
@@ -531,6 +532,16 @@ export default function Contact() {
             min-height: 16rem;
             order: -1;
           }
+
+          /* Hide floating icons when panel goes 1-col — they'd overlap */
+          .contact-floating-icon,
+          .contact-floating-email {
+            display: none !important;
+          }
+
+          .contact-premium-section {
+            min-height: auto;
+          }
         }
 
         /* ── Mobile social strip (hidden on desktop) ── */
@@ -539,19 +550,13 @@ export default function Contact() {
         }
 
         @media (max-width: 760px) {
-          /* Hide absolute floating icons entirely on mobile */
-          .contact-floating-icon,
-          .contact-floating-email {
-            display: none !important;
-          }
-
-          /* Show the mobile strip */
+          /* Show the mobile strip — below the form */
           .contact-mobile-social {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 0.85rem;
-            margin: 0.75rem auto 1.5rem;
+            margin: 1.2rem auto 0;
             max-width: 360px;
             position: relative;
             z-index: 8;

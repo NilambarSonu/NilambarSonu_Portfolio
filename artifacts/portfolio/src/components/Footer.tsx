@@ -291,44 +291,46 @@ export default function Footer() {
 
         @media (max-width: 760px) {
           .portfolio-footer {
-            padding: 1rem;
+            padding: 0.75rem;
           }
 
           .footer-shell {
             grid-template-columns: 1fr;
-            gap: 1.6rem;
-            padding: 1rem 1rem 3.2rem;
-            border-radius: 2rem;
+            gap: 1rem;
+            padding: 0.85rem 0.85rem 2.4rem;
+            border-radius: 1.5rem;
           }
 
           .footer-map-card,
           .footer-video-card {
-            height: 15rem;
+            height: 9rem;
           }
 
           .footer-nav {
             grid-column: auto;
             grid-row: auto;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1.2rem;
+            gap: 0.75rem;
           }
 
           .footer-link-column {
-            gap: 1rem;
+            gap: 0.6rem;
           }
 
           .footer-link-column a {
-            font-size: 1.35rem;
+            font-size: 1rem;
           }
 
           .pin-label {
-            min-width: 10.4rem;
-            font-size: 0.72rem;
+            min-width: 9rem;
+            font-size: 0.68rem;
+            padding: 0.5rem 0.65rem;
           }
 
           .footer-credit {
             width: calc(100% - 2rem);
             white-space: normal;
+            font-size: 0.66rem;
           }
         }
       `}</style>
