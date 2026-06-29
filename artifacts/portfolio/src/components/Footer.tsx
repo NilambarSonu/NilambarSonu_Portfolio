@@ -98,11 +98,11 @@ export default function Footer() {
         .footer-shell {
           position: relative;
           display: grid;
-          grid-template-columns: minmax(28rem, 44vw) minmax(21rem, 25vw) minmax(18rem, 22vw);
-          gap: clamp(2.4rem, 4vw, 5.2rem);
+          grid-template-columns: minmax(20rem, 38vw) minmax(16rem, 22vw) minmax(14rem, 20vw);
+          gap: clamp(1.4rem, 2.6vw, 3.4rem);
           align-items: center;
-          min-height: clamp(19rem, 28vw, 27rem);
-          padding: clamp(1rem, 1.8vw, 1.4rem) clamp(1.1rem, 2vw, 2rem);
+          min-height: clamp(13rem, 20vw, 20rem);
+          padding: clamp(0.8rem, 1.4vw, 1.2rem) clamp(0.9rem, 1.6vw, 1.6rem);
           border-radius: clamp(2rem, 5vw, 5.4rem);
           border: 1px solid rgba(0, 127, 255, 0.14);
           background:
@@ -115,7 +115,7 @@ export default function Footer() {
         .footer-map-card {
           position: relative;
           display: block;
-          height: clamp(15.5rem, 22vw, 23.5rem);
+          height: clamp(11rem, 16vw, 17rem);
           overflow: hidden;
           border-radius: 1.65rem;
           background: #e9e7df;
@@ -203,20 +203,20 @@ export default function Footer() {
 
         .footer-nav {
           display: grid;
-          grid-template-columns: repeat(2, minmax(8rem, 1fr));
-          gap: clamp(2rem, 3.2vw, 4rem);
+          grid-template-columns: repeat(2, minmax(6rem, 1fr));
+          gap: clamp(1.2rem, 2vw, 2.6rem);
           justify-self: center;
           width: 100%;
         }
 
         .footer-link-column {
           display: grid;
-          gap: clamp(1.15rem, 2vw, 1.9rem);
+          gap: clamp(0.75rem, 1.3vw, 1.25rem);
         }
 
         .footer-link-column a {
           font-family: "Ancizar Serif", Georgia, serif;
-          font-size: clamp(1.3rem, 1.65vw, 2.05rem);
+          font-size: clamp(0.95rem, 1.15vw, 1.45rem);
           font-weight: 700;
           line-height: 1;
           color: rgba(245, 247, 250, 0.9);
@@ -232,7 +232,7 @@ export default function Footer() {
 
         .footer-video-card {
           position: relative;
-          height: clamp(14.5rem, 20vw, 21.5rem);
+          height: clamp(10rem, 15vw, 15.5rem);
           overflow: hidden;
           border-radius: 1.35rem;
           background: rgba(100, 117, 180, 0.5);

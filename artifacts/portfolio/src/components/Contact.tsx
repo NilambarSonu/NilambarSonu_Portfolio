@@ -194,7 +194,7 @@ export default function Contact() {
                 value={formData.message}
                 onChange={handleChange}
                 required
-                rows={7}
+                rows={5}
                 disabled={isSubmitting}
                 aria-label="Your Message"
                 className="contact-textarea"
@@ -226,10 +226,9 @@ export default function Contact() {
         .contact-premium-section {
           position: relative;
           z-index: 40;
-          min-height: 100vh;
           overflow: hidden;
           isolation: isolate;
-          padding: clamp(5.2rem, 8vh, 6.8rem) 1rem clamp(6.5rem, 10vh, 8rem);
+          padding: clamp(3rem, 5vh, 4.5rem) 1rem clamp(3.5rem, 6vh, 5rem);
           background: #030913;
           color: #f5f7fa;
         }
@@ -284,10 +283,10 @@ export default function Contact() {
         .contact-heading {
           position: relative;
           z-index: 8;
-          margin: 0 auto clamp(5.8rem, 10vh, 8rem);
+          margin: 0 auto clamp(2.8rem, 5vh, 4rem);
           text-align: center;
           font-family: "Amiko", "Inter", sans-serif;
-          font-size: clamp(2.1rem, 4.2vw, 5.1rem);
+          font-size: clamp(1.8rem, 3.4vw, 4rem);
           font-weight: 400;
           line-height: 0.95;
           letter-spacing: 0;
@@ -307,11 +306,11 @@ export default function Contact() {
         .contact-panel {
           position: relative;
           display: grid;
-          grid-template-columns: minmax(0, 1.08fr) minmax(20rem, 0.82fr);
-          gap: clamp(2.5rem, 5vw, 5rem);
+          grid-template-columns: minmax(0, 1.08fr) minmax(16rem, 0.72fr);
+          gap: clamp(1.6rem, 3.5vw, 3.5rem);
           align-items: center;
-          min-height: clamp(30rem, 52vh, 42rem);
-          padding: clamp(2rem, 4vw, 3.6rem);
+          min-height: clamp(22rem, 38vh, 32rem);
+          padding: clamp(1.4rem, 2.8vw, 2.4rem);
           border: 2px solid rgba(91, 143, 194, 0.42);
           border-radius: 1.8rem;
           background: rgba(7, 48, 70, 0.44);
@@ -321,20 +320,20 @@ export default function Contact() {
 
         .contact-form {
           display: grid;
-          gap: clamp(1.35rem, 2vh, 2rem);
+          gap: clamp(0.85rem, 1.4vh, 1.3rem);
         }
 
         .contact-form label {
           display: grid;
-          gap: 0.55rem;
+          gap: 0.35rem;
         }
 
         .contact-form label span {
           font-family: "Ancizar Serif", Georgia, serif;
-          font-size: clamp(1.35rem, 1.7vw, 2rem);
+          font-size: clamp(0.9rem, 1.1vw, 1.25rem);
           font-weight: 700;
           line-height: 1;
-          letter-spacing: 0.12em;
+          letter-spacing: 0.1em;
           color: rgba(245, 247, 250, 0.9);
           text-shadow: 0 0 14px rgba(255, 255, 255, 0.08);
         }
@@ -346,16 +345,16 @@ export default function Contact() {
           background: rgba(148, 192, 214, 0.18);
           color: #f5f7fa;
           font-family: "Inter", sans-serif;
-          font-size: 1rem;
+          font-size: 0.95rem;
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
         }
 
         .contact-input {
-          height: clamp(3.5rem, 5.6vh, 4.7rem);
+          height: clamp(2.6rem, 4vh, 3.4rem);
         }
 
         .contact-textarea {
-          min-height: clamp(12rem, 25vh, 19rem);
+          min-height: clamp(8rem, 16vh, 12rem);
           resize: none;
         }
 
@@ -384,12 +383,12 @@ export default function Contact() {
         .contact-earth-wrap {
           display: grid;
           place-items: center;
-          min-height: 22rem;
+          min-height: 14rem;
         }
 
         .contact-earth {
-          width: min(26vw, 24rem);
-          min-width: 17rem;
+          width: min(20vw, 17rem);
+          min-width: 11rem;
           height: auto;
           filter: drop-shadow(0 0 26px rgba(0, 191, 255, 0.42)) drop-shadow(0 0 60px rgba(0, 127, 255, 0.22));
           animation: contact-earth-breathe 8s ease-in-out infinite;
