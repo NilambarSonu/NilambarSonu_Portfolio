@@ -131,7 +131,7 @@ export default function Intro({ onEnter }: IntroProps) {
       } catch (_2) {}
     }
     setIsExiting(true);
-    setTimeout(() => onEnter(), 1000);
+    setTimeout(() => onEnter(), 650);
   }, [onEnter]);
 
   return (

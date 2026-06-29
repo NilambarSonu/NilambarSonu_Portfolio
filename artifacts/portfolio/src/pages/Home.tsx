@@ -21,8 +21,7 @@ export default function Home() {
 
   const handleEnter = () => {
     setIsLoading(false);
-    // slight delay matches the intro exit animation (1s blur/fade)
-    setTimeout(() => setHeroRevealed(true), 200);
+    setHeroRevealed(true);
   };
 
   return (

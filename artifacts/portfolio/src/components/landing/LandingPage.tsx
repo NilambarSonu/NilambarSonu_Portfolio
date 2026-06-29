@@ -87,10 +87,10 @@ export default function LandingPage({ isRevealed = false }: LandingPageProps) {
         initial={{ opacity: 0, x: "38vw", scale: 1.05 }}
         animate={isRevealed ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: "38vw", scale: 1.05 }}
         transition={{
-          duration: 2.2,
+          duration: 1.8,
           ease: [0.16, 1, 0.3, 1],
-          delay: 0.45,
-          opacity: { duration: 2.0, ease: [0.22, 1, 0.36, 1], delay: 0.45 },
+          delay: 0.1,
+          opacity: { duration: 1.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 },
         }}
       />
 
