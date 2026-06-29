@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion } from "framer-motion";
-import { GitHubCalendar } from "react-github-calendar";
+import GitHubCalendar from "react-github-calendar";
 import { Github, Star, GitFork, Users, ArrowUpRight } from "lucide-react";
 import LiveStatsDashboard from "@/components/LiveStatsDashboard";
 
