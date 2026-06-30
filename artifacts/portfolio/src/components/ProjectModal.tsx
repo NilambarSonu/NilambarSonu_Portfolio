@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink, Github, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import type { Project } from "./Projects";
+import type { Project } from "@/lib/projects-data";
 
 interface ProjectModalProps {
   project: Project;
