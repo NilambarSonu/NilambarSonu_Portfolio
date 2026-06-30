@@ -93,15 +93,15 @@ export async function fetchSiteStats(fingerprint?: string) {
   }
 }
 
-/** Increment view count — deduplicated by session_id on the server */
-export async function incrementViews(): Promise<number | null> {
+/** Increment view count — deduplicated by session_id and fingerprint/IP on the server */
+export async function incrementViews(fingerprint: string): Promise<number | null> {
   try {
     const session_id = getSessionId();
 
     const response = await fetch("/api/stats/views", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ session_id })
+      body: JSON.stringify({ session_id, fingerprint })
     });
 
     if (response.ok) {

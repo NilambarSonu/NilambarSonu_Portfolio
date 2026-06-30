@@ -598,7 +598,7 @@ export default function Education() {
           .education-foundation-section {
             display: block;
             min-height: auto;
-            padding: 4.5rem 1.2rem 5rem;
+            padding: 3.8rem 1.2rem 4.4rem;
           }
 
           .education-left {
@@ -606,8 +606,11 @@ export default function Education() {
           }
 
           .education-left h2 {
-            margin-bottom: 2.3rem;
-            font-size: clamp(2.05rem, 9vw, 3.3rem);
+            margin-bottom: 1.45rem;
+            font-size: clamp(1.85rem, 7.6vw, 2.65rem);
+            line-height: 1.05;
+            letter-spacing: -0.035em;
+            -webkit-text-stroke: 0.8px #007fff;
           }
 
           .academic-panel-frame,
@@ -618,11 +621,13 @@ export default function Education() {
 
           .academic-stack {
             max-width: none;
-            gap: 1rem;
+            gap: 0.68rem;
           }
 
           .academic-pill {
-            border-radius: 1.1rem;
+            min-height: 3.45rem;
+            padding: 0.72rem 1rem;
+            border-radius: 0.82rem;
           }
 
           .education-metrics {
@@ -630,8 +635,9 @@ export default function Education() {
             left: auto;
             right: auto;
             bottom: auto;
-            margin: 2rem 0 2.8rem;
-            gap: 0.85rem;
+            width: min(17.2rem, 100%);
+            margin: 1rem auto 2.2rem;
+            gap: 0.54rem;
           }
 
           .education-right {
@@ -679,23 +685,65 @@ export default function Education() {
 
         @media (max-width: 560px) {
           .education-foundation-section {
-            padding-inline: 1rem;
+            padding: 3.35rem 0.72rem 3.8rem;
           }
 
           .education-metrics {
             grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.52rem;
+            width: min(15.4rem, 100%);
+            margin: 0.9rem auto 1.85rem;
           }
 
           .education-right {
-            margin-inline: -1rem;
+            margin-inline: -0.75rem;
+          }
+
+          .education-left h2 {
+            margin-bottom: 1.1rem;
+            font-size: clamp(1.42rem, 6.5vw, 2rem);
+            line-height: 1.02;
+            letter-spacing: -0.025em;
+            -webkit-text-stroke: 0.7px #007fff;
+          }
+
+          .academic-stack {
+            gap: 0.48rem;
+          }
+
+          .academic-pill {
+            min-height: 2.8rem;
+            padding: 0.5rem 0.72rem;
+            border-radius: 0.68rem;
+            background:
+              linear-gradient(135deg, rgba(44, 58, 126, 0.86), rgba(8, 63, 153, 0.88)),
+              radial-gradient(circle at 20% 15%, rgba(95, 170, 255, 0.2), transparent 38%);
           }
 
           .academic-pill-top {
-            font-size: 1rem;
+            font-size: 0.62rem;
           }
 
           .academic-pill p {
-            font-size: 0.95rem;
+            margin-top: 0.14rem;
+            font-size: 0.56rem;
+            line-height: 1.12;
+          }
+
+          .metric-tile {
+            border-radius: 0.58rem;
+            aspect-ratio: 1 / 0.74;
+            min-width: 0;
+          }
+
+          .metric-tile strong {
+            font-size: 0.78rem;
+          }
+
+          .metric-tile span {
+            max-width: 3.9rem;
+            margin-top: 0.25rem;
+            font-size: 0.42rem;
           }
         }
 

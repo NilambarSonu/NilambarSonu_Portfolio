@@ -1,82 +1,58 @@
-import { useEffect, useState, useRef, useCallback } from "react";
-import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
 
-const TRAIL_COUNT = 6;
-const TRAIL_STIFFNESS = [320, 200, 130, 80, 50, 30];
-const TRAIL_DAMPING   = [28,  24,  20,  18, 16, 14];
-
-type HoverState = "default" | "link" | "text";
+type CursorMode = "default" | "action" | "text";
 
 export default function CustomCursor() {
-  const [isMobile, setIsMobile]   = useState(false);
-  const [hover, setHover]         = useState<HoverState>("default");
-  const [clicked, setClicked]     = useState(false);
-  const [burst, setBurst]         = useState(false);
-  const [angle1, setAngle1]       = useState(0);
-  const [angle2, setAngle2]       = useState(180);
-  const rafRef                    = useRef<number>(0);
-  const lastTime                  = useRef<number>(0);
-
-  const mx = useMotionValue(-300);
-  const my = useMotionValue(-300);
-
-  // Core — near instant
-  const coreX = useSpring(mx, { stiffness: 1200, damping: 40, mass: 0.2 });
-  const coreY = useSpring(my, { stiffness: 1200, damping: 40, mass: 0.2 });
-
-  // Ring — medium lag
-  const ringX = useSpring(mx, { stiffness: 200, damping: 24, mass: 0.5 });
-  const ringY = useSpring(my, { stiffness: 200, damping: 24, mass: 0.5 });
-
-  // Trail springs
-  const trails = Array.from({ length: TRAIL_COUNT }, (_, i) => ({
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    x: useSpring(mx, { stiffness: TRAIL_STIFFNESS[i], damping: TRAIL_DAMPING[i], mass: 0.4 }),
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    y: useSpring(my, { stiffness: TRAIL_STIFFNESS[i], damping: TRAIL_DAMPING[i], mass: 0.4 }),
-  }));
-
-  // Orbit animation loop
-  useEffect(() => {
-    const loop = (time: number) => {
-      const dt = time - lastTime.current;
-      lastTime.current = time;
-      const speed1 = hover === "link" ? 4.5 : 2.2;
-      const speed2 = hover === "link" ? -3.0 : -1.4;
-      setAngle1(a => (a + speed1 * dt * 0.001 * 360) % 360);
-      setAngle2(a => (a + speed2 * dt * 0.001 * 360) % 360);
-      rafRef.current = requestAnimationFrame(loop);
-    };
-    rafRef.current = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [hover]);
+  const [isFinePointer, setIsFinePointer] = useState(false);
+  const [mode, setMode] = useState<CursorMode>("default");
+  const [pressed, setPressed] = useState(false);
+  const [bloom, setBloom] = useState(0);
+  const mx = useMotionValue(-240);
+  const my = useMotionValue(-240);
+  const ringX = useSpring(mx, { stiffness: 520, damping: 34, mass: 0.24 });
+  const ringY = useSpring(my, { stiffness: 520, damping: 34, mass: 0.24 });
+  const lensX = useSpring(mx, { stiffness: 1050, damping: 38, mass: 0.16 });
+  const lensY = useSpring(my, { stiffness: 1050, damping: 38, mass: 0.16 });
+  const bloomId = useRef(0);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (window.matchMedia("(pointer: coarse)").matches) {
-      setIsMobile(true);
-      return;
-    }
+    const media = window.matchMedia("(pointer: fine)");
+    setIsFinePointer(media.matches);
 
-    const onMove = (e: MouseEvent) => { mx.set(e.clientX); my.set(e.clientY); };
+    const updatePointer = () => setIsFinePointer(media.matches);
+    media.addEventListener?.("change", updatePointer);
 
-    const onOver = (e: MouseEvent) => {
-      const el = e.target as HTMLElement;
-      if (el.closest("a, button, [role='button'], label, select, input, textarea")) {
-        setHover("link");
-      } else if (el.closest("p, h1, h2, h3, h4, h5, span, li")) {
-        setHover("text");
+    return () => media.removeEventListener?.("change", updatePointer);
+  }, []);
+
+  useEffect(() => {
+    if (!isFinePointer) return;
+
+    const onMove = (event: MouseEvent) => {
+      mx.set(event.clientX);
+      my.set(event.clientY);
+    };
+
+    const onOver = (event: MouseEvent) => {
+      const element = event.target as HTMLElement;
+      if (element.closest("a, button, [role='button'], label, select, input, textarea, summary")) {
+        setMode("action");
+      } else if (element.closest("p, h1, h2, h3, h4, h5, h6, li, blockquote")) {
+        setMode("text");
       } else {
-        setHover("default");
+        setMode("default");
       }
     };
 
     const onDown = () => {
-      setClicked(true);
-      setBurst(true);
-      setTimeout(() => setBurst(false), 500);
+      setPressed(true);
+      bloomId.current += 1;
+      setBloom(bloomId.current);
     };
-    const onUp = () => setClicked(false);
+
+    const onUp = () => setPressed(false);
 
     window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("mouseover", onOver, { passive: true });
@@ -89,20 +65,12 @@ export default function CustomCursor() {
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
     };
-  }, []);
+  }, [isFinePointer, mx, my]);
 
-  if (isMobile) return null;
+  if (!isFinePointer) return null;
 
-  const isLink = hover === "link";
-
-  // Orbit radii
-  const r1 = isLink ? 10 : 16;
-  const r2 = isLink ? 16 : 26;
-
-  const sat1X = Math.cos((angle1 * Math.PI) / 180) * r1;
-  const sat1Y = Math.sin((angle1 * Math.PI) / 180) * r1;
-  const sat2X = Math.cos((angle2 * Math.PI) / 180) * r2;
-  const sat2Y = Math.sin((angle2 * Math.PI) / 180) * r2;
+  const isAction = mode === "action";
+  const isText = mode === "text";
 
   return (
     <>
@@ -112,224 +80,107 @@ export default function CustomCursor() {
         }
       `}</style>
 
-      {/* ── Comet trail ── */}
-      {trails.map((t, i) => (
-        <motion.div
-          key={i}
-          style={{
-            position: "fixed",
-            top: 0, left: 0,
-            x: t.x,
-            y: t.y,
-            translateX: "-50%",
-            translateY: "-50%",
-            pointerEvents: "none",
-            zIndex: 9994,
-          }}
-        >
-          <motion.div
-            animate={{
-              width:  isLink ? 2 : Math.max(1.5, 4 - i * 0.5),
-              height: isLink ? 2 : Math.max(1.5, 4 - i * 0.5),
-              opacity: isLink ? 0 : (0.3 - i * 0.04),
-              scale: clicked ? 0.4 : 1,
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 26 }}
-            style={{
-              borderRadius: "50%",
-              background: `rgba(65, 176, 255, 1)`,
-              boxShadow: `0 0 ${6 - i}px rgba(0,157,223,0.5)`,
-            }}
-          />
-        </motion.div>
-      ))}
-
-      {/* ── Orbital satellites (attached to ring position) ── */}
-      {/* Satellite 1 */}
       <motion.div
-        style={{
-          position: "fixed",
-          top: 0, left: 0,
-          x: ringX,
-          y: ringY,
-          translateX: "-50%",
-          translateY: "-50%",
-          pointerEvents: "none",
-          zIndex: 9997,
+        className="premium-cursor-ring"
+        style={{ x: ringX, y: ringY, translateX: "-50%", translateY: "-50%" }}
+        animate={{
+          width: isAction ? 58 : isText ? 44 : 48,
+          height: isAction ? 58 : isText ? 44 : 48,
+          opacity: isText ? 0.34 : 0.78,
+          scale: pressed ? 0.84 : 1,
+          borderColor: isAction ? "rgba(65,176,255,0.88)" : "rgba(190,225,255,0.38)",
+          boxShadow: isAction
+            ? "0 0 0 1px rgba(65,176,255,0.16), 0 0 30px rgba(0,120,231,0.32)"
+            : "0 0 0 1px rgba(255,255,255,0.05), 0 0 22px rgba(0,120,231,0.13)",
         }}
+        transition={{ type: "spring", stiffness: 340, damping: 28 }}
       >
-        <motion.div
-          style={{
-            position: "absolute",
-            top: "50%", left: "50%",
-            x: sat1X,
-            y: sat1Y,
-            translateX: "-50%",
-            translateY: "-50%",
-          }}
-        >
-          <motion.div
-            animate={{
-              width: isLink ? 4 : 3.5,
-              height: isLink ? 4 : 3.5,
-              backgroundColor: isLink ? "#41b0ff" : "rgba(0,191,255,0.85)",
-              boxShadow: isLink
-                ? "0 0 10px rgba(65,176,255,0.9), 0 0 20px rgba(65,176,255,0.4)"
-                : "0 0 6px rgba(0,191,255,0.6)",
-              scale: clicked ? 1.6 : 1,
-            }}
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            style={{ borderRadius: "50%" }}
-          />
-        </motion.div>
+        <span className="premium-cursor-axis axis-x" />
+        <span className="premium-cursor-axis axis-y" />
       </motion.div>
 
-      {/* Satellite 2 */}
       <motion.div
-        style={{
-          position: "fixed",
-          top: 0, left: 0,
-          x: ringX,
-          y: ringY,
-          translateX: "-50%",
-          translateY: "-50%",
-          pointerEvents: "none",
-          zIndex: 9997,
+        className="premium-cursor-lens"
+        style={{ x: lensX, y: lensY, translateX: "-50%", translateY: "-50%" }}
+        animate={{
+          width: isAction ? 12 : 9,
+          height: isAction ? 12 : 9,
+          scale: pressed ? 1.42 : 1,
+          background: isAction
+            ? "radial-gradient(circle, #e8f7ff 0%, #41b0ff 46%, rgba(0,120,231,0.82) 100%)"
+            : "radial-gradient(circle, #f7fbff 0%, #a8ddff 58%, rgba(65,176,255,0.62) 100%)",
         }}
-      >
-        <motion.div
-          style={{
-            position: "absolute",
-            top: "50%", left: "50%",
-            x: sat2X,
-            y: sat2Y,
-            translateX: "-50%",
-            translateY: "-50%",
-          }}
-        >
-          <motion.div
-            animate={{
-              width: isLink ? 3 : 2.5,
-              height: isLink ? 3 : 2.5,
-              backgroundColor: isLink ? "rgba(0,157,223,0.9)" : "rgba(0,120,231,0.7)",
-              boxShadow: isLink
-                ? "0 0 8px rgba(0,157,223,0.8)"
-                : "0 0 4px rgba(0,120,231,0.5)",
-              scale: clicked ? 1.4 : 1,
-            }}
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            style={{ borderRadius: "50%" }}
-          />
-        </motion.div>
-      </motion.div>
+        transition={{ type: "spring", stiffness: 620, damping: 25 }}
+      />
 
-      {/* ── Thin orbit ring (visual guide) ── */}
-      <motion.div
-        style={{
-          position: "fixed",
-          top: 0, left: 0,
-          x: ringX,
-          y: ringY,
-          translateX: "-50%",
-          translateY: "-50%",
-          pointerEvents: "none",
-          zIndex: 9996,
-        }}
-      >
-        <motion.div
-          animate={{
-            width:  isLink ? 36 : 58,
-            height: isLink ? 36 : 58,
-            opacity: hover === "text" ? 0.08 : isLink ? 0.45 : 0.14,
-            borderColor: isLink ? "rgba(65,176,255,0.8)" : "rgba(0,157,223,0.4)",
-            boxShadow: isLink ? "0 0 14px rgba(0,120,231,0.2)" : "none",
-            scale: clicked ? 0.75 : 1,
-          }}
-          transition={{ type: "spring", stiffness: 180, damping: 22 }}
-          style={{
-            borderRadius: "50%",
-            border: "1px solid",
-            borderStyle: "dashed",
-          }}
-        />
-      </motion.div>
-
-      {/* ── Core dot ── */}
-      <motion.div
-        style={{
-          position: "fixed",
-          top: 0, left: 0,
-          x: coreX,
-          y: coreY,
-          translateX: "-50%",
-          translateY: "-50%",
-          pointerEvents: "none",
-          zIndex: 9999,
-        }}
-      >
-        <motion.div
-          animate={{
-            width:  isLink ? 6 : 4,
-            height: isLink ? 6 : 4,
-            backgroundColor: isLink ? "#41b0ff" : "rgba(200,235,255,0.95)",
-            boxShadow: isLink
-              ? "0 0 12px rgba(65,176,255,1), 0 0 24px rgba(0,120,231,0.5)"
-              : "0 0 8px rgba(200,235,255,0.7)",
-            scale: clicked ? 0.5 : 1,
-          }}
-          transition={{ type: "spring", stiffness: 600, damping: 28 }}
-          style={{ borderRadius: "50%" }}
-        />
-      </motion.div>
-
-      {/* ── Click burst particles ── */}
       <AnimatePresence>
-        {burst && (
+        {bloom > 0 && (
           <motion.div
-            style={{
-              position: "fixed",
-              top: 0, left: 0,
-              x: coreX,
-              y: coreY,
-              translateX: "-50%",
-              translateY: "-50%",
-              pointerEvents: "none",
-              zIndex: 9998,
-            }}
-          >
-            {Array.from({ length: 8 }, (_, i) => {
-              const angle = (i / 8) * 360;
-              const rad = (angle * Math.PI) / 180;
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-                  animate={{
-                    x: Math.cos(rad) * 22,
-                    y: Math.sin(rad) * 22,
-                    opacity: 0,
-                    scale: 0,
-                  }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.45, ease: "easeOut" }}
-                  style={{
-                    position: "absolute",
-                    width: 3,
-                    height: 3,
-                    borderRadius: "50%",
-                    background: "#41b0ff",
-                    boxShadow: "0 0 6px rgba(65,176,255,0.8)",
-                    top: "50%",
-                    left: "50%",
-                    marginTop: -1.5,
-                    marginLeft: -1.5,
-                  }}
-                />
-              );
-            })}
-          </motion.div>
+            key={bloom}
+            className="premium-cursor-bloom"
+            style={{ x: lensX, y: lensY, translateX: "-50%", translateY: "-50%" }}
+            initial={{ opacity: 0.46, scale: 0.34 }}
+            animate={{ opacity: 0, scale: 1.7 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.48, ease: "easeOut" }}
+          />
         )}
       </AnimatePresence>
+
+      <style>{`
+        .premium-cursor-ring,
+        .premium-cursor-lens,
+        .premium-cursor-bloom {
+          position: fixed;
+          top: 0;
+          left: 0;
+          z-index: 9999;
+          pointer-events: none;
+        }
+
+        .premium-cursor-ring {
+          display: grid;
+          place-items: center;
+          border: 1px solid rgba(190,225,255,0.38);
+          border-radius: 50%;
+          background:
+            radial-gradient(circle at 50% 50%, rgba(65,176,255,0.12), transparent 42%),
+            conic-gradient(from 90deg, transparent 0 16%, rgba(65,176,255,0.34) 18% 22%, transparent 24% 100%);
+          backdrop-filter: blur(1.5px);
+          -webkit-backdrop-filter: blur(1.5px);
+          mix-blend-mode: screen;
+        }
+
+        .premium-cursor-axis {
+          position: absolute;
+          background: rgba(190,225,255,0.32);
+          border-radius: 999px;
+        }
+
+        .premium-cursor-axis.axis-x {
+          width: 11px;
+          height: 1px;
+        }
+
+        .premium-cursor-axis.axis-y {
+          width: 1px;
+          height: 11px;
+        }
+
+        .premium-cursor-lens {
+          border-radius: 50%;
+          box-shadow: 0 0 14px rgba(65,176,255,0.6), 0 0 34px rgba(0,120,231,0.22);
+          mix-blend-mode: screen;
+        }
+
+        .premium-cursor-bloom {
+          width: 46px;
+          height: 46px;
+          border-radius: 50%;
+          border: 1px solid rgba(65,176,255,0.58);
+          box-shadow: 0 0 28px rgba(0,120,231,0.26);
+        }
+      `}</style>
     </>
   );
 }

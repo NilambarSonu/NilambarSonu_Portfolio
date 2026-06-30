@@ -175,16 +175,16 @@ export default function Footer() {
         .pin-label {
           position: absolute;
           left: 50%;
-          bottom: calc(100% + 0.9rem);
+          top: calc(100% + 0.55rem);
           transform: translateX(-50%);
           min-width: 12.5rem;
-          padding: 0.72rem 0.9rem;
-          border-radius: 0.75rem;
+          padding: 0.42rem 0.62rem;
+          border-radius: 0.55rem;
           border: 1px solid rgba(0, 127, 255, 0.32);
           background: rgba(3, 9, 19, 0.9);
           color: #f5f7fa;
           font-family: "Inter", sans-serif;
-          font-size: 0.82rem;
+          font-size: 0.68rem;
           font-weight: 700;
           line-height: 1.25;
           text-align: center;
@@ -194,11 +194,11 @@ export default function Footer() {
         .pin-label::after {
           position: absolute;
           left: 50%;
-          top: 100%;
+          bottom: 100%;
           content: "";
           transform: translateX(-50%);
           border: 0.42rem solid transparent;
-          border-top-color: rgba(3, 9, 19, 0.9);
+          border-bottom-color: rgba(3, 9, 19, 0.9);
         }
 
         .footer-nav {
@@ -232,17 +232,17 @@ export default function Footer() {
 
         .footer-video-card {
           position: relative;
-          height: clamp(10rem, 15vw, 15.5rem);
+          height: clamp(8.4rem, 11.5vw, 12rem);
           overflow: hidden;
           border-radius: 1.35rem;
-          background: rgba(100, 117, 180, 0.5);
+          background: linear-gradient(135deg, rgba(10, 23, 42, 0.96), rgba(3, 9, 19, 0.98));
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 20px 54px rgba(0, 0, 0, 0.22);
         }
 
         .footer-video-card video {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
           display: block;
           opacity: 0.96;
           filter: saturate(0.96) contrast(1.04);
@@ -285,7 +285,7 @@ export default function Footer() {
 
           .footer-video-card {
             height: 100%;
-            min-height: 17rem;
+            min-height: 12rem;
           }
         }
 
@@ -303,7 +303,7 @@ export default function Footer() {
 
           .footer-map-card,
           .footer-video-card {
-            height: 9rem;
+            height: 8rem;
           }
 
           .footer-nav {

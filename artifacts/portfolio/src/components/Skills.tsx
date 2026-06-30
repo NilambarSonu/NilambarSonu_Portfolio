@@ -102,7 +102,7 @@ function makeStars(count: number): Star[] {
     speed: 0.6 + rn() * 2.2,
   }));
 }
-const STARS = makeStars(200);
+const STARS = makeStars(280);
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function Skills() {
@@ -134,8 +134,9 @@ export default function Skills() {
       canvas.height = h * devicePixelRatio;
       ctx.scale(devicePixelRatio, devicePixelRatio);
       cx = w / 2; cy = h / 2;
-      maxR  = Math.min(w, h) * 0.44;
-      sunR  = Math.max(20, Math.min(46, Math.min(w, h) * 0.052));
+      const mobile = w < 640;
+      maxR  = Math.min(w, h) * (mobile ? 0.54 : 0.48);
+      sunR  = Math.max(mobile ? 23 : 22, Math.min(mobile ? 52 : 50, Math.min(w, h) * (mobile ? 0.07 : 0.058)));
     };
     resize();
     const ro = new ResizeObserver(() => { ctx.setTransform(1,0,0,1,0,0); resize(); });

@@ -8,6 +8,7 @@ interface IntroProps {
 
 const ROLES = ["Founder & CEO · Mitti-AI", "AI Engineer", "Full-Stack Developer", "State-Level Innovator"];
 const NAME = "NILAMBAR";
+const PROOF_POINTS = ["AI + IoT founder", "Full-stack builder", "State-level winner"];
 
 function useMouseParallax(strength = 1) {
   const x = useMotionValue(0);
@@ -109,27 +110,6 @@ export default function Intro({ onEnter }: IntroProps) {
   }, [phase]);
 
   const handleEnter = useCallback(() => {
-    try {
-      const audio = new Audio("/Running Up That Hill.mp3");
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-      const ctx = new AudioCtx() as AudioContext;
-      const src = ctx.createMediaElementSource(audio);
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0, ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.85, ctx.currentTime + 2.2);
-      src.connect(gain);
-      gain.connect(ctx.destination);
-      audio.play().catch(() => {});
-      (window as any).__introAudio = audio;
-      (window as any).__introAudioCtx = ctx;
-    } catch (_) {
-      try {
-        const a = new Audio("/Running Up That Hill.mp3");
-        a.volume = 0.7;
-        a.play().catch(() => {});
-        (window as any).__introAudio = a;
-      } catch (_2) {}
-    }
     setIsExiting(true);
     setTimeout(() => onEnter(), 650);
   }, [onEnter]);
@@ -293,6 +273,17 @@ export default function Intro({ onEnter }: IntroProps) {
 
             {/* ── Enter button ── */}
             <motion.div
+              className="intro-proof-row"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: phase === "done" ? 1 : 0, y: phase === "done" ? 0 : 16 }}
+              transition={{ duration: 0.65, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {PROOF_POINTS.map((point) => (
+                <span key={point}>{point}</span>
+              ))}
+            </motion.div>
+
+            <motion.div
               className="intro-btn-wrap"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: phase === "done" ? 1 : 0, y: phase === "done" ? 0 : 24 }}
@@ -313,24 +304,15 @@ export default function Intro({ onEnter }: IntroProps) {
               <motion.button
                 className="intro-enter-btn"
                 onClick={handleEnter}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.035 }}
                 whileTap={{ scale: 0.96 }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(0,120,231,0.22)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,120,231,0.75)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 0 40px rgba(0,120,231,0.35), 0 0 80px rgba(0,120,231,0.15), inset 0 0 20px rgba(0,120,231,0.1)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(0,120,231,0.1)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,120,231,0.4)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 0 20px rgba(0,120,231,0.15)";
-                }}
               >
+                <span className="intro-btn-aura" aria-hidden="true" />
                 <span className="intro-btn-text">Enter Portfolio</span>
                 <motion.span
                   animate={{ x: [0, 5, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                  style={{ display: "flex", alignItems: "center" }}
+                  className="intro-btn-icon"
                 >
                   <ArrowRight size={16} color="#41b0ff" />
                 </motion.span>
@@ -356,7 +338,9 @@ export default function Intro({ onEnter }: IntroProps) {
               position: fixed;
               inset: 0;
               z-index: 100;
-              background: #030913;
+              background:
+                radial-gradient(ellipse 80% 55% at 50% 38%, rgba(5, 29, 54, 0.72), transparent 62%),
+                #030913;
               display: flex;
               flex-direction: column;
               align-items: center;
@@ -447,6 +431,7 @@ export default function Intro({ onEnter }: IntroProps) {
               text-align: center;
               padding: 0 1.5rem;
               gap: 0;
+              width: min(100%, 92rem);
             }
 
             /* Eyebrow */
@@ -489,6 +474,18 @@ export default function Intro({ onEnter }: IntroProps) {
               text-transform: uppercase;
             }
 
+            .intro-name-wrap::after {
+              position: absolute;
+              left: 50%;
+              bottom: -0.55rem;
+              width: min(55rem, 72vw);
+              height: 1px;
+              content: "";
+              transform: translateX(-50%);
+              background: linear-gradient(90deg, transparent, rgba(65,176,255,0.48), transparent);
+              box-shadow: 0 0 22px rgba(0,120,231,0.35);
+            }
+
             /* Light sweep */
             .intro-sweep {
               position: absolute;
@@ -526,7 +523,7 @@ export default function Intro({ onEnter }: IntroProps) {
               display: flex;
               align-items: center;
               justify-content: center;
-              margin-bottom: 2.8rem;
+              margin-bottom: 1.1rem;
             }
             .intro-role {
               font-family: system-ui, sans-serif;
@@ -536,6 +533,30 @@ export default function Intro({ onEnter }: IntroProps) {
               color: rgba(0,157,223,0.65);
               margin: 0;
               white-space: nowrap;
+            }
+
+            .intro-proof-row {
+              display: flex;
+              flex-wrap: wrap;
+              align-items: center;
+              justify-content: center;
+              gap: 0.55rem;
+              margin-bottom: 2.35rem;
+            }
+
+            .intro-proof-row span {
+              padding: 0.42rem 0.72rem;
+              border-radius: 999px;
+              border: 1px solid rgba(90, 165, 255, 0.18);
+              background: rgba(3, 15, 28, 0.58);
+              box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+              font-family: system-ui, sans-serif;
+              font-size: 0.62rem;
+              letter-spacing: 0.13em;
+              text-transform: uppercase;
+              color: rgba(222, 240, 255, 0.66);
+              backdrop-filter: blur(12px);
+              -webkit-backdrop-filter: blur(12px);
             }
 
             /* Button wrap */
@@ -548,9 +569,9 @@ export default function Intro({ onEnter }: IntroProps) {
             }
             .intro-btn-pulse {
               position: absolute;
-              inset: -2px;
+              inset: -8px;
               border-radius: 999px;
-              border: 1px solid rgba(0,120,231,0.5);
+              border: 1px solid rgba(65,176,255,0.28);
               pointer-events: none;
             }
             .intro-enter-btn {
@@ -558,22 +579,75 @@ export default function Intro({ onEnter }: IntroProps) {
               z-index: 1;
               display: inline-flex;
               align-items: center;
-              gap: 0.65rem;
-              padding: 0.85rem 2.2rem;
+              justify-content: center;
+              gap: 0.8rem;
+              min-width: min(18rem, calc(100vw - 3rem));
+              padding: 0.95rem 1.1rem 0.95rem 1.65rem;
               border-radius: 999px;
-              border: 1px solid rgba(0,120,231,0.4);
-              background: rgba(0,120,231,0.1);
-              box-shadow: 0 0 20px rgba(0,120,231,0.15);
+              border: 1px solid rgba(111, 193, 255, 0.44);
+              background:
+                linear-gradient(135deg, rgba(10, 31, 54, 0.88), rgba(3, 9, 19, 0.78)),
+                radial-gradient(circle at 12% 20%, rgba(65,176,255,0.24), transparent 34%);
+              box-shadow:
+                0 18px 52px rgba(0, 0, 0, 0.35),
+                0 0 34px rgba(0,120,231,0.16),
+                inset 0 1px 0 rgba(255,255,255,0.08);
               cursor: none;
-              transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+              overflow: hidden;
+              transition: border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
+            }
+            .intro-enter-btn::before {
+              position: absolute;
+              inset: 1px;
+              content: "";
+              border-radius: inherit;
+              background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+              transform: translateX(-120%);
+              transition: transform 0.72s ease;
+            }
+            .intro-enter-btn:hover,
+            .intro-enter-btn:focus-visible {
+              border-color: rgba(143, 211, 255, 0.78);
+              box-shadow:
+                0 24px 70px rgba(0, 0, 0, 0.42),
+                0 0 54px rgba(0,120,231,0.34),
+                inset 0 1px 0 rgba(255,255,255,0.12);
+            }
+            .intro-enter-btn:hover::before,
+            .intro-enter-btn:focus-visible::before {
+              transform: translateX(120%);
+            }
+            .intro-enter-btn:focus-visible {
+              outline: 2px solid rgba(65,176,255,0.75);
+              outline-offset: 5px;
+            }
+            .intro-btn-aura {
+              position: absolute;
+              inset: -40% -10%;
+              background: conic-gradient(from 90deg, transparent, rgba(65,176,255,0.22), transparent 34%);
+              opacity: 0.6;
+              animation: introButtonAura 6s linear infinite;
             }
             .intro-btn-text {
+              position: relative;
+              z-index: 1;
               font-family: system-ui, sans-serif;
               font-size: 0.72rem;
               font-weight: 400;
               letter-spacing: 0.22em;
               text-transform: uppercase;
               color: rgba(255,255,255,0.88);
+            }
+            .intro-btn-icon {
+              position: relative;
+              z-index: 1;
+              display: grid;
+              place-items: center;
+              width: 2rem;
+              height: 2rem;
+              border-radius: 50%;
+              background: rgba(65,176,255,0.1);
+              box-shadow: inset 0 0 0 1px rgba(65,176,255,0.2);
             }
 
             /* Hint */
@@ -594,6 +668,64 @@ export default function Intro({ onEnter }: IntroProps) {
               height: 1px;
               background: linear-gradient(90deg, transparent, rgba(0,120,231,0.25), transparent);
               pointer-events: none;
+            }
+
+            @keyframes introButtonAura {
+              to { transform: rotate(360deg); }
+            }
+
+            @media (max-width: 760px) {
+              .intro-center {
+                padding: 0 1rem;
+              }
+
+              .intro-eyebrow {
+                margin-bottom: 1rem;
+              }
+
+              .intro-name-wrap {
+                gap: 0.05rem;
+                margin-bottom: 1.1rem;
+              }
+
+              .intro-letter {
+                font-size: clamp(2.55rem, 15vw, 4.8rem);
+                letter-spacing: 0.055em;
+              }
+
+              .intro-fullname {
+                font-size: 0.66rem;
+                letter-spacing: 0.2em;
+              }
+
+              .intro-role-wrap {
+                margin-bottom: 0.9rem;
+              }
+
+              .intro-role {
+                font-size: 0.72rem;
+              }
+
+              .intro-proof-row {
+                max-width: 20rem;
+                margin-bottom: 1.6rem;
+                gap: 0.42rem;
+              }
+
+              .intro-proof-row span {
+                font-size: 0.54rem;
+                padding: 0.36rem 0.52rem;
+              }
+
+              .intro-enter-btn {
+                min-width: min(16.5rem, calc(100vw - 2rem));
+                padding: 0.82rem 0.9rem 0.82rem 1.25rem;
+              }
+
+              .intro-btn-text {
+                font-size: 0.66rem;
+                letter-spacing: 0.16em;
+              }
             }
           `}</style>
         </motion.div>

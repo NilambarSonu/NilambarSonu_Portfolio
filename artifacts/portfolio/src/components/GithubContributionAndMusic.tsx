@@ -1,6 +1,6 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import GitHubCalendar from "react-github-calendar";
+import { GitHubCalendar } from "react-github-calendar";
 import { Github, Star, GitFork, Users, ArrowUpRight } from "lucide-react";
 import LiveStatsDashboard from "@/components/LiveStatsDashboard";
 
@@ -13,20 +13,31 @@ const highlights = [
   { icon: <Github size={15} />, label: "Open Source Contributor", sub: "NilambarSonu" },
 ];
 
+const easeOut = [0.22, 1, 0.36, 1] as const;
+
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 32 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1], delay },
+  transition: { duration: 0.7, ease: easeOut, delay },
 });
 
 export default function ContributionsAndMusic() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [isCompact, setIsCompact] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 640px)");
+    const sync = () => setIsCompact(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
 
   return (
     <section
       ref={sectionRef}
-      id="contributions"
+      id="github"
       className="github-section"
     >
       {/* Background */}
@@ -64,9 +75,9 @@ export default function ContributionsAndMusic() {
               <GitHubCalendar
                 username={GITHUB_USERNAME}
                 colorScheme="dark"
-                blockSize={13}
-                blockMargin={4}
-                fontSize={13}
+                blockSize={isCompact ? 9 : 13}
+                blockMargin={isCompact ? 2.5 : 4}
+                fontSize={isCompact ? 10 : 13}
                 theme={{
                   dark: ["#0d1f30", "#003d6b", "#0057a8", "#0078e7", "#41b0ff"],
                 }}
@@ -238,6 +249,11 @@ export default function ContributionsAndMusic() {
           border-radius: 14px;
           padding: clamp(1.2rem, 2vw, 1.8rem);
           overflow-x: auto;
+          max-width: 100%;
+        }
+
+        .github-calendar-card svg {
+          max-width: none;
         }
 
         /* ── Right ── */
@@ -381,11 +397,12 @@ export default function ContributionsAndMusic() {
         /* ── Mobile ── */
         @media (max-width: 640px) {
           .github-section {
-            padding: 2.8rem 0 2.8rem;
+            padding: 2.6rem 0 2.8rem;
           }
 
           .github-inner {
-            padding: 0 0.9rem;
+            padding: 0 0.72rem;
+            max-width: 100%;
           }
 
           .github-header {
@@ -404,10 +421,22 @@ export default function ContributionsAndMusic() {
 
           /* Calendar — horizontal scroll with proper containment */
           .github-calendar-card {
-            padding: 0.8rem 0.7rem;
+            width: 100%;
+            padding: 0.74rem 0.58rem;
             border-radius: 10px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+          }
+
+          .github-calendar-card > div {
+            min-width: max-content;
+          }
+
+          .github-left,
+          .github-right,
+          .github-grid {
+            min-width: 0;
           }
 
           /* Profile card — row: avatar left, info right */
@@ -415,21 +444,23 @@ export default function ContributionsAndMusic() {
             flex-direction: row;
             align-items: flex-start;
             text-align: left;
-            padding: 1rem;
-            gap: 0.8rem;
+            padding: 0.72rem;
+            gap: 0.62rem;
             border-radius: 10px;
+            width: 100%;
+            overflow: hidden;
           }
 
           .github-avatar-wrap {
-            width: 54px;
-            height: 54px;
+            width: 44px;
+            height: 44px;
             flex-shrink: 0;
             margin-bottom: 0;
           }
 
           .github-avatar {
-            width: 54px;
-            height: 54px;
+            width: 44px;
+            height: 44px;
           }
 
           /* Text block — takes remaining width */
@@ -440,7 +471,7 @@ export default function ContributionsAndMusic() {
           }
 
           .github-profile-name {
-            font-size: 0.92rem;
+            font-size: 0.82rem;
             margin-bottom: 0.1rem;
             text-align: left;
           }
@@ -452,15 +483,17 @@ export default function ContributionsAndMusic() {
           }
 
           .github-profile-bio {
-            font-size: 0.76rem;
-            line-height: 1.55;
-            margin-bottom: 0.8rem;
+            max-width: 100%;
+            font-size: 0.66rem;
+            line-height: 1.48;
+            margin-bottom: 0.62rem;
             text-align: left;
+            overflow-wrap: anywhere;
           }
 
           .github-highlights {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 0.45rem 0.6rem;
             border-top: 1px solid rgba(0,120,231,0.1);
             padding-top: 0.65rem;
@@ -469,14 +502,23 @@ export default function ContributionsAndMusic() {
 
           .github-highlight-item {
             gap: 0.35rem;
+            min-width: 0;
+          }
+
+          .github-highlight-text {
+            min-width: 0;
           }
 
           .github-highlight-text strong {
-            font-size: 0.68rem;
+            font-size: 0.64rem;
+            line-height: 1.15;
+            overflow-wrap: anywhere;
           }
 
           .github-highlight-text span {
-            font-size: 0.58rem;
+            font-size: 0.54rem;
+            line-height: 1.15;
+            overflow-wrap: anywhere;
           }
 
           .github-cta {

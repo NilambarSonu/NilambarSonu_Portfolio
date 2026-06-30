@@ -426,49 +426,120 @@ export default function Achievements() {
 
         @media (max-width: 900px) {
           .achievements-premium-section {
-            min-height: 46rem;
+            min-height: 41rem;
           }
 
           .achievement-lanes {
-            transform: rotate(-18deg) scale(1.18);
+            transform: rotate(-10deg) scale(1.03);
+            top: 2.5rem;
           }
 
           .achievement-lane {
-            left: -58vw;
-            width: 210vw;
+            left: -46vw;
+            width: 192vw;
           }
 
           .achievement-lane-top {
-            top: 13vh;
+            top: 7rem;
           }
 
           .achievement-lane-center {
-            top: 39vh;
+            top: 16.5rem;
           }
 
           .achievement-lane-bottom {
-            top: 64vh;
+            top: 27rem;
           }
 
           .achievement-photo-card {
-            width: 10rem;
-            height: 12rem;
-            border-radius: 1rem;
+            width: 8.8rem;
+            height: 10.4rem;
+            border-radius: 0.9rem;
+            transform: rotate(10deg);
           }
 
           .achievement-photo-card.wide {
-            width: 13rem;
-            height: 8.4rem;
+            width: 11.6rem;
+            height: 7.5rem;
           }
 
           .achievement-photo-card.hero,
           .achievement-photo-card.is-featured {
-            width: 18rem;
-            height: 11.6rem;
+            width: 15.8rem;
+            height: 10rem;
           }
 
           .achievements-heading-shell {
-            top: 4rem;
+            top: 2.4rem;
+          }
+
+          @keyframes achievement-card-grow {
+            0% {
+              transform: rotate(10deg) scale(0.74);
+              opacity: 0.84;
+            }
+            45% {
+              transform: rotate(10deg) scale(0.9);
+              opacity: 0.96;
+            }
+            100% {
+              transform: rotate(10deg) scale(0.98);
+              opacity: 1;
+            }
+          }
+        }
+
+        @media (max-width: 480px) {
+          .achievements-premium-section {
+            min-height: 36rem;
+          }
+
+          .achievement-lanes {
+            transform: rotate(-8deg) scale(1);
+          }
+
+          .achievement-lane {
+            left: -64vw;
+            width: 230vw;
+          }
+
+          .achievement-lane-top {
+            top: 6.4rem;
+            opacity: 0.38;
+          }
+
+          .achievement-lane-center {
+            top: 15.2rem;
+          }
+
+          .achievement-lane-bottom {
+            top: 24.2rem;
+            opacity: 0.38;
+          }
+
+          .achievement-track {
+            gap: 1rem;
+          }
+
+          .achievement-photo-card {
+            width: 7.5rem;
+            height: 8.8rem;
+            transform: rotate(8deg);
+          }
+
+          .achievement-photo-card.wide {
+            width: 9.8rem;
+            height: 6.3rem;
+          }
+
+          .achievement-photo-card.hero,
+          .achievement-photo-card.is-featured {
+            width: 13rem;
+            height: 8.2rem;
+          }
+
+          .achievements-heading-shell h2 {
+            font-size: 1.36rem;
           }
         }
       `}</style>

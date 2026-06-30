@@ -371,87 +371,110 @@ export default function LandingPage({ isRevealed = false }: LandingPageProps) {
           }
 
           .landing-portrait {
-            width: min(92vw, 34rem);
-            right: -7.4rem;
-            bottom: clamp(2rem, 7vh, 4.4rem);
-            opacity: 0.88;
-            filter: saturate(1.04) contrast(1.05) drop-shadow(-18px 10px 34px rgba(0, 0, 0, 0.36));
+            width: min(118vw, 40rem);
+            left: 50%;
+            right: auto;
+            bottom: 0;
+            translate: -50% 0;
+            opacity: 0.96;
+            filter: saturate(1.08) contrast(1.08) drop-shadow(0 -2px 36px rgba(0, 120, 231, 0.18));
           }
 
           .landing-copy {
-            left: clamp(1.35rem, 6vw, 3rem);
-            top: auto;
-            bottom: clamp(2.2rem, 5.8vh, 4rem);
-            width: min(84vw, 33rem);
+            left: 50%;
+            top: clamp(5.4rem, 12vh, 7.4rem);
+            bottom: auto;
+            width: min(92vw, 32rem);
+            translate: -50% 0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
           }
 
           .landing-eyebrow {
-            font-size: clamp(1.8rem, 8vw, 2.75rem);
+            margin: 0 0 0.55rem;
+            font-size: clamp(2.05rem, 8vw, 2.85rem);
+            text-align: left;
+            width: 100%;
           }
 
           .landing-copy h1 {
-            font-size: clamp(2.8rem, 11.4vw, 4.55rem);
-            line-height: 0.98;
-            white-space: normal;
+            display: block;
+            font-size: clamp(2.25rem, 8.7vw, 3.55rem);
+            line-height: 1;
+            letter-spacing: 0.035em;
+            white-space: nowrap;
+            transform: none;
+            text-align: center;
           }
 
           .landing-role {
-            width: min(19rem, 78vw);
-            margin-top: 1.15rem;
+            width: 100%;
+            margin-top: 0.62rem;
             margin-left: auto;
             margin-right: auto;
           }
 
           .landing-role p {
-            font-size: clamp(1.65rem, 7vw, 2.35rem);
+            font-size: clamp(1.18rem, 4.8vw, 1.7rem);
+            line-height: 1.05;
           }
 
           .landing-role p + p {
-            font-size: clamp(1.45rem, 6.2vw, 2.05rem);
+            margin-top: 0.58rem;
+            font-size: clamp(1.08rem, 4.55vw, 1.55rem);
           }
 
           .landing-tagline {
-            margin-left: 0;
-            width: min(21rem, 78vw);
-            font-size: clamp(1.15rem, 5.35vw, 1.65rem);
-            white-space: normal;
+            position: static;
+            width: min(25rem, 92vw);
+            margin: 0.8rem auto 0;
+            translate: none;
+            font-size: clamp(0.83rem, 3.55vw, 1.1rem);
+            white-space: nowrap;
+            text-align: center;
+            z-index: 4;
           }
         }
 
         @media (max-width: 480px) {
           .landing-portrait {
-            width: 104vw;
-            right: -11.2rem;
-            bottom: 7.5rem;
-            opacity: 0.78;
+            width: 118vw;
+            max-width: none;
+            bottom: 0;
+            left: 51%;
+            opacity: 0.98;
           }
 
           .landing-copy {
-            bottom: 2.2rem;
+            top: clamp(4.5rem, 10vh, 5.7rem);
+            width: 90vw;
           }
 
           .landing-copy h1 {
-            font-size: clamp(2.55rem, 13.8vw, 3.65rem);
-            max-width: 13.5rem;
+            font-size: clamp(1.92rem, 8.4vw, 2.5rem);
+            max-width: none;
           }
 
           .landing-role {
-            transform: translateX(1.4rem);
+            transform: none;
           }
 
           .landing-tagline {
-            max-width: 16.5rem;
+            max-width: none;
+            margin-top: 0.62rem;
+            font-size: clamp(0.74rem, 3.35vw, 0.98rem);
           }
         }
 
         @media (max-width: 380px) {
           .landing-portrait {
-            right: -10.7rem;
-            bottom: 7.8rem;
+            width: 124vw;
           }
 
           .landing-copy h1 {
-            font-size: clamp(2.38rem, 13vw, 3.3rem);
+            font-size: clamp(1.72rem, 8vw, 2.12rem);
           }
         }
       `}</style>

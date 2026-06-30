@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Users, Heart, Eye, Github } from "lucide-react";
+// @ts-ignore
+import confetti from "canvas-confetti";
 import {
   fetchGitHubStats,
   fetchSiteStats,
@@ -87,15 +89,25 @@ export default function LiveStatsDashboard({ compact = false }: LiveStatsDashboa
     getFingerprint().then(async fp => {
       if (!isMounted) return;
       setFingerprint(fp);
+
+      // Record view securely on backend
+      let newViewCount: number | null = null;
+      try {
+        newViewCount = await incrementViews(fp);
+      } catch (err) {
+        console.error("Error recording view:", err);
+      }
+
+      // Fetch latest site stats
       const stats = await fetchSiteStats(fp);
       if (!isMounted) return;
-      setSiteStats({ views: stats.views, loves: stats.loves, loading: false });
-      setLoved(stats.hasLoved);
-    });
 
-    incrementViews().then(newViewCount => {
-      if (!isMounted || !newViewCount) return;
-      setSiteStats(prev => ({ ...prev, views: newViewCount }));
+      setSiteStats({
+        views: newViewCount !== null ? newViewCount : stats.views,
+        loves: stats.loves,
+        loading: false
+      });
+      setLoved(stats.hasLoved);
     });
 
     return () => { isMounted = false; };
@@ -108,6 +120,19 @@ export default function LiveStatsDashboard({ compact = false }: LiveStatsDashboa
     if (result?.success) {
       setLoved(true);
       setSiteStats(prev => ({ ...prev, loves: result.newLoveCount }));
+      
+      // Fire confetti explosion!
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 60,
+          origin: { y: 0.8 },
+          colors: ["#ff007f", "#ff4b91", "#0078e7", "#00d2ff"]
+        });
+      } catch (err) {
+        console.error("Confetti trigger error:", err);
+      }
+
       setShowLoveAnimation(true);
       setTimeout(() => setShowLoveAnimation(false), 1000);
     } else if (result?.alreadyLoved) {
@@ -183,10 +208,14 @@ export default function LiveStatsDashboard({ compact = false }: LiveStatsDashboa
       <style>{`
         /* ── Compact wrap ── */
         .stats-compact-wrap {
-          background: rgba(0,120,231,0.04);
-          border: 1px solid rgba(0,120,231,0.12);
-          border-radius: 12px;
-          padding: 1rem;
+          background: rgba(3, 9, 22, 0.4);
+          border: 1px solid rgba(0, 120, 231, 0.15);
+          border-radius: 16px;
+          padding: 0.85rem;
+          backdrop-filter: blur(16px);
+          box-shadow: 
+            0 4px 30px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         /* ── Stats grid ── */
@@ -196,63 +225,123 @@ export default function LiveStatsDashboard({ compact = false }: LiveStatsDashboa
           gap: 0.75rem;
         }
         .stats-grid[data-compact="true"] {
-          gap: 0.5rem;
+          gap: 0.6rem;
         }
 
         /* ── Stat card ── */
         .stats-card {
+          position: relative;
           display: flex;
           flex-direction: column;
           align-items: center;
           text-align: center;
-          gap: 0.25rem;
-          padding: 1.4rem 1rem;
-          background: rgba(0,120,231,0.05);
-          border: 1px solid rgba(0,120,231,0.13);
+          gap: 0.35rem;
+          padding: 1.1rem 0.85rem;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.07);
           border-radius: 12px;
-          transition: border-color 0.25s, box-shadow 0.25s;
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          overflow: hidden;
+          box-shadow: 
+            0 4px 20px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+        .stats-card::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(circle at center, rgba(0, 120, 231, 0.1) 0%, transparent 70%);
+          opacity: 0;
+          transition: opacity 0.35s ease;
+          pointer-events: none;
+          z-index: 0;
         }
         .stats-card:hover {
-          border-color: rgba(0,120,231,0.3);
-          box-shadow: 0 0 18px rgba(0,120,231,0.08);
+          border-color: rgba(0, 120, 231, 0.35);
+          transform: translateY(-2px);
+          box-shadow: 
+            0 8px 30px rgba(0, 120, 231, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.06);
         }
+        .stats-card:hover::before {
+          opacity: 1;
+        }
+        
         .stats-card[data-compact="true"] {
-          padding: 0.75rem 0.5rem;
-          border-radius: 8px;
-          background: rgba(0,120,231,0.04);
-          border-color: rgba(0,120,231,0.09);
+          padding: 0.85rem 0.6rem;
+          border-radius: 10px;
+          gap: 0.25rem;
         }
 
         .stats-card-icon {
+          position: relative;
+          z-index: 1;
           color: #0078e7;
-          margin-bottom: 0.15rem;
-          opacity: 0.85;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.4rem;
+          background: rgba(0, 120, 231, 0.06);
+          border: 1px solid rgba(0, 120, 231, 0.15);
+          border-radius: 50%;
+          margin-bottom: 0.1rem;
+          transition: all 0.3s ease;
+        }
+        .stats-card:hover .stats-card-icon {
+          background: rgba(0, 120, 231, 0.15);
+          border-color: rgba(0, 120, 231, 0.4);
+          transform: scale(1.05);
+          color: #38bdf8;
+          box-shadow: 0 0 12px rgba(0, 120, 231, 0.2);
+        }
+        [data-compact="true"] .stats-card-icon {
+          padding: 0.3rem;
+          margin-bottom: 0.05rem;
         }
 
         .stats-card-value {
-          font-family: "Ancizar Serif", Georgia, serif;
-          font-size: clamp(1.6rem, 2.5vw, 2.4rem);
-          font-weight: 400;
+          position: relative;
+          z-index: 1;
+          font-family: "Poppins", "Inter", system-ui, sans-serif;
+          font-size: clamp(1.3rem, 2vw, 1.7rem);
+          font-weight: 600;
           line-height: 1;
-          color: #f5f7fa;
+          color: #f8fafc;
+          letter-spacing: -0.02em;
+          text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+          transition: color 0.3s ease;
+        }
+        .stats-card:hover .stats-card-value {
+          color: #fff;
         }
         [data-compact="true"] .stats-card-value {
-          font-size: 1.2rem;
+          font-size: 1.15rem;
         }
 
         .stats-card-label {
-          font-family: system-ui, sans-serif;
-          font-size: 0.6rem;
-          letter-spacing: 0.22em;
+          position: relative;
+          z-index: 1;
+          font-family: "Inter", system-ui, sans-serif;
+          font-size: 0.58rem;
+          font-weight: 500;
+          letter-spacing: 0.16em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.35);
+          color: rgba(255, 255, 255, 0.4);
+          transition: color 0.3s ease;
+        }
+        .stats-card:hover .stats-card-label {
+          color: rgba(255, 255, 255, 0.6);
+        }
+        [data-compact="true"] .stats-card-label {
+          font-size: 0.52rem;
+          letter-spacing: 0.12em;
         }
 
         .stats-card-skeleton {
-          width: 3.5rem;
-          height: 1.8rem;
+          width: 3rem;
+          height: 1.5rem;
           border-radius: 4px;
-          background: rgba(0,120,231,0.1);
+          background: rgba(0, 120, 231, 0.08);
           animation: pulse 1.5s ease-in-out infinite;
         }
         @keyframes pulse {
@@ -262,32 +351,58 @@ export default function LiveStatsDashboard({ compact = false }: LiveStatsDashboa
 
         /* ── Love button ── */
         .stats-love-btn {
+          position: relative;
+          z-index: 1;
           display: inline-flex;
           align-items: center;
-          gap: 0.3rem;
-          margin-top: 0.5rem;
-          padding: 0.35rem 0.8rem;
-          border-radius: 999px;
-          border: 1px solid rgba(0,120,231,0.25);
-          background: transparent;
-          color: rgba(255,255,255,0.5);
-          font-family: system-ui, sans-serif;
-          font-size: 0.62rem;
-          letter-spacing: 0.12em;
+          justify-content: center;
+          gap: 0.35rem;
+          margin-top: 0.3rem;
+          padding: 0.3rem 0.7rem;
+          border-radius: 20px;
+          border: 1px solid rgba(255, 75, 145, 0.25);
+          background: rgba(255, 75, 145, 0.04);
+          color: rgba(255, 255, 255, 0.6);
+          font-family: "Inter", system-ui, sans-serif;
+          font-size: 0.58rem;
+          font-weight: 500;
+          letter-spacing: 0.08em;
           text-transform: uppercase;
           cursor: pointer;
-          transition: all 0.25s ease;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .stats-love-btn:hover:not(:disabled) {
-          border-color: rgba(0,120,231,0.55);
+          border-color: rgba(255, 75, 145, 0.6);
           color: #fff;
-          background: rgba(0,120,231,0.1);
+          background: rgba(255, 75, 145, 0.15);
+          transform: scale(1.05);
+          box-shadow: 0 4px 12px rgba(255, 75, 145, 0.15);
+        }
+        .stats-love-btn:active:not(:disabled) {
+          transform: scale(0.95);
         }
         .stats-love-btn.loved {
-          border-color: rgba(0,120,231,0.35);
-          color: #0078e7;
+          border-color: rgba(255, 75, 145, 0.45);
+          color: #ff4b91;
+          background: rgba(255, 75, 145, 0.08);
+          cursor: default;
         }
-        .stats-love-btn svg.filled { fill: #0078e7; color: #0078e7; }
+        .stats-love-btn svg {
+          transition: transform 0.3s ease;
+        }
+        .stats-love-btn:hover svg:not(.filled) {
+          transform: scale(1.15);
+        }
+        .stats-love-btn svg.filled { 
+          fill: #ff4b91; 
+          color: #ff4b91;
+          filter: drop-shadow(0 0 4px rgba(255, 75, 145, 0.5));
+        }
+        
+        [data-compact="true"] .stats-love-btn {
+          margin-top: 0.15rem;
+          padding: 0.2rem 0.5rem;
+        }
 
         /* ── Full-page section ── */
         .stats-section {
@@ -323,12 +438,47 @@ export default function LiveStatsDashboard({ compact = false }: LiveStatsDashboa
           display: flex;
           align-items: center;
           justify-content: center;
+          background: rgba(0, 0, 0, 0.15);
+          backdrop-filter: blur(2px);
         }
 
         /* ── Responsive ── */
-        @media (max-width: 600px) {
+        @media (max-width: 620px) {
           .stats-grid { grid-template-columns: repeat(2, 1fr); }
-          .stats-card-value { font-size: 1.4rem; }
+          
+          .stats-compact-wrap {
+            padding: 0.65rem;
+            border-radius: 12px;
+          }
+
+          .stats-grid[data-compact="true"] {
+            gap: 0.5rem;
+          }
+
+          .stats-card[data-compact="true"] {
+            min-height: 4rem;
+            padding: 0.65rem 0.45rem;
+            border-radius: 8px;
+          }
+
+          [data-compact="true"] .stats-card-icon svg {
+            width: 14px;
+            height: 14px;
+          }
+
+          [data-compact="true"] .stats-card-value {
+            font-size: 1rem;
+          }
+
+          [data-compact="true"] .stats-card-label {
+            font-size: 0.48rem;
+            letter-spacing: 0.1em;
+          }
+
+          [data-compact="true"] .stats-love-btn {
+            margin-top: 0.1rem;
+            padding: 0.15rem 0.4rem;
+          }
         }
       `}</style>
     </>
